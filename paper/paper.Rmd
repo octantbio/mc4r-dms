@@ -1,0 +1,177 @@
+---
+title: "MC4R Figure Generation"
+author: "Nathan Abell and Nathan Lubock"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: github_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  dev = c("png", "pdf")
+)
+
+library(scico)
+library(factoextra)
+library(ggrepel)
+library(ggbeeswarm)
+library(janitor)
+library(broom)
+library(patchwork)
+library(cmdstanr)
+library(brms)
+library(tidyverse)
+
+custom_theme <- theme_bw(base_size = 16) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+  )
+theme_set(custom_theme)
+
+scale_fill_scico_mid <- function(..., mid = 0, alpha = NULL, begin = 0, end = 1, direction = 1, reverse = TRUE, palette = "broc") {
+  force(mid)
+  ggplot2::continuous_scale(
+    aesthetics = "fill",
+    scale_name = "gradient2",
+    palette = scales::gradient_n_pal(
+      colours = scico::scico(256, alpha, begin, end, direction, palette),
+      values = NULL, space = "Lab"
+    ),
+    guide = "colourbar",
+    rescaler = function(x, to = c(0, 1), from = range(x, na.rm = TRUE)) {
+      scales::rescale_mid(x, to, from, mid)
+    },
+    ...
+  )
+}
+```
+
+# Introduction
+
+This document will recreate all of the figures for the manuscript. Extended figures are included in the same directory as their corresponding main figures for clarity.
+
+But first, a little data munging to get everything annotated an consistent.
+
+```{r loading}
+aa_grouping <- c("G", "A", "S", "T", "C", "P", "V", "I", "L", "M", "F", "Y", "W", "N", "Q", "D", "E", "K", "R", "H", "*")
+lehner_grouping <- c("*", "D", "E", "R", "H", "K", "S", "T", "N", "Q", "C", "G", "P", "A", "V", "I", "L", "M", "F", "W", "Y")
+
+#-------------------------------------------------------------------------------
+
+bias <- read_tsv("../sumstats/MC4R-Bias.tsv")
+
+
+drug_compare_cre <- read_tsv("../sumstats/MC4R-DMS5-Gs-drugCompare.tsv")
+drug_compare_uas <- read_tsv("../sumstats/MC4R-DMS8-Gq-drugCompare.tsv")
+drug_compare <- bind_rows(
+  cre = drug_compare_cre,
+  uas = drug_compare_uas,
+  .id = "reporter"
+)
+
+#-------------------------------------------------------------------------------
+# dealing with un-normalized data
+
+uas_annotation <- tribble(
+  ~compound, ~condition, ~dose,
+  "aMSH", "aMSH1e-06", "high",
+  "aMSH", "aMSH2e-08", "medium",
+  "aMSH", "aMSH5e-08", "low",
+  "None", "None0", "zero",
+  "THIQ", "THIQ1e-07", "high",
+  "THIQ", "THIQ3e-09", "medium",
+  "THIQ", "THIQ9e-09", "low"
+)
+
+uas_unnorm <- read_tsv("../sumstats/MC4R-DMS8-Gq-unnormalized.tsv") %>%
+  inner_join(uas_annotation)
+
+cre_annotation <- tribble(
+  ~compound, ~condition, ~dose,
+  "aMSH", "aMSH2e-08", "high",
+  "aMSH", "aMSH5e-09", "medium",
+  "aMSH", "aMSH5e-10", "low",
+  "Forsk", "Forsk2.5e-05", NA,
+  "None", "None0", "zero",
+  "THIQ", "THIQ1.2e-08", "high",
+  "THIQ", "THIQ4e-09", "medium",
+  "THIQ", "THIQ4e-10", "low"
+)
+
+cre_unnorm <- read_tsv("../sumstats/MC4R-DMS5-Gs-unnormalized.tsv") %>%
+  inner_join(cre_annotation)
+
+unnorm_combo <- bind_rows(
+  gs = cre_unnorm,
+  gq = uas_unnorm,
+  .id = "pathway"
+)
+
+#-------------------------------------------------------------------------------
+
+cre <- read_tsv("../sumstats/MC4R-DMS5-Gs.tsv")
+
+cre_dose <- tribble(
+  ~condition, ~dose, ~compound, ~concentration,
+  "aMSH2e-08 - None0", "high", "aMSH", 2e-08,
+  "aMSH5e-09 - None0", "medium", "aMSH", 5e-09,
+  "aMSH5e-10 - None0", "low", "aMSH", 5e-10,
+  "Forsk2.5e-05 - None0", NA, NA, NA,
+  "None0 - Forsk2.5e-05", "zero", "None", NA,
+  "THIQ1.2e-08 - None0", "high", "THIQ", 1.2e-08,
+  "THIQ4e-09 - None0", "medium", "THIQ", 4e-09,
+  "THIQ4e-10 - None0", "low", "THIQ", 4e-10,
+  "aMSH2e-08 - Forsk2.5e-05", "high", "aMSH", 2e-08,
+  "aMSH5e-09 - Forsk2.5e-05", "medium", "aMSH", 5e-09,
+  "aMSH5e-10 - Forsk2.5e-05", "low", "aMSH", 5e-10,
+  "THIQ1.2e-08 - Forsk2.5e-05", "high", "THIQ", 1.2e-08,
+  "THIQ4e-09 - Forsk2.5e-05", "medium", "THIQ", 4e-09,
+  "THIQ4e-10 - Forsk2.5e-05", "low", "THIQ", 4e-10
+) %>%
+  mutate(dose = factor(dose, levels = c("zero", "low", "medium", "high")))
+
+# standardize on Foskolin Normalization
+cre <- cre %>%
+  inner_join(cre_dose) %>%
+  rename(contrast = condition) %>%
+  filter(contrast != "Forsk2.5e-05 - None0") %>%
+  mutate(
+    norm = if_else(str_detect(contrast, "Forsk"), "Forsk", "None"),
+    aa = factor(aa, levels = lehner_grouping)
+  ) %>%
+  filter(norm == "Forsk")
+
+#-------------------------------------------------------------------------------
+
+uas <- uas_unnorm %>%
+  group_by(compound, dose) %>%
+  mutate(
+    p.adj = p.adjust(p.value, method = "BH")
+  ) %>%
+  ungroup()
+
+cre_uas <- bind_rows(
+  CRE = cre,
+  UAS = uas,
+  .id = "reporter"
+) %>%
+  select(reporter, compound, dose, chunk, pos, aa, log2FoldChange, std.error, statistic, p.value, p.adj) %>%
+  mutate(
+    dose = factor(dose, levels = c("zero", "low", "medium", "high")),
+    aa = factor(aa, levels = lehner_grouping)
+  )
+```
+
+
+# Figure 1
+
+```{r child="fig-1.rmd"}
+```
+
+# Figure 2
+
+```{r child="fig-2.rmd"}
+```

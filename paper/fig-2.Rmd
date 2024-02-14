@@ -1,0 +1,311 @@
+```{r fig-2-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-2/"
+)
+```
+
+## Main Figures
+
+### aMSH Heatmap
+
+Let's split the protein up in two and use patchwork to smash it together
+
+```{r cre-amsh-heatmap, fig.width=12, fig.height=3}
+amsh_top <- cre %>%
+  filter(
+    dose == "low",
+    compound == "aMSH",
+    pos <= 175
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = statistic)) +
+  geom_tile() +
+  coord_equal() +
+  scale_fill_scico(palette = "vik", limits = c(-10, 10), oob = scales::squish) +
+  theme_void()
+
+amsh_bottom <- cre %>%
+  filter(
+    dose == "low",
+    compound == "aMSH",
+    pos > 175
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = statistic)) +
+  geom_tile() +
+  coord_equal() +
+  scale_fill_scico(palette = "vik", limits = c(-10, 10), oob = scales::squish) +
+  theme_void()
+
+amsh_top +
+  amsh_bottom +
+  plot_layout(ncol = 1) +
+  theme(legend.position = "none")
+```
+
+### ClinVar
+
+```{r clinvar-dists, fig.width=9, fig.height=3}
+clinvar <- read_tsv("../data/annotations/MC4R-clinvar_20240105.tsv") %>%
+  mutate(
+    pos = as.numeric(str_sub(mut, 2, -2)),
+    aa = str_sub(mut, -1, -1)
+  )
+
+clinvar_dists <- cre %>% 
+  left_join(clinvar) %>% 
+  mutate(
+    significance = case_when(
+      is.na(consequence) & aa == "*" ~ "Nonsense",
+      is.na(consequence) ~ "Missense",
+      grepl("pathogenic", consequence, ignore.case = TRUE) ~ "Pathogenic",
+      grepl("benign", consequence, ignore.case = TRUE) ~ "Benign",
+      TRUE ~ "VUS"
+    ),
+    significance = factor(
+      significance,
+      levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")
+    ),
+    color = case_when(
+      p.adj < 0.01 & statistic < 0 ~ "#001260",
+      p.adj < 0.01 & statistic > 0 ~ "#590007",
+      TRUE ~ "grey"
+    )
+  ) 
+
+clinvar_dists%>% 
+  filter(
+    dose == 'low',
+    compound == 'aMSH'
+  ) %>% 
+  ggplot(aes(x = fct_rev(significance), y = statistic, color = color)) +
+  geom_quasirandom() +
+  coord_flip() +
+  geom_hline(yintercept = 0) +
+  theme(legend.pos = "none") +
+  scale_color_identity() +
+  ylab("Z-Statistic")+ 
+  xlab("")
+```
+
+### gnomAD
+
+```{r gnomad, fig.width=6, fig.height=6}
+aa_table <- read_tsv(
+  "../data/annotations/aa-letters.tsv", 
+  col_names = c("full", "three", "one")
+) %>%
+  select(-full)
+
+gnomad_missense <- read_tsv("../data/annotations/MC4R-gnomAD_missense_20240108.tsv")
+
+gnomad <- gnomad_missense %>%
+  filter(`VEP Annotation` == "missense_variant") %>%
+  select(`Protein Consequence`, `Allele Frequency`) %>%
+  mutate(
+    mut = str_remove(`Protein Consequence`, "p." ),
+    wt_aa = str_sub(mut, 1, 3),
+    three = str_sub(mut, -3, -1),
+    pos = as.numeric(str_sub(mut, 4, -4))
+  ) %>%
+  left_join(aa_table) %>%
+  rename("aa" = "one")
+
+cre %>% 
+  filter(
+    dose == 'low',
+    compound == 'aMSH'
+  ) %>% 
+  inner_join(gnomad) %>% 
+  mutate(
+    color = case_when(
+      p.adj < 0.01 & statistic < 0 ~ "#001260",
+      p.adj < 0.01 & statistic > 0 ~ "#590007",
+      TRUE ~ "grey"
+    )
+  ) %>% 
+  ggplot() +
+  geom_point(
+    aes(x = log2FoldChange, y = log10(`Allele Frequency`), color = color)
+  ) +
+  xlab("Log2(Fold Change vs WT)") +
+  ylab("Log10(Allele Frequency)") +
+  scale_color_identity()
+```
+
+### Literature Mutants
+
+```{r huang-mutants, fig.width=4, fig.height=4}
+huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv") %>% 
+  mutate(
+    group = str_replace(group, 'L', ' L'),
+    group = factor(group, levels = c("Mild LoF", "Partial LoF", "Full LoF")),
+    aa = if_else(mut_aa == 'X', '*', mut_aa)
+  ) %>% 
+  select(-mut_aa) 
+
+cre %>% 
+  filter(
+    dose == 'low',
+    compound == 'aMSH'
+  ) %>% 
+  inner_join(huang2017) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 'dashed') +
+  geom_boxplot(
+    aes(x = group, y = log2FoldChange),
+    outlier.shape = NA
+    ) +
+  geom_quasirandom(aes(x = group, y = log2FoldChange)) +
+  #theme(axis.text.x = element_text(angle = 45)) +
+  xlab("") +
+  ylab("Log2(Fold Change vs WT)") 
+
+```
+
+### Delta EC50s from Literature
+
+```{r amsh-experimental-pec50s, fig.width=6, fig.height=6}
+zhang <- read_csv("../data/annotations/mc4r-zhang-2021.csv")
+
+crystal_wt <- zhang %>%
+  filter(wt == "WT") %>%
+  select(
+    compound,
+    pec50_wt = pec50,
+    pec50_err_wt = pec50_err,
+    emax_wt = emax,
+    emax_err_wt = emax_err
+  )
+
+crystal_diff <- crystal_wt %>%
+  inner_join(zhang) %>%
+  mutate(
+    rel_pec50 = (pec50 - pec50_wt),
+    rel_pec50_err = sqrt(pec50_err^2 + pec50_err_wt^2),
+    rel_pec50_z = rel_pec50 / rel_pec50_err,
+    rel_emax = (emax - emax_wt),
+    rel_emax_err = sqrt(emax_err^2 + emax_err_wt^2),
+    rel_emax_z = rel_emax / rel_emax_err
+  ) %>%
+  filter(aa != "WT") %>%
+  select(compound, location, wt, pos, aa, contains("rel"))
+
+cre %>%
+  filter(
+    dose == "low",
+    compound == "aMSH"
+  ) %>%
+  inner_join(crystal_diff) %>%
+  filter(location == "Active Site") %>%
+  ggplot(aes(x = statistic, y = rel_pec50)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point(pch = 21) +
+  labs(
+    x = "DMS Z-Score\n(Gs, aMSH, low concentration)",
+    y = "aMSH ΔpEC50 for MC4R\nvariants (Relative to WT)"
+  )
+```
+
+### Variant Classification
+
+```{r class-proportions, fig.width=9, fig.height=4.5}
+variant_class <- cre_uas %>%
+  group_by(reporter, compound, dose) %>%
+  mutate(
+    class = case_when(
+      statistic < 0 & p.adj < 0.01 ~ "Loss of Function",
+      statistic > 0 & p.adj < 0.01 ~ "Gain of Function",
+      TRUE ~ "WT-Like"
+    ),
+    class = factor(class, levels = c("Gain of Function", "WT-Like", "Loss of Function"))
+  ) %>%
+  ungroup() %>%
+  count(reporter, compound, dose, class)
+
+variant_class %>%
+  filter(compound != "THIQ") %>%
+  mutate(compound = "aMSH") %>%
+  ggplot(aes(x = dose, y = n, fill = class)) +
+  geom_col(position = "fill", color = "black") +
+  facet_wrap(facets = vars(reporter), scales = "free_x") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = rev(c("#001260", "grey", "#590007"))) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    x = "aMSH Dose",
+    y = "Fraction of Variants"
+  )
+```
+
+## Extended Figures
+
+### aMSH Heatmap (Log2FC)
+
+```{r cre-amsh-zoom-log2fc, fig.width=12, fig.height=3}
+amsh_top <- cre %>%
+  filter(
+    dose == "low",
+    compound == "aMSH",
+    pos <= 175
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = log2FoldChange)) +
+  geom_tile() +
+  coord_equal() +
+  scale_fill_scico_mid(palette = "cork", limits = c(-3, 1), mid = 0, oob = scales::squish) +
+  theme_void()
+
+amsh_bottom <- cre %>%
+  filter(
+    dose == "low",
+    compound == "aMSH",
+    pos > 175
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = log2FoldChange)) +
+  geom_tile() +
+  coord_equal() +
+  scale_fill_scico_mid(palette = "cork", limits = c(-3, 1), mid = 0, oob = scales::squish) +
+  theme_void()
+
+amsh_top +
+  amsh_bottom +
+  plot_layout(ncol = 1) +
+  theme(legend.position = "none")
+```
+
+### Show of Force (Z's)
+
+```{r show-of-force, fig.width=12, fig.height=10}
+unnorm_combo %>%
+  mutate(
+    aa = factor(aa, levels = lehner_grouping),
+    dose = factor(dose, levels = c("zero", "low", "medium", "high")),
+    compound = factor(compound, levels = c("aMSH", "THIQ", "None", "Forsk"))
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = statistic)) +
+  geom_tile() +
+  facet_grid(rows = vars(pathway, compound, dose)) +
+  coord_equal() +
+  scale_fill_scico(palette = "vik", limits = c(-10, 10), oob = scales::squish) +
+  theme_void()
+```
+
+### Show of Force (Log2FC)
+
+```{r show-of-force-log2fc, fig.width=12, fig.height=10}
+unnorm_combo %>%
+  mutate(
+    aa = factor(aa, levels = lehner_grouping),
+    dose = factor(dose, levels = c("zero", "low", "medium", "high")),
+    compound = factor(compound, levels = c("aMSH", "THIQ", "None", "Forsk"))
+  ) %>%
+  ggplot(aes(x = pos, y = aa, fill = log2FoldChange)) +
+  geom_tile() +
+  facet_grid(rows = vars(pathway, compound, dose)) +
+  coord_equal() +
+  scale_fill_scico(palette = "cork", limits = c(-2, 2), oob = scales::squish) +
+  theme_void() +
+  labs(fill = "log2fc")
+```
