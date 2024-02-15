@@ -18,6 +18,14 @@ consistent.
 
 ## Extended Figures
 
+### Effect of Barcodes
+
+![](./fig-1/barcode-downsample-1.png)<!-- -->
+
+### Correlation to Computational Predictions
+
+![](./fig-1/predictors-1.png)<!-- -->
+
 # Figure 2
 
 ## Main Figures
