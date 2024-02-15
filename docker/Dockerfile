@@ -96,7 +96,11 @@ RUN /opt/conda/bin/micromamba self-update -c conda-forge && \
         r-data.table \
         r-irkernel \
         r-argparse \
-        r-future.callr
+        r-future.callr \
+        factoextra \
+        janitor \
+        cmdstanr \
+        brms
 
 #===============================================================================
 # Work environment
