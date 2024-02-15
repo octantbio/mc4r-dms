@@ -78,8 +78,8 @@ clinvar_dists%>%
   ) %>% 
   ggplot(aes(x = fct_rev(significance), y = statistic, color = color)) +
   geom_quasirandom() +
+  geom_hline(yintercept = 0, lty = 'dashed') +
   coord_flip() +
-  geom_hline(yintercept = 0) +
   theme(legend.pos = "none") +
   scale_color_identity() +
   ylab("Z-Statistic")+ 
@@ -126,6 +126,7 @@ cre %>%
   geom_point(
     aes(x = log2FoldChange, y = log10(`Allele Frequency`), color = color)
   ) +
+  geom_vline(xintercept = 0, lty = 'dashed') +
   xlab("Log2(Fold Change vs WT)") +
   ylab("Log10(Allele Frequency)") +
   scale_color_identity()
@@ -198,7 +199,7 @@ cre %>%
   filter(location == "Active Site") %>%
   ggplot(aes(x = statistic, y = rel_pec50)) +
   geom_smooth(method = "lm", se = FALSE) +
-  geom_point(pch = 21) +
+  geom_point() +
   labs(
     x = "DMS Z-Score\n(Gs, aMSH, low concentration)",
     y = "aMSH ΔpEC50 for MC4R\nvariants (Relative to WT)"

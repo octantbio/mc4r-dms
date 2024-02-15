@@ -78,12 +78,12 @@ drug_compare <- bind_rows(
 uas_annotation <- tribble(
   ~compound, ~condition, ~dose,
   "aMSH", "aMSH1e-06", "high",
-  "aMSH", "aMSH2e-08", "medium",
-  "aMSH", "aMSH5e-08", "low",
+  "aMSH", "aMSH5e-08", "medium",
+  "aMSH", "aMSH2e-08", "low",
   "None", "None0", "zero",
   "THIQ", "THIQ1e-07", "high",
-  "THIQ", "THIQ3e-09", "medium",
-  "THIQ", "THIQ9e-09", "low"
+  "THIQ", "THIQ9e-09", "medium",
+  "THIQ", "THIQ3e-09", "low",
 )
 
 uas_unnorm <- read_tsv("../sumstats/MC4R-DMS8-Gq-unnormalized.tsv") %>%
