@@ -1,0 +1,9 @@
+```{r fig-1-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-1/"
+)
+```
+
+## Main Figures
+
+## Extended Figures
