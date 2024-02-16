@@ -167,3 +167,83 @@ augment(bias_pca_amsh) %>%
     col_names = FALSE
   )
 ```
+
+### More Biased Residue Zooms
+
+```{r bias-inset-3, fig.width=9, fig.height=9}
+bias_plot(140, "I") +
+  bias_plot(254, "P") +
+  theme(axis.title.y = element_blank()) +
+  bias_plot(79, "R") +
+  bias_plot(146, "Y") +
+  theme(axis.title.y = element_blank()) +
+  plot_layout(nrow = 2, guides = "collect") &
+  scale_y_continuous(limits = c(-1.25, 2.5), breaks = seq(-1.5, 2.5, 0.5))
+```
+
+### 79 Zoom
+
+```{r 79-zoom, fig.width=12, fig.height=12}
+aa_ordering <- tribble(
+  ~aa, ~group,
+  "*", "Stop",
+  "C", "Special",
+  "G", "Special",
+  "P", "Special",
+  "A", "Hydrophobic",
+  "V", "Hydrophobic",
+  "I", "Hydrophobic",
+  "L", "Hydrophobic",
+  "M", "Hydrophobic",
+  "F", "Hydrophobic",
+  "Y", "Hydrophobic",
+  "W", "Hydrophobic",
+  "R", "Positive",
+  "H", "Positive",
+  "K", "Positive",
+  "D", "Negative",
+  "E", "Negative",
+  "S", "Polar Uncharged",
+  "T", "Polar Uncharged",
+  "N", "Polar Uncharged",
+  "Q", "Polar Uncharged"
+)
+
+cre_uas %>%
+  filter(
+    compound %in% c("None", "aMSH"),
+    pos == 79
+  ) %>%
+  mutate(aa = as.character(aa)) %>%
+  inner_join(aa_ordering) %>%
+  mutate(
+    compound = "aMSH",
+    pathway = if_else(reporter == "CRE", "Gs", "Gq"),
+    dose = if_else(dose == "medium", "med", dose),
+    dose = R.utils::capitalize(dose),
+    dose = factor(dose, levels = c("Zero", "Low", "Med", "High")),
+    aa = factor(aa, levels = aa_ordering$aa)
+  ) %>%
+  ggplot(aes(x = dose, y = log2FoldChange, color = pathway, group = pathway)) +
+  geom_hline(yintercept = 0, lty = "dashed") +
+  geom_pointrange(
+    aes(
+      ymin = log2FoldChange - 2 * std.error,
+      ymax = log2FoldChange + 2 * std.error
+    ),
+    position = position_dodge(width = 0.25)
+  ) +
+  geom_line(
+    position = position_dodge(width = 0.25)
+  ) +
+  facet_wrap(facets = vars(aa), nrow = 5) +
+  labs(
+    title = "Pos 79 Mutants",
+    y = "Log2-fold Change vs WT\n(+/- 2 Standard Errors)",
+  ) +
+  scale_color_manual(values = c("#9467BD", "#2CA02C")) +
+  theme(
+    axis.title.x = element_blank(),
+    # legend.position = 'none'
+  )
+```

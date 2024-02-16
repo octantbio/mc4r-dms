@@ -97,3 +97,11 @@ Let’s split the protein up in two and use patchwork to smash it together
 ### Write TSV out for Structure
 
 We’ll also write out the PC’s for projecting onto the structure
+
+### More Biased Residue Zooms
+
+![](./fig-3/bias-inset-3-1.png)<!-- -->
+
+### 79 Zoom
+
+![](./fig-3/79-zoom-1.png)<!-- -->
