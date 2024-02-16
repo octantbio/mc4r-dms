@@ -1,0 +1,203 @@
+```{r fig-5-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-5/"
+)
+```
+
+## Main Figures
+
+### THIQ vs aMSH meta-regression
+
+```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
+amsh_vs_thiq_wide <- cre %>%
+  filter(dose == "low") %>%
+  select(pos, aa, compound, est = log2FoldChange, se = std.error) %>%
+  pivot_wider(names_from = compound, values_from = c(est, se)) %>%
+  mutate(
+    contrast = est_aMSH - est_THIQ,
+    pooled_se = sqrt(se_aMSH^2 + se_THIQ^2),
+    z = contrast / pooled_se,
+    pval = (1 - pnorm(abs(z))) * 2,
+    fdr = p.adjust(pval, method = "fdr"),
+    mutant = str_c(pos, aa)
+  )
+
+# assume a perfect slope and intercept centered at 0
+priors <- c(
+  prior(normal(1, 1), class = "b", lb = 0),
+  prior(normal(0, 1), class = "Intercept")
+)
+
+bench::bench_time(
+  model_brm <- brm(
+    data = amsh_vs_thiq_wide,
+    formula = est_aMSH | se(se_aMSH) ~ me(est_THIQ, se_THIQ),
+    backend = "cmdstanr",
+    chains = 4, cores = 4,
+    prior = priors,
+    family = "gaussian"
+  )
+)
+
+meta_lm <- fixef(model_brm)[, 1]
+
+resid_data <- residuals(model_brm) %>%
+  as_tibble() %>%
+  mutate(
+    residual_z = Estimate / Est.Error,
+    residual_pval = (1 - pnorm(abs(residual_z))) * 2,
+    residual_fdr = p.adjust(residual_pval, method = "fdr")
+  ) %>%
+  bind_cols(amsh_vs_thiq_wide)
+
+resid_data %>%
+  ggplot(aes(y = est_aMSH, x = est_THIQ)) +
+  geom_hline(yintercept = 0, lty = "dashed") +
+  geom_vline(xintercept = 0, lty = "dashed") +
+  geom_abline(lty = "dashed") +
+  geom_point(pch = 21, alpha = 0.5) +
+  geom_point(
+    color = "#1F77B4",
+    data = filter(resid_data, residual_fdr < 0.05, residual_z < 0),
+    size = 2
+  ) +
+  geom_point(
+    color = "#FF7F0E",
+    data = filter(resid_data, residual_fdr < 0.05, residual_z > 0),
+    size = 2
+  ) +
+  geom_abline(
+    intercept = meta_lm[1],
+    slope = meta_lm[2],
+    color = "#E377C2"
+  ) +
+  geom_text_repel(
+    aes(label = mutant),
+    data = filter(resid_data, residual_fdr < 0.05, (residual_z > 0)),
+    force = 2,
+    min.segment.length = 0,
+    max.overlaps = 20,
+    max.time = 2
+  ) +
+  coord_equal() +
+  labs(
+    x = "THIQ\n(log2-fold change from WT)",
+    y = "aMSH\n(log2-fold change from WT)",
+    title = "aMSH vs THIQ (low concentration)"
+  ) +
+  theme(panel.grid.major = element_blank())
+```
+
+As a table, here's the 5% FDR's
+
+```{r}
+resid_data %>%
+  filter(residual_fdr < 0.05) %>%
+  select(pos, aa, est_aMSH, est_THIQ, residual_z, residual_fdr) %>%
+  mutate(residual_fdr = -log10(residual_fdr)) %>%
+  arrange(pos, residual_z) %>%
+  knitr::kable(digits = 2)
+```
+
+### aMSH vs THIQ -- Position 129 
+
+```{r pos129-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_amsh_thiq <- function(sel_pos) {
+  aa_ordering <- tribble(
+    ~aa, ~group,
+    "*", "Special",
+    "C", "Special",
+    "G", "Special",
+    "P", "Special",
+    "A", "Hydrophobic",
+    "V", "Hydrophobic",
+    "I", "Hydrophobic",
+    "L", "Hydrophobic",
+    "M", "Hydrophobic",
+    "F", "Hydrophobic",
+    "Y", "Hydrophobic",
+    "W", "Hydrophobic",
+    "R", "Positive",
+    "H", "Positive",
+    "K", "Positive",
+    "D", "Negative",
+    "E", "Negative",
+    "S", "Polar Uncharged",
+    "T", "Polar Uncharged",
+    "N", "Polar Uncharged",
+    "Q", "Polar Uncharged"
+  ) %>%
+    mutate(group = factor(group, levels = c("Special", "Hydrophobic", "Polar Uncharged", "Positive", "Negative")))
+  
+  cre %>%
+    filter(
+      pos == sel_pos,
+      dose == "low"
+    ) %>%
+    mutate(aa = as.character(aa)) %>%
+    inner_join(aa_ordering) %>%
+    ggplot(aes(x = aa, y = log2FoldChange, color = compound, group = compound)) +
+    geom_hline(yintercept = 0, lty = "dashed") +
+    geom_pointrange(
+      aes(
+        ymin = log2FoldChange - 2 * std.error,
+        ymax = log2FoldChange + 2 * std.error
+      ),
+      position = position_dodge(width = 0.5)
+    ) +
+    facet_grid(cols = vars(group), space = "free_x", scales = "free_x") +
+    labs(
+      title = str_c("Pos ", sel_pos, " Mutants"),
+      y = "Log2-fold Change vs WT\n(+/- 2 Standard Errors)",
+    ) +
+    scale_color_manual(values = c("#1F77B4", "#FF7F0E")) +
+    theme(
+      axis.title.x = element_blank(),
+      legend.position = "bottom",
+      legend.title = element_blank(),
+      panel.grid.major.y = element_line(colour = "grey92", linewidth = rel(0.5))
+    )
+}
+
+compare_amsh_thiq(129) +
+  scale_y_continuous(limits = c(-3, 1.25), breaks = seq(-3, 1, 1))
+```
+
+### aMSH vs THIQ -- Position 284
+
+```{r pos284-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_amsh_thiq(284) +
+  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5,0.5,0.5), expand = c(0,0))
+```
+
+### aMSH vs THIQ -- Position 48
+
+```{r pos48-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_amsh_thiq(48) +
+  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5,0.5,0.5), expand = c(0,0))
+```
+
+## Extended Figures
+
+### PCA for ligand selectivity
+
+```{r ligand-pca, fig.width=9, fig.height=9}
+foo <- cre %>% 
+  filter(compound != 'None', aa!='*') %>% 
+  select(pos, aa, contrast, statistic) %>% 
+  pivot_wider(names_from = contrast, values_from = statistic) %>% 
+  unite(col = 'variant', pos, aa, sep = '') %>% 
+  column_to_rownames('variant') %>% 
+  prcomp() 
+
+foo%>% 
+  fviz_pca(
+    axes = c(1,3),
+    label = 'var',
+    ggtheme = theme_get()
+  ) +
+  geom_label_repel(
+    aes(x = .fittedPC1, y = .fittedPC3, label = .rownames),
+    data = augment(foo) %>% filter(abs(.fittedPC3) > 3.75)
+  )
+```
