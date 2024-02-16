@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-February 15, 2024
+February 16, 2024
 
 # Introduction
 
@@ -69,3 +69,39 @@ Let’s split the protein up in two and use patchwork to smash it together
 ### Show of Force (Log2FC)
 
 ![](./fig-2/show-of-force-log2fc-1.png)<!-- -->
+
+# Figure 3
+
+## Main Figures
+
+### PCA for Bias
+
+![](./fig-3/amsh-bias-no-contrasts-1.png)<!-- -->
+
+### Specific Mutants
+
+![](./fig-3/bias-inset-1-1.png)<!-- -->
+
+![](./fig-3/bias-inset-2-1.png)<!-- -->
+
+## Extended Figures
+
+### Bias PCA with Stops
+
+![](./fig-3/bias_pca_stops-1.png)<!-- -->
+
+### Bias PCA with Loadings
+
+![](./fig-3/bias_pca_loadings-1.png)<!-- -->
+
+### Write TSV out for Structure
+
+We’ll also write out the PC’s for projecting onto the structure
+
+### More Biased Residue Zooms
+
+![](./fig-3/bias-inset-3-1.png)<!-- -->
+
+### 79 Zoom
+
+![](./fig-3/79-zoom-1.png)<!-- -->

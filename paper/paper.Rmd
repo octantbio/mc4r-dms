@@ -168,10 +168,15 @@ cre_uas <- bind_rows(
 
 # Figure 1
 
-```{r child="fig-1.rmd"}
+```{r child="fig-1.Rmd"}
 ```
 
 # Figure 2
 
-```{r child="fig-2.rmd"}
+```{r child="fig-2.Rmd"}
+```
+
+# Figure 3
+
+```{r child="fig-3.Rmd"}
 ```

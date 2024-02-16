@@ -21,100 +21,102 @@ bind_rows(
   pos61p_downsample_sumstats %>% mutate(mut = "E61P")
 ) %>%
   ggplot() +
-  geom_pointrange(aes(x = as.factor(depth), y = estimate,
-                      ymin = estimate - 2*std.error,
-                      ymax = estimate + 2*std.error), position = position_dodge2(width = 0.5)) +
+  geom_pointrange(aes(
+    x = as.factor(depth), y = estimate,
+    ymin = estimate - 2 * std.error,
+    ymax = estimate + 2 * std.error
+  ), position = position_dodge2(width = 0.5)) +
   facet_wrap(~mut, nrow = 1) +
-  geom_hline(yintercept = 0, lty = 'dashed') +
-  xlab("Number of Barcodes Per Sample") + 
+  geom_hline(yintercept = 0, lty = "dashed") +
+  xlab("Number of Barcodes Per Sample") +
   ylab("Log2FoldChange\n+/- 2 Standard Errors")
 ```
 
 ### Correlation to Computational Predictions
 
 ```{r predictors, fig.width=10, fig.height=9}
-alpha_missense <- read_tsv('../data/annotations/mc4r-alphamissense.tsv') %>% 
-  clean_names() %>% 
+alpha_missense <- read_tsv("../data/annotations/mc4r-alphamissense.tsv") %>%
+  clean_names() %>%
   mutate(
-    aa = str_sub(mut, start=-1, end=-1),
-    pos = str_extract(mut, '\\d+') %>% as.numeric()
-  ) 
+    aa = str_sub(mut, start = -1, end = -1),
+    pos = str_extract(mut, "\\d+") %>% as.numeric()
+  )
 
-alpha_missense_plot <- alpha_missense %>% 
-  mutate(score = -score + 1) %>% 
-  inner_join(cre) %>% 
+alpha_missense_plot <- alpha_missense %>%
+  mutate(score = -score + 1) %>%
+  inner_join(cre) %>%
   filter(
-    compound == 'aMSH',
-    dose == 'low'
-  ) %>% 
-  ggplot(aes(x=statistic, y=score)) +
-  geom_point(pch=21, alpha = 0.3) +
+    compound == "aMSH",
+    dose == "low"
+  ) %>%
+  ggplot(aes(x = statistic, y = score)) +
+  geom_point(pch = 21, alpha = 0.3) +
   labs(
-    x = 'DMS Z Score',
-    y = 'AlphaMissense score\n(0 = pathogenic, 1 = benign)'
+    x = "DMS Z Score",
+    y = "AlphaMissense score\n(0 = pathogenic, 1 = benign)"
   )
 
 #-------------------------------------------------------------------------------
 
-popeve <- read_csv('../data/annotations/mc4r-popeve.csv') %>% 
+popeve <- read_csv("../data/annotations/mc4r-popeve.csv") %>%
   mutate(
     wt = str_sub(mutant, start = 1, end = 1),
-    pos = str_extract(mutant, '\\d+') %>% as.numeric(),
+    pos = str_extract(mutant, "\\d+") %>% as.numeric(),
     aa = str_sub(mutant, start = -1, end = -1)
-  ) 
+  )
 
-popeve_plot <- popeve %>% 
-  inner_join(cre) %>% 
+popeve_plot <- popeve %>%
+  inner_join(cre) %>%
   filter(
-    compound == 'aMSH',
-    dose == 'low'
-  ) %>% 
-  ggplot(aes(x=statistic, y=popEVE)) +
-  geom_point(pch=21, alpha = 0.3) +
+    compound == "aMSH",
+    dose == "low"
+  ) %>%
+  ggplot(aes(x = statistic, y = popEVE)) +
+  geom_point(pch = 21, alpha = 0.3) +
   labs(
-    x = 'DMS Z Score',
-    y = 'popEVE Score'
-  ) 
+    x = "DMS Z Score",
+    y = "popEVE Score"
+  )
 
 #-------------------------------------------------------------------------------
 
-class_a <- read_tsv('../data/annotations/mc4r-class-a.tsv') %>% 
-  clean_names() %>% 
+class_a <- read_tsv("../data/annotations/mc4r-class-a.tsv") %>%
+  clean_names() %>%
   rename(class_a = cons, wt = wt_aa_short)
 
-class_a_fit <- cre %>% 
+class_a_fit <- cre %>%
   filter(
-    compound == 'aMSH',
-    dose == 'low'
-  ) %>% 
-  group_by(compound, dose, norm, contrast, pos) %>% 
+    compound == "aMSH",
+    dose == "low"
+  ) %>%
+  group_by(compound, dose, norm, contrast, pos) %>%
   summarise(
     estimate = mean(log2FoldChange),
     z = mean(statistic),
-    .groups = 'drop'
-  ) %>% 
-  inner_join(class_a) %>% 
-  augment(lm(class_a ~ z, data=.), data =.)
+    .groups = "drop"
+  ) %>%
+  inner_join(class_a) %>%
+  augment(lm(class_a ~ z, data = .), data = .)
 
-conservation_plot <- class_a_fit %>% 
+conservation_plot <- class_a_fit %>%
   ggplot() +
   geom_point(
-    aes(x = z, y = class_a), 
+    aes(x = z, y = class_a),
     pch = 21
   ) +
   geom_text_repel(
-    aes(x = z, y = class_a, label = pos), 
+    aes(x = z, y = class_a, label = pos),
     data = filter(class_a_fit, .std.resid < -2),
     min.segment.length = 0,
     max.time = 2,
     force = 0.5,
-    color = 'red'
+    color = "red"
   ) +
   geom_line(aes(x = z, y = .fitted), linewidth = 1) +
   labs(
-    x = 'Mutational Tolerance Score',
-    y = 'Class-A GPCR Conservation'
-  ) 
+    x = "Mutational Tolerance Score",
+    y = "Class-A GPCR Conservation"
+  )
 
 #-------------------------------------------------------------------------------
 
@@ -123,4 +125,3 @@ alpha_missense_plot +
   conservation_plot +
   plot_layout(ncol = 2)
 ```
-
