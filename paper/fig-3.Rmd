@@ -1,0 +1,169 @@
+```{r fig-3-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-3/"
+)
+```
+
+## Main Figures
+
+### PCA for Bias
+
+```{r amsh-bias-no-contrasts, fig.width=6, fig.height=6}
+bias_pca_amsh <- cre_uas %>%
+  filter(compound != "THIQ") %>%
+  select(reporter, pos, aa, compound, dose, statistic) %>%
+  pivot_wider(names_from = c(reporter, compound, dose), values_from = statistic) %>%
+  unite(col = "variant", pos, aa, sep = "") %>%
+  column_to_rownames("variant") %>%
+  prcomp()
+
+bias_pca_amsh_labels <- augment(bias_pca_amsh) %>%
+  mutate(
+    color = case_when(
+      .fittedPC2 > 7.5 | (.rownames %in% c("140I", "146Y")) ~ "#9467BD",
+      .fittedPC2 < -7.5 ~ "#2CA02C",
+      TRUE ~ "black"
+    )
+  )
+
+bias_pca_amsh_labels %>%
+  ggplot(aes(x = .fittedPC1, y = .fittedPC2)) +
+  geom_point(
+    aes(color = color),
+    alpha = 0.3,
+    data = bias_pca_amsh_labels %>% filter(color == "black")
+  ) +
+  geom_point(
+    aes(color = color),
+    data = bias_pca_amsh_labels %>% filter(color != "black"),
+    size = 2
+  ) +
+  geom_text_repel(
+    aes(label = .rownames),
+    data = bias_pca_amsh_labels %>% filter(color != "black"),
+    min.segment.length = 0,
+    max.time = 2,
+    force = 2
+  ) +
+  theme(
+    legend.position = "none"
+  ) +
+  scale_color_identity() +
+  labs(
+    x = "PC1 (66%)",
+    y = "PC2 (12%)"
+  )
+```
+
+### Specific Mutants
+
+```{r bias-inset-1, fig.width=12, fig.height=4}
+bias_plot <- function(sel_pos, sel_aa) {
+  amsh_zero <- cre_uas %>%
+    filter(
+      pos == sel_pos,
+      aa == sel_aa,
+      compound %in% c("None", "aMSH")
+    ) %>%
+    mutate(
+      compound = "aMSH",
+      pathway = if_else(reporter == "CRE", "Gs", "Gq"),
+      dose = if_else(dose == "medium", "med", dose),
+      dose = R.utils::capitalize(dose),
+      dose = factor(dose, levels = c("Zero", "Low", "Med", "High"))
+    )
+
+  amsh_zero %>%
+    ggplot(aes(x = dose, y = log2FoldChange, color = pathway, group = pathway)) +
+    geom_hline(yintercept = 0, lty = "dashed") +
+    geom_pointrange(
+      aes(
+        ymin = log2FoldChange - 2 * std.error,
+        ymax = log2FoldChange + 2 * std.error
+      ),
+      position = position_dodge(width = 0.25)
+    ) +
+    geom_line(
+      position = position_dodge(width = 0.25)
+    ) +
+    labs(
+      title = paste0(sel_pos, sel_aa),
+      y = "Log2-fold Change vs WT\n(+/- 2 Standard Errors)",
+    ) +
+    scale_color_manual(values = c("#9467BD", "#2CA02C")) +
+    theme(
+      axis.title.x = element_blank(),
+      # legend.position = 'none'
+    )
+}
+
+bias_plot(164, "L") +
+  bias_plot(158, "R") +
+  theme(axis.title.y = element_blank()) +
+  bias_plot(152, "R") +
+  theme(axis.title.y = element_blank()) +
+  plot_layout(nrow = 1, guides = "collect") &
+  scale_y_continuous(limits = c(-1.75, 1.75), breaks = seq(-1.5, 1.5, 0.5))
+```
+
+```{r bias-inset-2, fig.width=4, fig.height=8}
+bias_plot(223, "L") /
+  bias_plot(228, "R") &
+  theme(legend.position = "none") &
+  scale_y_continuous(limits = c(-0.5, 1.75), breaks = seq(-0.5, 1.5, 0.5))
+```
+
+## Extended Figures
+
+### Bias PCA with Stops
+
+```{r bias_pca_stops, fig.width=6, fig.height=6}
+bias_pca_amsh_labels %>%
+  ggplot(aes(x = .fittedPC1, y = .fittedPC2)) +
+  geom_point(
+    aes(color = "black"),
+    data = bias_pca_amsh_labels %>% filter(str_detect(.rownames, "\\*", negate = TRUE))
+  ) +
+  geom_point(
+    aes(color = "blue"),
+    data = bias_pca_amsh_labels %>% filter(str_detect(.rownames, "\\*"))
+  ) +
+  theme(
+    legend.position = "none"
+  ) +
+  scale_color_identity() +
+  labs(
+    x = "PC1 (66%)",
+    y = "PC2 (12%)"
+  )
+```
+
+### Bias PCA with Loadings
+
+```{r bias_pca_loadings, fig.width=6, fig.height=6}
+bias_pca_amsh %>%
+  fviz_pca(
+    axes = c(1, 2),
+    label = "var",
+    ggtheme = theme_get()
+  ) +
+  labs(title = "aMSH Bias PCA")
+```
+
+### Write TSV out for Structure
+
+We'll also write out the PC's for projecting onto the structure
+
+```{r}
+augment(bias_pca_amsh) %>%
+  mutate(
+    pos = str_extract(.rownames, "\\d+") %>% as.numeric()
+  ) %>%
+  group_by(pos) %>%
+  summarise(mean_pc2 = mean(.fittedPC2)) %>%
+  mutate(pos = str_c(":", pos, ".R")) %>%
+  write_tsv(
+    "./bias-collapse.tsv",
+    col_names = FALSE
+  )
+```
