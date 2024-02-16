@@ -163,7 +163,7 @@ augment(bias_pca_amsh) %>%
   summarise(mean_pc2 = mean(.fittedPC2)) %>%
   mutate(pos = str_c("/R:", pos)) %>%
   write_tsv(
-    "./bias-collapse.tsv",
+    "./fig-3/bias-collapse.tsv",
     col_names = FALSE
   )
 ```
