@@ -180,3 +180,13 @@ cre_uas <- bind_rows(
 
 ```{r child="fig-3.Rmd"}
 ```
+
+# Figure 4
+
+```{r child="fig-4.Rmd"}
+```
+
+# Figure 5
+
+```{r child="fig-5.Rmd"}
+```
