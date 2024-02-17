@@ -2,21 +2,102 @@
 knitr::opts_chunk$set(
   fig.path = "./fig-4/"
 )
+knitr::opts_chunk$set(
+    dev = c("png", "cairo_pdf")
+)
 ```
 
 ## Main Figures
-
-### 
-
-```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
+```{r}
 library(ggpubr)
-library(vroom)
 library(knitr)
 library(ggrepel)
-library(fs)
 library(patchwork)
 library(tidyverse)
-source("../src/dms-analysis-utils.R")
 
+defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
+rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv")
+
+defect_rescue_stats <- inner_join(defect_sumstats %>% filter(chaperone == "NoIpsen"),
+           rescue_sumstats,
+           suffix = c("_defect", "_rescue"),
+           by = c("chunk", "pos", "mut_aa")) %>%
+    mutate(category = if_else(p.adj_defect < 0.05 & p.adj_rescue < 0.05,
+                              "Joint Significant",
+                              "Non-Joint Significant"))
+
+sig_vars <- defect_rescue_stats %>%
+    filter(category == "Joint Significant") %>%
+    mutate(id = str_c(pos, mut_aa)) %>%
+    dplyr::select(id) %>%
+    unlist()
 ```
 
+### Scaled (0-1) Rescue Effects Across All Variants
+```{r scaled-rescue-scatter, fig.width=6, fig.height=6}
+defect_sumstats %>%
+    dplyr::select(chunk:log2FoldChange) %>%
+    pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
+    ggplot() +
+        geom_point(aes(x = 2^NoIpsen,
+                       y = 2^Ipsen,
+                       color = if_else(mut_aa == "X", "Stop", "NonStop")),
+                   alpha = 0.3) +
+        theme_pubr(base_size = 16) +
+        scale_color_manual(values = c("Stop" = "red",
+                                      "NonStop" = "black"),
+                           name = "") +
+        coord_cartesian(xlim = c(0,1.5), ylim = c(0,3)) +
+        xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
+        ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") +
+        geom_abline(slope = 1, intercept = 0)
+```
+
+### Wang 2014 Variants
+```
+wang2014 <- read_tsv("../data/annotations/Wang-Ipsen2014.tsv")
+```
+
+### Huang 2017 Variants
+```
+huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv")
+```
+
+## Extended Figures
+
+### Rescue/Defect Effects Across All Variants
+```{r rescue-defect-effects-scatter, fig.width=6, fig.height=6}
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = log2FoldChange_defect,
+                   y = log2FoldChange_rescue,
+                   color = category),
+               alpha = 0.3) +
+    theme_pubr(base_size = 16) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +
+    geom_abline(intercept = 0, slope = -1) +
+    coord_cartesian(xlim = c(-2,1), ylim = c(-2,2.5)) +
+    xlab("Defect Log2FoldChange") +
+    ylab("Rescue Log2FoldChange") 
+```
+
+### Rescue/Defect Z-Statistics Across All Variants
+```{r rescue-defect-z-scatter, fig.width=6, fig.height=6}
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = statistic_defect,
+                   y = statistic_rescue,
+                   color = category),
+               alpha = 0.3) +
+    theme_pubr(base_size = 16) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +   
+    geom_abline(intercept = 0, slope = -1) +
+    xlab("Defect Z-Statistic") +
+    ylab("Rescue Z-Statistic") 
+```
