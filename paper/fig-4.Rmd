@@ -1,0 +1,22 @@
+```{r fig-4-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-4/"
+)
+```
+
+## Main Figures
+
+### 
+
+```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
+library(ggpubr)
+library(vroom)
+library(knitr)
+library(ggrepel)
+library(fs)
+library(patchwork)
+library(tidyverse)
+source("../src/dms-analysis-utils.R")
+
+```
+
