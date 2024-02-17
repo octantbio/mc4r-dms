@@ -176,12 +176,40 @@ As a table, here’s the 5% FDR’s
 
 ![](./fig-5/pos284-amsh-vs-thiq-1.png)<!-- -->
 
-### aMSH vs THIQ – Position 48
-
-![](./fig-5/pos48-amsh-vs-thiq-1.png)<!-- -->
-
 ## Extended Figures
 
 ### PCA for ligand selectivity
 
 ![](./fig-5/ligand-pca-1.png)<!-- -->
+
+### aMSH vs THIQ – Position 48
+
+![](./fig-5/pos48-amsh-vs-thiq-1.png)<!-- -->
+
+### DRC aMSH vs Thiq – Position 48
+
+![](./fig-5/48-drc-1.png)<!-- -->
+
+### aMSH vs THIQ – Position 52
+
+![](./fig-5/pos52-amsh-vs-thiq-1.png)<!-- -->
+
+### DRC aMSH vs THIQ – Position 52
+
+![](./fig-5/52-drc-1.png)<!-- -->
+
+### aMSH vs THIQ – Position 101
+
+![](./fig-5/pos101-amsh-vs-thiq-1.png)<!-- -->
+
+### DRC aMSH vs THIQ – Position 101
+
+![](./fig-5/101-drc-1.png)<!-- -->
+
+### DRC aMSH vs THIQ – Position 129
+
+![](./fig-5/129-drc-1.png)<!-- -->
+
+### DRC aMSH vs THIQ – Position 284
+
+![](./fig-5/284-drc-1.png)<!-- -->
