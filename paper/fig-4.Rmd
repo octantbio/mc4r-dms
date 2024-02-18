@@ -72,7 +72,8 @@ wang2014_barplot_data %>%
                  stat = "identity") +
         scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
         facet_grid(cols = vars(group), scales = "free_x", space = "free") +
-        geom_hline(yintercept = 1)
+        geom_hline(yintercept = 1) +
+        xlab("Variant")
 ```
 
 ```{r rescue-wang2014-scatter, fig.width=9, fig.height=7}
