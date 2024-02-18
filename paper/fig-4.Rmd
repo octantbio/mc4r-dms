@@ -109,6 +109,65 @@ defect_sumstats %>%
 
 ### Huang 2017 Variants
 
+```{r rescue-huanh2017-barplot, fig.width=12, fig.height=4}
+huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv")
+defect_rescue_stats_huang2017 <- defect_sumstats %>%
+    dplyr::select(chunk:std.error) %>%
+    inner_join(huang2017, by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("MildLoF",
+                                            "PartialLoF",
+                                            "FullLoF")))
+defect_rescue_stats_huang2017 %>%
+    mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
+    ggplot() +
+        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     fill = chaperone),
+                 width = 0.5,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     ymin = 2^(log2FoldChange-2*std.error),
+                     ymax = 2^(log2FoldChange+2*std.error),
+                     group = chaperone),
+                 width = 0.2,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
+        facet_grid(cols = vars(group), scales = "free_x", space = "free") +
+        geom_hline(yintercept = 1) +
+        theme(axis.text.x = element_blank()) +
+        xlab("")
+```
+
+```{r rescue-huang2017-scatter, fig.width=9, fig.height=7}
+defect_rescue_stats_huang2017 <- huang2017 %>%
+    left_join(defect_rescue_stats,
+              by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("MildLoF",
+                                            "PartialLoF",
+                                            "FullLoF")))
+
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = statistic_defect,
+                   y = statistic_rescue),
+               alpha = 0.3) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    geom_abline(intercept = 0, slope = -1) +
+    geom_point(data = defect_rescue_stats_huang2017,
+               aes(x = statistic_defect,
+                   y = statistic_rescue,
+                   color = group),
+               size = 3) +
+    scale_color_manual(values = c("MildLoF" = "green",
+                                  "PartialLoF" = "gold",
+                                  "FullLoF" = "red"),
+                       name = "Huang 2017")
+```
+
+
 ## Extended Figures
 
 ### Rescue/Defect Effects Across All Variants
