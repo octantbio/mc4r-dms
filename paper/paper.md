@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-February 16, 2024
+February 18, 2024
 
 # Introduction
 
@@ -107,6 +107,34 @@ We’ll also write out the PC’s for projecting onto the structure
 ![](./fig-3/79-zoom-1.png)<!-- -->
 
 # Figure 4
+
+## Main Figures
+
+### Scaled (0-1) Rescue Effects Across All Variants
+
+![](./fig-4/scaled-rescue-scatter-1.png)<!-- -->
+
+### Wang 2014 Variants
+
+![](./fig-4/rescue-wang2014-barplot-1.png)<!-- -->
+
+![](./fig-4/rescue-wang2014-scatter-1.png)<!-- -->
+
+### Huang 2017 Variants
+
+![](./fig-4/rescue-huanh2017-barplot-1.png)<!-- -->
+
+![](./fig-4/rescue-huang2017-scatter-1.png)<!-- -->
+
+## Extended Figures
+
+### Rescue/Defect Effects Across All Variants
+
+![](./fig-4/rescue-defect-effects-scatter-1.png)<!-- -->
+
+### Rescue/Defect Z-Statistics Across All Variants
+
+![](./fig-4/rescue-defect-z-scatter-1.png)<!-- -->
 
 # Figure 5
 

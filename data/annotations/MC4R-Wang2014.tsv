@@ -1,0 +1,13 @@
+pos	mut_aa	group
+58	C	WeakRescue
+61	K	StrongRescue
+62	S	StrongRescue
+69	T	StrongRescue
+78	L	StrongRescue
+84	R	StrongRescue
+98	R	NoRescue
+162	I	StrongRescue
+165	W	StrongRescue
+174	C	StrongRescue
+271	Y	WeakRescue
+299	H	NoRescue

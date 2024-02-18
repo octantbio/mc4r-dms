@@ -1,0 +1,207 @@
+```{r fig-4-setup}
+knitr::opts_chunk$set(
+  fig.path = "./fig-4/"
+)
+```
+
+## Main Figures
+```{r}
+defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
+rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv")
+
+defect_rescue_stats <- inner_join(defect_sumstats %>% filter(chaperone == "NoIpsen"),
+           rescue_sumstats,
+           suffix = c("_defect", "_rescue"),
+           by = c("chunk", "pos", "mut_aa")) %>%
+    mutate(category = if_else(p.adj_defect < 0.05 & p.adj_rescue < 0.05,
+                              "Joint Significant",
+                              "Non-Joint Significant"))
+
+sig_vars <- defect_rescue_stats %>%
+    filter(category == "Joint Significant") %>%
+    mutate(id = str_c(pos, mut_aa)) %>%
+    dplyr::select(id) %>%
+    unlist()
+```
+
+### Scaled (0-1) Rescue Effects Across All Variants
+```{r scaled-rescue-scatter, fig.width=9, fig.height=7}
+defect_sumstats %>%
+    dplyr::select(chunk:log2FoldChange) %>%
+    pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
+    ggplot() +
+        geom_point(aes(x = 2^NoIpsen,
+                       y = 2^Ipsen,
+                       color = if_else(str_c(pos, mut_aa) %in% sig_vars, "Joint Significant", "Non-Joint Significant")),
+                   alpha = 0.3) +
+        scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +
+        coord_cartesian(xlim = c(0,1.5), ylim = c(0,3)) +
+        xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
+        ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") +
+        geom_abline(slope = 1, intercept = 0)
+```
+
+### Wang 2014 Variants
+```{r rescue-wang2014-barplot, fig.width=12, fig.height=4}
+wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv")
+wang2014_barplot_data <- defect_sumstats %>%
+    dplyr::select(chunk:std.error) %>%
+    inner_join(wang2014, by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("NoRescue",
+                                            "WeakRescue",
+                                            "StrongRescue")))
+
+wang2014_barplot_data %>%
+    mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
+    ggplot() +
+        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     fill = chaperone),
+                 width = 0.5,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     ymin = 2^(log2FoldChange-2*std.error),
+                     ymax = 2^(log2FoldChange+2*std.error),
+                     group = chaperone),
+                 width = 0.2,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
+        facet_grid(cols = vars(group), scales = "free_x", space = "free") +
+        geom_hline(yintercept = 1) +
+        xlab("Variant")
+```
+
+```{r rescue-wang2014-scatter, fig.width=9, fig.height=7}
+wang2014_vswt <- defect_sumstats %>%
+    dplyr::select(chunk:log2FoldChange) %>%
+    pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
+    inner_join(wang2014, by = join_by(pos, mut_aa))
+
+defect_sumstats %>%
+    dplyr::select(chunk:log2FoldChange) %>%
+    pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
+    left_join(wang2014, by = join_by(pos, mut_aa)) %>%
+    ggplot() +
+        geom_point(aes(x = 2^NoIpsen,
+                       y = 2^Ipsen),
+                   alpha = 0.3) +
+        geom_point(data = wang2014_vswt,
+                   aes(x = 2^NoIpsen,
+                       y = 2^Ipsen,
+                       color = group),
+                   size = 3) +
+        geom_label_repel(data = wang2014_vswt,
+               aes(x = 2^NoIpsen,
+                   y = 2^Ipsen,
+                   label = str_c(pos, mut_aa))) +
+        scale_color_manual(values = c("StrongRescue" = "green",
+                                      "WeakRescue" = "gold",
+                                      "NoRescue" = "red"),
+                           name = "Wang 2014") +
+        coord_cartesian(xlim = c(0,1.5), ylim = c(0,3)) +
+        xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
+        ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") 
+```
+
+### Huang 2017 Variants
+
+```{r rescue-huanh2017-barplot, fig.width=12, fig.height=4}
+huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv")
+defect_rescue_stats_huang2017 <- defect_sumstats %>%
+    dplyr::select(chunk:std.error) %>%
+    inner_join(huang2017, by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("MildLoF",
+                                            "PartialLoF",
+                                            "FullLoF")))
+defect_rescue_stats_huang2017 %>%
+    mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
+    ggplot() +
+        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     fill = chaperone),
+                 width = 0.5,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     ymin = 2^(log2FoldChange-2*std.error),
+                     ymax = 2^(log2FoldChange+2*std.error),
+                     group = chaperone),
+                 width = 0.2,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
+        facet_grid(cols = vars(group), scales = "free_x", space = "free") +
+        geom_hline(yintercept = 1) +
+        theme(axis.text.x = element_blank()) +
+        xlab("")
+```
+
+```{r rescue-huang2017-scatter, fig.width=9, fig.height=7}
+defect_rescue_stats_huang2017 <- huang2017 %>%
+    left_join(defect_rescue_stats,
+              by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("MildLoF",
+                                            "PartialLoF",
+                                            "FullLoF")))
+
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = statistic_defect,
+                   y = statistic_rescue),
+               alpha = 0.3) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    geom_abline(intercept = 0, slope = -1) +
+    geom_point(data = defect_rescue_stats_huang2017,
+               aes(x = statistic_defect,
+                   y = statistic_rescue,
+                   color = group),
+               size = 3) +
+    scale_color_manual(values = c("MildLoF" = "green",
+                                  "PartialLoF" = "gold",
+                                  "FullLoF" = "red"),
+                       name = "Huang 2017")
+```
+
+
+## Extended Figures
+
+### Rescue/Defect Effects Across All Variants
+```{r rescue-defect-effects-scatter, fig.width=9, fig.height=7}
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = log2FoldChange_defect,
+                   y = log2FoldChange_rescue,
+                   color = category),
+               alpha = 0.3) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +
+    geom_abline(intercept = 0, slope = -1) +
+    coord_cartesian(xlim = c(-2,1), ylim = c(-2,2.5)) +
+    xlab("Defect Log2FoldChange") +
+    ylab("Rescue Log2FoldChange") 
+```
+
+### Rescue/Defect Z-Statistics Across All Variants
+```{r rescue-defect-z-scatter, fig.width=9, fig.height=7}
+ggplot(defect_rescue_stats) +
+    geom_point(aes(x = statistic_defect,
+                   y = statistic_rescue,
+                   color = category),
+               alpha = 0.3) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = 0) +
+    scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +   
+    geom_abline(intercept = 0, slope = -1) +
+    xlab("Defect Z-Statistic") +
+    ylab("Rescue Z-Statistic") 
+```
