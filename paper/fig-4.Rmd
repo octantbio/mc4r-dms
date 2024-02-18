@@ -2,19 +2,10 @@
 knitr::opts_chunk$set(
   fig.path = "./fig-4/"
 )
-knitr::opts_chunk$set(
-    dev = c("png", "cairo_pdf")
-)
 ```
 
 ## Main Figures
 ```{r}
-library(ggpubr)
-library(knitr)
-library(ggrepel)
-library(patchwork)
-library(tidyverse)
-
 defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
 rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv")
 
@@ -43,7 +34,6 @@ defect_sumstats %>%
                        y = 2^Ipsen,
                        color = if_else(mut_aa == "X", "Stop", "NonStop")),
                    alpha = 0.3) +
-        theme_pubr(base_size = 16) +
         scale_color_manual(values = c("Stop" = "red",
                                       "NonStop" = "black"),
                            name = "") +
@@ -81,7 +71,6 @@ wang2014_barplot_data %>%
                  position = position_dodge(width = 0.5),
                  stat = "identity") +
         scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
-        theme_pubr(base_size = 16) +
         facet_grid(cols = vars(group), scales = "free_x", space = "free") +
         geom_hline(yintercept = 1)
 ```
@@ -109,7 +98,6 @@ defect_sumstats %>%
                aes(x = 2^NoIpsen,
                    y = 2^Ipsen,
                    label = str_c(pos, mut_aa))) +
-        theme_pubr(base_size = 16) +
         scale_color_manual(values = c("StrongRescue" = "green",
                                       "WeakRescue" = "gold",
                                       "NoRescue" = "red"),
@@ -130,7 +118,6 @@ ggplot(defect_rescue_stats) +
                    y = log2FoldChange_rescue,
                    color = category),
                alpha = 0.3) +
-    theme_pubr(base_size = 16) +
     geom_hline(yintercept = 0) +
     geom_vline(xintercept = 0) +
     scale_color_manual(values = c("Joint Significant" = "red",
@@ -149,7 +136,6 @@ ggplot(defect_rescue_stats) +
                    y = statistic_rescue,
                    color = category),
                alpha = 0.3) +
-    theme_pubr(base_size = 16) +
     geom_hline(yintercept = 0) +
     geom_vline(xintercept = 0) +
     scale_color_manual(values = c("Joint Significant" = "red",
