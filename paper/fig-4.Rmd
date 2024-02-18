@@ -32,11 +32,11 @@ defect_sumstats %>%
     ggplot() +
         geom_point(aes(x = 2^NoIpsen,
                        y = 2^Ipsen,
-                       color = if_else(str_c(pos, mut_aa) %in% sig_vars, "Significant Defect and Rescue, FDR < 0.05", "All Other Variants")),
+                       color = if_else(str_c(pos, mut_aa) %in% sig_vars, "Joint Significant", "Non-Joint Significant")),
                    alpha = 0.3) +
-        scale_color_manual(values = c("Significant Defect and Rescue, FDR < 0.05" = "red",
-                                      "All Other Variants" = "black"),
-                           name = "") +
+        scale_color_manual(values = c("Joint Significant" = "red",
+                                  "Non-Joint Significant" = "black"),
+                       name = "") +
         coord_cartesian(xlim = c(0,1.5), ylim = c(0,3)) +
         xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
         ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") +
