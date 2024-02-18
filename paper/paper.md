@@ -122,6 +122,10 @@ We’ll also write out the PC’s for projecting onto the structure
 
 ### Huang 2017 Variants
 
+![](./fig-4/rescue-huanh2017-barplot-1.png)<!-- -->
+
+![](./fig-4/rescue-huang2017-scatter-1.png)<!-- -->
+
 ## Extended Figures
 
 ### Rescue/Defect Effects Across All Variants
