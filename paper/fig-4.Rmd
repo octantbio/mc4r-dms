@@ -25,7 +25,7 @@ sig_vars <- defect_rescue_stats %>%
 ```
 
 ### Scaled (0-1) Rescue Effects Across All Variants
-```{r scaled-rescue-scatter, fig.width=6, fig.height=6}
+```{r scaled-rescue-scatter, fig.width=9, fig.height=7}
 defect_sumstats %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
@@ -44,7 +44,7 @@ defect_sumstats %>%
 ```
 
 ### Wang 2014 Variants
-```{r rescue-wang2014-barplot, fig.width=12, fig.height=6}
+```{r rescue-wang2014-barplot, fig.width=12, fig.height=4}
 wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv")
 wang2014_barplot_data <- defect_sumstats %>%
     dplyr::select(chunk:std.error) %>%
@@ -75,7 +75,7 @@ wang2014_barplot_data %>%
         geom_hline(yintercept = 1)
 ```
 
-```{r rescue-wang2014-scatter, fig.width=6, fig.height=6}
+```{r rescue-wang2014-scatter, fig.width=9, fig.height=7}
 wang2014_vswt <- defect_sumstats %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
@@ -112,7 +112,7 @@ defect_sumstats %>%
 ## Extended Figures
 
 ### Rescue/Defect Effects Across All Variants
-```{r rescue-defect-effects-scatter, fig.width=6, fig.height=6}
+```{r rescue-defect-effects-scatter, fig.width=9, fig.height=7}
 ggplot(defect_rescue_stats) +
     geom_point(aes(x = log2FoldChange_defect,
                    y = log2FoldChange_rescue,
@@ -130,7 +130,7 @@ ggplot(defect_rescue_stats) +
 ```
 
 ### Rescue/Defect Z-Statistics Across All Variants
-```{r rescue-defect-z-scatter, fig.width=6, fig.height=6}
+```{r rescue-defect-z-scatter, fig.width=9, fig.height=7}
 ggplot(defect_rescue_stats) +
     geom_point(aes(x = statistic_defect,
                    y = statistic_rescue,
