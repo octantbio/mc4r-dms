@@ -40,7 +40,7 @@ defect_sumstats %>%
         coord_cartesian(xlim = c(0,1.5), ylim = c(0,3)) +
         xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
         ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") +
-        geom_abline(slope = 1, intercept = 0)
+        geom_abline(slope = 1, intercept = 0, lty = 'dashed')
 ```
 
 ### Wang 2014 Variants
@@ -72,7 +72,7 @@ wang2014_barplot_data %>%
                  stat = "identity") +
         scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
         facet_grid(cols = vars(group), scales = "free_x", space = "free") +
-        geom_hline(yintercept = 1) +
+        geom_hline(yintercept = 1, lty = 'dashed') +
         xlab("Variant")
 ```
 
@@ -137,7 +137,7 @@ defect_rescue_stats_huang2017 %>%
                  stat = "identity") +
         scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
         facet_grid(cols = vars(group), scales = "free_x", space = "free") +
-        geom_hline(yintercept = 1) +
+        geom_hline(yintercept = 1, lty = 'dashed') +
         theme(axis.text.x = element_blank()) +
         xlab("")
 ```
@@ -154,9 +154,9 @@ ggplot(defect_rescue_stats) +
     geom_point(aes(x = statistic_defect,
                    y = statistic_rescue),
                alpha = 0.3) +
-    geom_hline(yintercept = 0) +
-    geom_vline(xintercept = 0) +
-    geom_abline(intercept = 0, slope = -1) +
+    geom_hline(yintercept = 0, lty = 'dashed') +
+    geom_vline(xintercept = 0, lty = 'dashed') +
+    geom_abline(intercept = 0, lty = 'dashed', slope = -1) +
     geom_point(data = defect_rescue_stats_huang2017,
                aes(x = statistic_defect,
                    y = statistic_rescue,
@@ -178,12 +178,12 @@ ggplot(defect_rescue_stats) +
                    y = log2FoldChange_rescue,
                    color = category),
                alpha = 0.3) +
-    geom_hline(yintercept = 0) +
-    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0, lty = 'dashed') +
+    geom_vline(xintercept = 0, lty = 'dashed') +
+    geom_abline(intercept = 0, lty = 'dashed', slope = -1) +
     scale_color_manual(values = c("Joint Significant" = "red",
                                   "Non-Joint Significant" = "black"),
                        name = "") +
-    geom_abline(intercept = 0, slope = -1) +
     coord_cartesian(xlim = c(-2,1), ylim = c(-2,2.5)) +
     xlab("Defect Log2FoldChange") +
     ylab("Rescue Log2FoldChange") 
@@ -196,12 +196,12 @@ ggplot(defect_rescue_stats) +
                    y = statistic_rescue,
                    color = category),
                alpha = 0.3) +
-    geom_hline(yintercept = 0) +
-    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0, lty = 'dashed') +
+    geom_vline(xintercept = 0, lty = 'dashed') +
+    geom_abline(intercept = 0, lty = 'dashed', slope = -1) +
     scale_color_manual(values = c("Joint Significant" = "red",
                                   "Non-Joint Significant" = "black"),
                        name = "") +   
-    geom_abline(intercept = 0, slope = -1) +
     xlab("Defect Z-Statistic") +
     ylab("Rescue Z-Statistic") 
 ```
