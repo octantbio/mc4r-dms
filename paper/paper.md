@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-February 19, 2024
+February 22, 2024
 
 # Introduction
 
@@ -233,6 +233,14 @@ As a table, here’s the 5% FDR’s
 ### DRC aMSH vs THIQ – Position 101
 
 ![](./fig-5/101-drc-1.png)<!-- -->
+
+### aMSH vs THIQ – Position 104
+
+![](./fig-5/pos104-amsh-vs-thiq-1.png)<!-- -->
+
+### DRC aMSH vs THIQ – Position 104
+
+![](./fig-5/104-drc-1.png)<!-- -->
 
 ### DRC aMSH vs THIQ – Position 129
 
