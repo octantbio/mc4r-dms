@@ -128,7 +128,7 @@ compare_amsh_thiq <- function(sel_pos) {
     "Q", "Polar Uncharged"
   ) %>%
     mutate(group = factor(group, levels = c("Special", "Hydrophobic", "Polar Uncharged", "Positive", "Negative")))
-  
+
   cre %>%
     filter(
       pos == sel_pos,
@@ -136,6 +136,7 @@ compare_amsh_thiq <- function(sel_pos) {
     ) %>%
     mutate(aa = as.character(aa)) %>%
     inner_join(aa_ordering) %>%
+    mutate(aa = factor(aa, levels = aa_ordering$aa)) %>%
     ggplot(aes(x = aa, y = log2FoldChange, color = compound, group = compound)) +
     geom_hline(yintercept = 0, lty = "dashed") +
     geom_pointrange(
@@ -167,7 +168,7 @@ compare_amsh_thiq(129) +
 
 ```{r pos284-amsh-vs-thiq, fig.width=9, fig.height=4}
 compare_amsh_thiq(284) +
-  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5,0.5,0.5), expand = c(0,0))
+  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
 ```
 
 ## Extended Figures
@@ -175,30 +176,31 @@ compare_amsh_thiq(284) +
 ### PCA for ligand selectivity
 
 ```{r ligand-pca, fig.width=9, fig.height=9}
-ligand_pca <- cre %>% 
-  filter(compound != 'None', aa!='*') %>% 
-  select(pos, aa, contrast, statistic) %>% 
-  pivot_wider(names_from = contrast, values_from = statistic) %>% 
-  unite(col = 'variant', pos, aa, sep = '') %>% 
-  column_to_rownames('variant') %>% 
-  prcomp() 
+ligand_pca <- cre %>%
+  filter(compound != "None") %>%
+  mutate(condition = str_c(compound, dose, sep = " - ")) %>%
+  select(pos, aa, condition, statistic) %>%
+  pivot_wider(names_from = condition, values_from = statistic) %>%
+  unite(col = "variant", pos, aa, sep = "") %>%
+  column_to_rownames("variant") %>%
+  prcomp()
 
-ligand_pca %>% 
+ligand_pca %>%
   fviz_pca(
-    axes = c(1,3),
-    label = 'var',
+    axes = c(1, 3),
+    label = "var",
     ggtheme = theme_get()
   ) +
   geom_point(
     aes(x = .fittedPC1, y = .fittedPC3),
     size = 2,
-    data =  augment(ligand_pca) %>% filter(.fittedPC3 < -3.75),
+    data = augment(ligand_pca) %>% filter(.fittedPC3 < -3.75),
     color = "#FF7F0E"
   ) +
   geom_point(
     aes(x = .fittedPC1, y = .fittedPC3),
     size = 2,
-    data =  augment(ligand_pca) %>% filter(.fittedPC3 > 3.75),
+    data = augment(ligand_pca) %>% filter(.fittedPC3 > 3.75),
     color = "#1F77B4"
   ) +
   geom_text_repel(
@@ -206,6 +208,9 @@ ligand_pca %>%
     data = augment(ligand_pca) %>% filter(abs(.fittedPC3) > 3.75),
     min.segment.length = 0,
     max.time = 2
+  ) +
+  labs(
+    title = "PCA Biplot of aMSH and THIQ conditions"
   )
 ```
 
@@ -213,36 +218,38 @@ ligand_pca %>%
 
 ```{r pos48-amsh-vs-thiq, fig.width=9, fig.height=4}
 compare_amsh_thiq(48) +
-  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5,0.5,0.5), expand = c(0,0))
+  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
 ```
 
 ### DRC aMSH vs Thiq -- Position 48
 
 ```{r 48-drc, fig.width=12, fig.height=12}
 compare_amsh_thiq_all <- function(sel_pos) {
-  amsh_zero <- cre %>% 
+  amsh_zero <- cre %>%
     filter(
-      pos == sel_pos, 
-      compound %in% c('None', 'aMSH')
-    ) %>% 
-    mutate(compound = 'aMSH')
-  
-  thiq_zero <- cre %>% 
+      pos == sel_pos,
+      compound %in% c("None", "aMSH")
+    ) %>%
+    mutate(compound = "aMSH")
+
+  thiq_zero <- cre %>%
     filter(
-      pos == sel_pos, 
-      compound %in% c('None', 'THIQ')
-    ) %>% 
-    mutate(compound = 'THIQ')
-  
+      pos == sel_pos,
+      compound %in% c("None", "THIQ")
+    ) %>%
+    mutate(compound = "THIQ")
+
   bind_rows(
     amsh_zero,
     thiq_zero,
-  ) %>% 
+  ) %>%
     ggplot(aes(x = dose, y = log2FoldChange, color = compound, group = compound)) +
-    geom_hline(yintercept = 0, lty = 'dashed') +
+    geom_hline(yintercept = 0, lty = "dashed") +
     geom_pointrange(
-      aes(ymin=log2FoldChange - 2*std.error,
-          ymax=log2FoldChange + 2*std.error),
+      aes(
+        ymin = log2FoldChange - 2 * std.error,
+        ymax = log2FoldChange + 2 * std.error
+      ),
       position = position_dodge(width = 0.25)
     ) +
     geom_line(
@@ -257,15 +264,15 @@ compare_amsh_thiq_all <- function(sel_pos) {
     ) +
     scale_color_manual(values = c("#1F77B4", "#FF7F0E")) +
     labs(
-      title = paste0(sel_pos, ' Dose Response Curves'),
-      y = 'Log2-fold Change vs WT',
-      x = 'Concentration',
-      color = 'Drug'
+      title = paste0(sel_pos, " Dose Response Curves"),
+      y = "Log2-fold Change vs WT",
+      x = "Concentration",
+      color = "Drug"
     )
 }
 
 compare_amsh_thiq_all(48) +
-  scale_y_continuous(limits = c(-2,1), breaks = seq(-2,1,0.5), expand = c(0,0))
+  scale_y_continuous(limits = c(-2, 1), breaks = seq(-2, 1, 0.5), expand = c(0, 0))
 ```
 
 ### aMSH vs THIQ -- Position 52
@@ -278,7 +285,7 @@ compare_amsh_thiq(52)
 
 ```{r 52-drc, fig.width=12, fig.height=12}
 compare_amsh_thiq_all(52) +
-  scale_y_continuous(limits = c(-2,1), breaks = seq(-2,1,0.5), expand = c(0,0))
+  scale_y_continuous(limits = c(-2, 1), breaks = seq(-2, 1, 0.5), expand = c(0, 0))
 ```
 
 ### aMSH vs THIQ -- Position 101
@@ -293,6 +300,18 @@ compare_amsh_thiq(101)
 compare_amsh_thiq_all(101)
 ```
 
+### aMSH vs THIQ -- Position 104
+
+```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_amsh_thiq(104)
+```
+
+### DRC aMSH vs THIQ -- Position 104
+
+```{r 104-drc, fig.width=12, fig.height=12}
+compare_amsh_thiq_all(104)
+```
+
 ### DRC aMSH vs THIQ -- Position 129
 
 ```{r 129-drc, fig.width=12, fig.height=12}
@@ -304,4 +323,3 @@ compare_amsh_thiq_all(129)
 ```{r 284-drc, fig.width=12, fig.height=12}
 compare_amsh_thiq_all(284)
 ```
-

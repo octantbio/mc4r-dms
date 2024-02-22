@@ -160,12 +160,15 @@ augment(bias_pca_amsh) %>%
     pos = str_extract(.rownames, "\\d+") %>% as.numeric()
   ) %>%
   group_by(pos) %>%
-  summarise(mean_pc2 = mean(.fittedPC2)) %>%
-  mutate(pos = str_c("/R:", pos)) %>%
-  write_tsv(
-    "./fig-3/bias-collapse.tsv",
-    col_names = FALSE
-  )
+  summarise(
+    mean_pc2 = mean(.fittedPC2),
+    extreme_pc2 = .fittedPC2[which.max(abs(.fittedPC2))],
+    max_pc2 = max(.fittedPC2),
+    min_pc2 = min(.fittedPC2),
+    max_abs_pc2 = max(abs(.fittedPC2)),
+    .groups = "drop"
+  ) %>%
+  write_tsv("./fig-3/bias-collapse.tsv")
 ```
 
 ### More Biased Residue Zooms
