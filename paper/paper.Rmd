@@ -60,19 +60,6 @@ aa_grouping <- c("G", "A", "S", "T", "C", "P", "V", "I", "L", "M", "F", "Y", "W"
 lehner_grouping <- c("*", "D", "E", "R", "H", "K", "S", "T", "N", "Q", "C", "G", "P", "A", "V", "I", "L", "M", "F", "W", "Y")
 
 #-------------------------------------------------------------------------------
-
-bias <- read_tsv("../sumstats/MC4R-Bias.tsv")
-
-
-drug_compare_cre <- read_tsv("../sumstats/MC4R-DMS5-Gs-drugCompare.tsv")
-drug_compare_uas <- read_tsv("../sumstats/MC4R-DMS8-Gq-drugCompare.tsv")
-drug_compare <- bind_rows(
-  cre = drug_compare_cre,
-  uas = drug_compare_uas,
-  .id = "reporter"
-)
-
-#-------------------------------------------------------------------------------
 # dealing with un-normalized data
 
 uas_annotation <- tribble(
