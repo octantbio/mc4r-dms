@@ -22,6 +22,7 @@ library(broom)
 library(patchwork)
 library(cmdstanr)
 library(brms)
+library(stringr)
 library(tidyverse)
 
 custom_theme <- theme_bw(base_size = 16) +
