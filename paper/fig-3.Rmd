@@ -104,7 +104,7 @@ bias_plot(164, "L") +
   bias_plot(152, "R") +
   theme(axis.title.y = element_blank()) +
   plot_layout(nrow = 1, guides = "collect") &
-  scale_y_continuous(limits = c(-1.75, 1.75), breaks = seq(-1.5, 1.5, 0.5))
+  scale_y_continuous(limits = c(-1.5, 2.0), breaks = seq(-1.5, 2, 0.5))
 ```
 
 ```{r bias-inset-2, fig.width=4, fig.height=8}
@@ -182,7 +182,7 @@ bias_plot(140, "I") +
   bias_plot(146, "Y") +
   theme(axis.title.y = element_blank()) +
   plot_layout(nrow = 2, guides = "collect") &
-  scale_y_continuous(limits = c(-1.25, 2.5), breaks = seq(-1.5, 2.5, 0.5))
+  scale_y_continuous(limits = c(-1.25, 2.6), breaks = seq(-1.5, 2.5, 0.5))
 ```
 
 ### 79 Zoom
