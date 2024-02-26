@@ -4,6 +4,50 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  dev = c("png", "pdf")
+)
+
+library(scico)
+library(factoextra)
+library(ggrepel)
+library(ggbeeswarm)
+library(janitor)
+library(broom)
+library(patchwork)
+library(cmdstanr)
+library(brms)
+library(tidyverse)
+
+custom_theme <- theme_bw(base_size = 16) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+  )
+theme_set(custom_theme)
+
+scale_fill_scico_mid <- function(..., mid = 0, alpha = NULL, begin = 0, end = 1, direction = 1, reverse = TRUE, palette = "broc") {
+  force(mid)
+  ggplot2::continuous_scale(
+    aesthetics = "fill",
+    scale_name = "gradient2",
+    palette = scales::gradient_n_pal(
+      colours = scico::scico(256, alpha, begin, end, direction, palette),
+      values = NULL, space = "Lab"
+    ),
+    guide = "colourbar",
+    rescaler = function(x, to = c(0, 1), from = range(x, na.rm = TRUE)) {
+      scales::rescale_mid(x, to, from, mid)
+    },
+    ...
+  )
+}
+```
+
 ## Main Figures
 ```{r}
 defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
@@ -41,6 +85,41 @@ defect_sumstats %>%
         xlab("Fold Change, Mutant NoIpsen vs WT NoIpsen") +
         ylab("Fold Change, Mutant Ipsen vs WT NoIpsen") +
         geom_abline(slope = 1, intercept = 0, lty = 'dashed')
+```
+
+### Custom Variant Set
+```{r chap-custom-varset-barplot, fig.width=12, fig.height=4}
+variant_set <- read_tsv("../data/annotations/MC4R-fig4-variants.tsv")
+custom_joined_data <- defect_sumstats %>% 
+    mutate(mut_aa = if_else(mut_aa == "X", "*", mut_aa)) %>%
+    dplyr::select(chunk:std.error) %>%
+    inner_join(variant_set, by = join_by(pos, mut_aa)) %>%
+    mutate(group = factor(group, levels = c("Responder",
+                                            "Non-Responder")))
+
+custom_joined_data %>%
+    mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
+    ggplot() +
+        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     fill = chaperone),
+                 width = 0.5,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+                     y = 2^log2FoldChange,
+                     ymin = 2^(log2FoldChange-2*std.error),
+                     ymax = 2^(log2FoldChange+2*std.error),
+                     group = chaperone),
+                 width = 0.2,
+                 position = position_dodge(width = 0.5),
+                 stat = "identity") +
+        scale_fill_manual(values = c("Ipsen" = "red", "NoIpsen" = "gray")) +
+        facet_grid(cols = vars(group), scales = "free_x", space = "free") +
+        geom_hline(yintercept = 1, lty = 'dashed') +
+        xlab("Variant") + ylab("Fold Change") +
+        theme(axis.text.x = element_text(size = 12),
+            legend.title = element_blank())
 ```
 
 ### Wang 2014 Variants
