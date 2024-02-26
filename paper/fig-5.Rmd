@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 ```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
 amsh_vs_thiq_wide <- cre %>%
   filter(dose == "low") %>%
-  select(pos, aa, compound, est = log2FoldChange, se = std.error) %>%
+  select(pos, aa, compound, est = log2FoldChange, se = log2StdError) %>%
   pivot_wider(names_from = compound, values_from = c(est, se)) %>%
   mutate(
     contrast = est_aMSH - est_THIQ,
@@ -141,8 +141,8 @@ compare_amsh_thiq <- function(sel_pos) {
     geom_hline(yintercept = 0, lty = "dashed") +
     geom_pointrange(
       aes(
-        ymin = log2FoldChange - 2 * std.error,
-        ymax = log2FoldChange + 2 * std.error
+        ymin = log2FoldChange - 2 * log2StdError,
+        ymax = log2FoldChange + 2 * log2StdError
       ),
       position = position_dodge(width = 0.5)
     ) +
@@ -247,8 +247,8 @@ compare_amsh_thiq_all <- function(sel_pos) {
     geom_hline(yintercept = 0, lty = "dashed") +
     geom_pointrange(
       aes(
-        ymin = log2FoldChange - 2 * std.error,
-        ymax = log2FoldChange + 2 * std.error
+        ymin = log2FoldChange - 2 * log2StdError,
+        ymax = log2FoldChange + 2 * log2StdError
       ),
       position = position_dodge(width = 0.25)
     ) +

@@ -89,7 +89,7 @@ class_a_fit <- cre %>%
     compound == "aMSH",
     dose == "low"
   ) %>%
-  group_by(compound, dose, norm, contrast, pos) %>%
+  group_by(compound, dose, contrast, pos) %>%
   summarise(
     estimate = mean(log2FoldChange),
     z = mean(statistic),

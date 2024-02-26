@@ -43,7 +43,8 @@ bias_pca_amsh_labels %>%
     data = bias_pca_amsh_labels %>% filter(color != "black"),
     min.segment.length = 0,
     max.time = 2,
-    force = 2
+    force = 2,
+    max.overlaps = 15
   ) +
   theme(
     legend.position = "none"
@@ -69,7 +70,7 @@ bias_plot <- function(sel_pos, sel_aa) {
       compound = "aMSH",
       pathway = if_else(reporter == "CRE", "Gs", "Gq"),
       dose = if_else(dose == "medium", "med", dose),
-      dose = R.utils::capitalize(dose),
+      dose = str_to_sentence(dose),
       dose = factor(dose, levels = c("Zero", "Low", "Med", "High"))
     )
 
@@ -78,8 +79,8 @@ bias_plot <- function(sel_pos, sel_aa) {
     geom_hline(yintercept = 0, lty = "dashed") +
     geom_pointrange(
       aes(
-        ymin = log2FoldChange - 2 * std.error,
-        ymax = log2FoldChange + 2 * std.error
+        ymin = log2FoldChange - 2 * log2StdError,
+        ymax = log2FoldChange + 2 * log2StdError
       ),
       position = position_dodge(width = 0.25)
     ) +
@@ -223,7 +224,7 @@ cre_uas %>%
     compound = "aMSH",
     pathway = if_else(reporter == "CRE", "Gs", "Gq"),
     dose = if_else(dose == "medium", "med", dose),
-    dose = R.utils::capitalize(dose),
+    dose = str_to_sentence(dose),
     dose = factor(dose, levels = c("Zero", "Low", "Med", "High")),
     aa = factor(aa, levels = aa_ordering$aa)
   ) %>%
@@ -231,8 +232,8 @@ cre_uas %>%
   geom_hline(yintercept = 0, lty = "dashed") +
   geom_pointrange(
     aes(
-      ymin = log2FoldChange - 2 * std.error,
-      ymax = log2FoldChange + 2 * std.error
+      ymin = log2FoldChange - 2 * log2StdError,
+      ymax = log2FoldChange + 2 * log2StdError
     ),
     position = position_dodge(width = 0.25)
   ) +
