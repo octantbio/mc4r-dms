@@ -114,6 +114,10 @@ We’ll also write out the PC’s for projecting onto the structure
 
 ![](./fig-4/scaled-rescue-scatter-1.png)<!-- -->
 
+### Custom Variant Set
+
+![](./fig-4/chap-custom-varset-barplot-1.png)<!-- -->
+
 ### Wang 2014 Variants
 
 ![](./fig-4/rescue-wang2014-barplot-1.png)<!-- -->

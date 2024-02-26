@@ -4,50 +4,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  warning = FALSE,
-  message = FALSE,
-  dev = c("png", "pdf")
-)
-
-library(scico)
-library(factoextra)
-library(ggrepel)
-library(ggbeeswarm)
-library(janitor)
-library(broom)
-library(patchwork)
-library(cmdstanr)
-library(brms)
-library(tidyverse)
-
-custom_theme <- theme_bw(base_size = 16) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-  )
-theme_set(custom_theme)
-
-scale_fill_scico_mid <- function(..., mid = 0, alpha = NULL, begin = 0, end = 1, direction = 1, reverse = TRUE, palette = "broc") {
-  force(mid)
-  ggplot2::continuous_scale(
-    aesthetics = "fill",
-    scale_name = "gradient2",
-    palette = scales::gradient_n_pal(
-      colours = scico::scico(256, alpha, begin, end, direction, palette),
-      values = NULL, space = "Lab"
-    ),
-    guide = "colourbar",
-    rescaler = function(x, to = c(0, 1), from = range(x, na.rm = TRUE)) {
-      scales::rescale_mid(x, to, from, mid)
-    },
-    ...
-  )
-}
-```
-
 ## Main Figures
 ```{r}
 defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
