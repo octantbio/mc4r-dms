@@ -69,7 +69,7 @@ bias_plot <- function(sel_pos, sel_aa) {
       compound = "aMSH",
       pathway = if_else(reporter == "CRE", "Gs", "Gq"),
       dose = if_else(dose == "medium", "med", dose),
-      dose = R.utils::capitalize(dose),
+      dose = str_to_sentence(dose),
       dose = factor(dose, levels = c("Zero", "Low", "Med", "High"))
     )
 
@@ -223,7 +223,7 @@ cre_uas %>%
     compound = "aMSH",
     pathway = if_else(reporter == "CRE", "Gs", "Gq"),
     dose = if_else(dose == "medium", "med", dose),
-    dose = R.utils::capitalize(dose),
+    dose = str_to_sentence(dose),
     dose = factor(dose, levels = c("Zero", "Low", "Med", "High")),
     aa = factor(aa, levels = aa_ordering$aa)
   ) %>%
