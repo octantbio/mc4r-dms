@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Example usage:
-# Rscript src/chaperone-marginal-contrast.R -i combined.sumstats.tsv -w None_0 -o contrast.tsv -t condition1,condition2
+# Rscript src/contrast-marginal-chaperone.R -i combined.sumstats.tsv -w None_0 -o contrast.tsv -t condition1,condition2
 
 library(argparse)
 library(tidyverse)

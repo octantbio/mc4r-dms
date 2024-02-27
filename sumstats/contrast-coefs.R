@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Example usage:
-# Rscript src/sumstats-contrast.R -i combined.sumstats.tsv -c None_0 -o contrast.tsv -t condition1,condition2
+# Rscript src/contrast-coefs.R -i combined.sumstats.tsv -c None_0 -o contrast.tsv -t condition1,condition2
 
 library(argparse)
 library(tidyverse)
