@@ -61,89 +61,84 @@ aa_grouping <- c("G", "A", "S", "T", "C", "P", "V", "I", "L", "M", "F", "Y", "W"
 lehner_grouping <- c("*", "D", "E", "R", "H", "K", "S", "T", "N", "Q", "C", "G", "P", "A", "V", "I", "L", "M", "F", "W", "Y")
 
 #-------------------------------------------------------------------------------
-
-bias <- read_tsv("../sumstats/MC4R-Bias.tsv")
-
-
-drug_compare_cre <- read_tsv("../sumstats/MC4R-DMS5-Gs-drugCompare.tsv")
-drug_compare_uas <- read_tsv("../sumstats/MC4R-DMS8-Gq-drugCompare.tsv")
-drug_compare <- bind_rows(
-  cre = drug_compare_cre,
-  uas = drug_compare_uas,
-  .id = "reporter"
-)
-
-#-------------------------------------------------------------------------------
 # dealing with un-normalized data
 
 uas_annotation <- tribble(
-  ~compound, ~condition, ~dose,
-  "aMSH", "aMSH1e-06", "high",
-  "aMSH", "aMSH5e-08", "medium",
-  "aMSH", "aMSH2e-08", "low",
-  "None", "None0", "zero",
-  "THIQ", "THIQ1e-07", "high",
-  "THIQ", "THIQ9e-09", "medium",
-  "THIQ", "THIQ3e-09", "low",
+  ~compound, ~concentration, ~dose,
+  "aMSH", "1e-06", "high",
+  "aMSH", "5e-08", "medium",
+  "aMSH", "2e-08", "low",
+  "None", "0", "zero",
+  "THIQ", "1e-07", "high",
+  "THIQ", "9e-09", "medium",
+  "THIQ", "3e-09", "low",
 )
 
 uas_unnorm <- read_tsv("../sumstats/MC4R-DMS8-Gq-unnormalized.tsv") %>%
+  separate(
+    contrast, 
+    into = c('compound', 'concentration', 'norm'), 
+    remove = FALSE, 
+    sep = '_'
+  ) %>% 
   inner_join(uas_annotation)
 
+#-------------------------------------------------------------------------------
+
 cre_annotation <- tribble(
-  ~compound, ~condition, ~dose,
-  "aMSH", "aMSH2e-08", "high",
-  "aMSH", "aMSH5e-09", "medium",
-  "aMSH", "aMSH5e-10", "low",
-  "Forsk", "Forsk2.5e-05", NA,
-  "None", "None0", "zero",
-  "THIQ", "THIQ1.2e-08", "high",
-  "THIQ", "THIQ4e-09", "medium",
-  "THIQ", "THIQ4e-10", "low"
+  ~compound, ~concentration, ~dose,
+  "aMSH", "2e-08", "high",
+  "aMSH", "5e-09", "medium",
+  "aMSH", "5e-10", "low",
+  "Forsk", "2.5e-05", NA,
+  "None", "0", "zero",
+  "THIQ", "1.2e-08", "high",
+  "THIQ", "4e-09", "medium",
+  "THIQ", "4e-10", "low"
 )
 
 cre_unnorm <- read_tsv("../sumstats/MC4R-DMS5-Gs-unnormalized.tsv") %>%
+  separate(
+    contrast, 
+    into = c('compound', 'concentration', 'norm'), 
+    remove = FALSE, 
+    sep = '_'
+  ) %>% 
   inner_join(cre_annotation)
 
 unnorm_combo <- bind_rows(
   gs = cre_unnorm,
   gq = uas_unnorm,
   .id = "pathway"
-)
+) %>% 
+  mutate(aa = if_else(aa == 'X', '*', aa))
 
 #-------------------------------------------------------------------------------
 
-cre <- read_tsv("../sumstats/MC4R-DMS5-Gs.tsv")
+cre <- read_tsv('../sumstats/MC4R-DMS5-Gs.tsv')
 
 cre_dose <- tribble(
-  ~condition, ~dose, ~compound, ~concentration,
-  "aMSH2e-08 - None0", "high", "aMSH", 2e-08,
-  "aMSH5e-09 - None0", "medium", "aMSH", 5e-09,
-  "aMSH5e-10 - None0", "low", "aMSH", 5e-10,
-  "Forsk2.5e-05 - None0", NA, NA, NA,
-  "None0 - Forsk2.5e-05", "zero", "None", NA,
-  "THIQ1.2e-08 - None0", "high", "THIQ", 1.2e-08,
-  "THIQ4e-09 - None0", "medium", "THIQ", 4e-09,
-  "THIQ4e-10 - None0", "low", "THIQ", 4e-10,
-  "aMSH2e-08 - Forsk2.5e-05", "high", "aMSH", 2e-08,
-  "aMSH5e-09 - Forsk2.5e-05", "medium", "aMSH", 5e-09,
-  "aMSH5e-10 - Forsk2.5e-05", "low", "aMSH", 5e-10,
-  "THIQ1.2e-08 - Forsk2.5e-05", "high", "THIQ", 1.2e-08,
-  "THIQ4e-09 - Forsk2.5e-05", "medium", "THIQ", 4e-09,
-  "THIQ4e-10 - Forsk2.5e-05", "low", "THIQ", 4e-10
+  ~contrast, ~dose, ~compound, ~concentration,
+  "None_0_minus_Forsk_2.5e-05", "zero", "None", NA,
+  "aMSH_2e-08_minus_Forsk_2.5e-05", "high", "aMSH", "2e-08",
+  "aMSH_5e-09_minus_Forsk_2.5e-05", "medium", "aMSH", "5e-09",
+  "aMSH_5e-10_minus_Forsk_2.5e-05", "low", "aMSH", "5e-10",
+  "THIQ_1.2e-08_minus_Forsk_2.5e-05", "high", "THIQ", "1.2e-08",
+  "THIQ_4e-09_minus_Forsk_2.5e-05", "medium", "THIQ", "4e-09",
+  "THIQ_4e-10_minus_Forsk_2.5e-05", "low", "THIQ", "4e-10"
 ) %>%
   mutate(dose = factor(dose, levels = c("zero", "low", "medium", "high")))
 
-# standardize on Foskolin Normalization
 cre <- cre %>%
-  inner_join(cre_dose) %>%
-  rename(contrast = condition) %>%
-  filter(contrast != "Forsk2.5e-05 - None0") %>%
+  inner_join(cre_dose) %>% 
+  rename(
+    log2FoldChange = log2ContrastEstimate,
+    log2StdError = log2ContrastError
+  ) %>% 
   mutate(
-    norm = if_else(str_detect(contrast, "Forsk"), "Forsk", "None"),
+    aa = if_else(aa == 'X', '*', aa),
     aa = factor(aa, levels = lehner_grouping)
-  ) %>%
-  filter(norm == "Forsk")
+    )
 
 #-------------------------------------------------------------------------------
 
@@ -152,16 +147,18 @@ uas <- uas_unnorm %>%
   mutate(
     p.adj = p.adjust(p.value, method = "BH")
   ) %>%
-  ungroup()
+  ungroup() %>% 
+  select(-norm)
 
 cre_uas <- bind_rows(
   CRE = cre,
   UAS = uas,
   .id = "reporter"
 ) %>%
-  select(reporter, compound, dose, chunk, pos, aa, log2FoldChange, std.error, statistic, p.value, p.adj) %>%
+  select(reporter, compound, dose, chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, p.adj) %>%
   mutate(
     dose = factor(dose, levels = c("zero", "low", "medium", "high")),
+    aa = if_else(aa == 'X', '*', aa),
     aa = factor(aa, levels = lehner_grouping)
   )
 ```
