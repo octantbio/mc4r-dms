@@ -25,16 +25,21 @@ Rscript src/sumstats-contrast.R \
 ```
 
 #### Marginal Contrasts of DMS11
+
+NOTE: `contrast-marginal-chaperone.R` accepts only one concentration per treatment, and requires each treatment have a corresponding `-Ipsen` condition, e.g. `aMSH` and `aMSH-Ipsen`.
+
 ```
-Rscript src/marginal-contrast.R \
+Rscript src/contrast-marginal-chaperone.R \
     -i mc4r-dms/sumstats/MC4R_new/dms11-combined-marginals.sumstats.tsv \
-    -c NA \
+    -w aMSH \
+    -c Forsk \
     -o mc4r-dms/sumstats/MC4R-DMS11-DefectSumstats.tsv \
-    -t 
+    -t aMSH
 
 Rscript src/marginal-contrast.R \
     -i mc4r-dms/sumstats/MC4R_new/dms11-combined-marginals.sumstats.tsv \
-    -c NA \
+    -w aMSH \
+    -c Forsk \
     -o mc4r-dms/sumstats/MC4R-DMS11-RescueSumstats.tsv \
-    -t 
+    -t aMSH
 ```

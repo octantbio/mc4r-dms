@@ -14,41 +14,59 @@ parser$add_argument("-t", "--targets", type = "character", help = "Comma delimit
 args <- parser$parse_args()
 
 # Execution
-data <- read_tsv(args$input) %>% rename("aa" = "mut_aa")
+data <- read_tsv(args$input) %>%
+    rename("aa" = "mut_aa") %>%
+    separate(condition, c("treatment", "concentration"), "_") %>%
+    separate(treatment, c("drug", "chaperone"), "-") %>%
+    mutate(chaperone = if_else(is.na(chaperone), "NoIpsen", "Ipsen"))
+
 if (!is.null(args$targets)) {
-    target_conditions <- str_split(args$targets, ",")[[1]]
+    target_drugs <- str_split(args$targets, ",")[[1]]
     data <- data %>%
-        filter(condition %in% c(target_conditions, args$control))
+        filter(drug %in% c(target_drugs, args$control))
 }
+
+wt_reference <- data %>%
+    filter(drug == args$wt, aa == "WT") %>%
+    select(chunk, pos, aa, log2Marginal,log2MarginalError) %>%
+    rename("log2Marginal" = "log2Marginal_WT",
+        "log2MarginalError" = "log2MarginalError_WT")
 
 if (args$control == "NA") {
     sumstats_contrast <- data %>%
-        group_by(condition) %>%
-        mutate(contrast = str_c(condition, "_unnormalized"),
-            p.adj = p.adjust(p.value, method = "BH")) %>%
-        ungroup() %>%
-        select(chunk, pos, aa, log2Marginal,log2MarginalError,
-            statistic, p.value, contrast)
-} else {
-
-    data_reduced <- data %>% select(chunk, pos, condition, aa, log2Marginal, log2MarginalError)
-    condition_data <- data_reduced %>% filter(condition != args$control)
-    control_data <- data_reduced %>% filter(condition == args$control)
-
-    sumstats_contrast <- condition_data %>%
-        inner_join(control_data,
-            by = c("chunk", "pos", "aa"),
-            suffix = c("_cond", "_control")) %>%
-        group_by(condition_cond) %>%
-        mutate(log2ContrastEstimate = log2Marginal_cond - log2Marginal_control,
-            log2ContrastError = sqrt(log2MarginalError_cond^2 + log2MarginalError_control^2),
-            contrast = str_c(condition_cond, "_minus_", condition_control),
+        left_join(wt_reference,
+            by = c("chunk", "pos", "aa")) %>%
+        mutate(log2ContrastEstimate = log2Marginal - log2Marginal_WT,
+            log2ContrastError = sqrt(log2MarginalError^2 + log2Marginal_WT^2),
             statistic = log2ContrastEstimate / log2ContrastError,
             p.value = (1 - pnorm(abs(statistic))) * 2,
             p.adj = p.adjust(p.value, method = "BH")) %>%
-        ungroup() %>%
         select(chunk, pos, aa, log2ContrastEstimate,log2ContrastError,
-            statistic, p.value, p.adj, contrast)
+            statistic, p.value, p.adj)
+} else {
+
+    data_reduced <- data %>% select(chunk, pos, condition, aa, log2Marginal, log2MarginalError)
+    condition_data <- data_reduced %>% filter(drug != args$control)
+    control_data <- data_reduced %>% filter(drug == args$control)
+
+    sumstats_norm <- condition_data %>%
+        inner_join(control_data,
+            by = c("chunk", "pos", "aa", "chaperone"),
+            suffix = c("_cond", "_control")) %>%
+        mutate(log2NormEstimate = log2Marginal_cond - log2Marginal_control,
+            log2NormError = sqrt(log2MarginalError_cond^2 + log2MarginalError_control^2)) %>%
+        select(chunk, pos, aa, log2NormEstimate,log2NormError)
+
+    sumstats_contrast <- sumstats_norm %>%
+        left_join(wt_reference,
+            by = c("chunk", "pos", "aa")) %>%
+        mutate(log2ContrastEstimate = log2Marginal - log2Marginal_WT,
+            log2ContrastError = sqrt(log2MarginalError^2 + log2Marginal_WT^2),
+            statistic = log2ContrastEstimate / log2ContrastError,
+            p.value = (1 - pnorm(abs(statistic))) * 2,
+            p.adj = p.adjust(p.value, method = "BH")) %>%
+        select(chunk, pos, aa, log2ContrastEstimate,log2ContrastError,
+            statistic, p.value, p.adj)
 }
 
 write_tsv(sumstats_contrast, args$output)
