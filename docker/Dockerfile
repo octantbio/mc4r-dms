@@ -16,6 +16,7 @@ RUN apt-get update && \
 # R packages
 #===============================================================================
 RUN install2.r --error --skipinstalled --ncpus -1 \
+	argparse \
         emmeans \
 	bench \
         broom \
