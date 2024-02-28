@@ -55,7 +55,7 @@ rescue_sumstats <- norm_marginals %>%
            statistic = log2FoldChange/std.error,
            p.value = 1-pnorm(statistic, mean = 0, sd = 1),
            p.adj = p.adjust(p.value, method = "BH")) %>%
-    select(-log2MarginalNorm_Ipsen:-log2MarginalNormError_NoIpsen)
+    select(-log2MarginalNorm_NoIpsen:-log2MarginalNormError_Ipsen)
 
 write_tsv(defect_sumstats, args$defect)
 write_tsv(rescue_sumstats, args$rescue)
