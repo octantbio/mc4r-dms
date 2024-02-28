@@ -25,7 +25,9 @@ library(brms)
 library(stringr)
 library(tidyverse)
 
-custom_theme <- theme_bw(base_size = 16) +
+custom_theme <- theme_bw(
+  base_size = 10
+  ) +
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
