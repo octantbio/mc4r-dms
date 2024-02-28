@@ -50,7 +50,7 @@ resid_data <- residuals(model_brm) %>%
   ) %>%
   bind_cols(amsh_vs_thiq_wide)
 
-resid_data %>%
+meta_regression_plot <- resid_data %>%
   ggplot(aes(y = est_aMSH, x = est_THIQ)) +
   geom_hline(yintercept = 0, lty = "dashed") +
   geom_vline(xintercept = 0, lty = "dashed") +
@@ -79,13 +79,13 @@ resid_data %>%
     max.overlaps = 20,
     max.time = 2
   ) +
-  coord_equal() +
   labs(
     x = "THIQ\n(log2-fold change from WT)",
     y = "aMSH\n(log2-fold change from WT)",
-    title = "aMSH vs THIQ (low concentration)"
   ) +
   theme(panel.grid.major = element_blank())
+
+meta_regression_plot
 ```
 
 As a table, here's the 5% FDR's
@@ -148,7 +148,7 @@ compare_amsh_thiq <- function(sel_pos) {
     ) +
     facet_grid(cols = vars(group), space = "free_x", scales = "free_x") +
     labs(
-      title = str_c("Pos ", sel_pos, " Mutants"),
+      title = str_c("Position ", sel_pos),
       y = "Log2-fold Change vs WT\n(+/- 2 Standard Errors)",
     ) +
     scale_color_manual(values = c("#1F77B4", "#FF7F0E")) +
@@ -160,15 +160,41 @@ compare_amsh_thiq <- function(sel_pos) {
     )
 }
 
-compare_amsh_thiq(129) +
+compare_129 <- compare_amsh_thiq(129) +
   scale_y_continuous(limits = c(-3, 1.25), breaks = seq(-3, 1, 1))
+
+compare_129
 ```
 
-### aMSH vs THIQ -- Position 284
+### aMSH vs THIQ -- Position 104
 
-```{r pos284-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_amsh_thiq(284) +
+```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_104 <- compare_amsh_thiq(104)
+
+compare_104
+```
+
+### aMSH vs THIQ -- Position 48
+
+```{r pos48-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_48 <- compare_amsh_thiq(48) +
   scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
+
+compare_48
+```
+
+### Patchwork
+
+```{r position-inset, fig.width=6, fig.height=8}
+layout <- "
+A
+B
+B
+"
+
+compare_48 / compare_104 / compare_129 + 
+  plot_layout(guides = 'collect') & 
+  theme(legend.position = 'bottom')
 ```
 
 ## Extended Figures
@@ -212,13 +238,6 @@ ligand_pca %>%
   labs(
     title = "PCA Biplot of aMSH and THIQ conditions"
   )
-```
-
-### aMSH vs THIQ -- Position 48
-
-```{r pos48-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_amsh_thiq(48) +
-  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
 ```
 
 ### DRC aMSH vs Thiq -- Position 48
@@ -300,12 +319,6 @@ compare_amsh_thiq(101)
 compare_amsh_thiq_all(101)
 ```
 
-### aMSH vs THIQ -- Position 104
-
-```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_amsh_thiq(104)
-```
-
 ### DRC aMSH vs THIQ -- Position 104
 
 ```{r 104-drc, fig.width=12, fig.height=12}
@@ -316,6 +329,13 @@ compare_amsh_thiq_all(104)
 
 ```{r 129-drc, fig.width=12, fig.height=12}
 compare_amsh_thiq_all(129)
+```
+
+### aMSH vs THIQ -- Position 284
+
+```{r pos284-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_amsh_thiq(284) +
+  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
 ```
 
 ### DRC aMSH vs THIQ -- Position 284
