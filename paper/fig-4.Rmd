@@ -13,6 +13,7 @@ defect_rescue_stats <- inner_join(defect_sumstats %>% filter(chaperone == "NoIps
            rescue_sumstats,
            suffix = c("_defect", "_rescue"),
            by = c("chunk", "pos", "aa")) %>%
+    filter(aa != "WT") %>%
     mutate(category = if_else(p.adj_defect < 0.05 & p.adj_rescue < 0.05,
                               "Joint Significant",
                               "Non-Joint Significant"))
@@ -27,6 +28,7 @@ sig_vars <- defect_rescue_stats %>%
 ### Scaled (0-1) Rescue Effects Across All Variants
 ```{r scaled-rescue-scatter, fig.width=9, fig.height=7}
 defect_sumstats %>%
+    filter(aa != "WT") %>%
     select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
     ggplot() +
@@ -46,17 +48,30 @@ defect_sumstats %>%
 ### Custom Variant Set
 ```{r chap-custom-varset-barplot, fig.width=12, fig.height=4}
 variant_set <- read_tsv("../data/annotations/MC4R-fig4-variants.tsv")
+
+wt_stats <- defect_sumstats %>%
+    filter(aa == "WT") %>%
+    group_by(aa, chaperone) %>%
+    summarize(log2FoldChange = mean(log2FoldChange),
+        std.error = mean(std.error),
+        chunk = NA,
+        pos = "",
+        group = "WT")
+
 custom_joined_data <- defect_sumstats %>% 
     mutate(aa = if_else(aa == "X", "*", aa)) %>%
     select(chunk:std.error) %>%
     inner_join(variant_set, by = join_by(pos, aa)) %>%
-    mutate(group = factor(group, levels = c("Responder",
+    mutate(pos = as.character(pos)) %>%
+    bind_rows(wt_stats) %>%
+    mutate(group = factor(group, levels = c("WT",
+                                            "Responder",
                                             "Non-Responder")))
 
 custom_joined_data %>%
     mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
     ggplot() +
-        geom_bar(aes(x = reorder(str_c(pos, aa), pos),
+        geom_bar(aes(x = reorder(str_c(pos, aa), as.numeric(pos)),
                      y = 2^log2FoldChange,
                      fill = chaperone),
                  width = 0.5,
@@ -82,6 +97,7 @@ custom_joined_data %>%
 ```{r rescue-wang2014-barplot, fig.width=12, fig.height=4}
 wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv")
 wang2014_barplot_data <- defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:std.error) %>%
     inner_join(wang2014, by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("NoRescue",
@@ -113,11 +129,13 @@ wang2014_barplot_data %>%
 
 ```{r rescue-wang2014-scatter, fig.width=9, fig.height=7}
 wang2014_vswt <- defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
     inner_join(wang2014, by = join_by(pos, aa))
 
 defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
     left_join(wang2014, by = join_by(pos, aa)) %>%
@@ -148,12 +166,14 @@ defect_sumstats %>%
 ```{r rescue-huanh2017-barplot, fig.width=12, fig.height=4}
 huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv")
 defect_rescue_stats_huang2017 <- defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:std.error) %>%
     inner_join(huang2017, by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("MildLoF",
                                             "PartialLoF",
                                             "FullLoF")))
 defect_rescue_stats_huang2017 %>%
+    filter(aa != "WT") %>%
     mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
     ggplot() +
         geom_bar(aes(x = reorder(str_c(pos, aa), pos),
