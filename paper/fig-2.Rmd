@@ -113,6 +113,13 @@ clinvar_dists <- cre %>%
     )
   )
 
+clinvar_dists <- bind_rows(
+  clinvar_dists,
+  clinvar_dists %>%
+    filter(significance %in% c("Pathogenic", "Benign", "VUS")) %>%
+    mutate(significance = if_else(aa == "*", "Nonsense", "Missense"))
+)
+
 clinvar_plot <- clinvar_dists %>%
   filter(
     dose == "low",
