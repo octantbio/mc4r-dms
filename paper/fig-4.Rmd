@@ -12,14 +12,15 @@ rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv")
 defect_rescue_stats <- inner_join(defect_sumstats %>% filter(chaperone == "NoIpsen"),
            rescue_sumstats,
            suffix = c("_defect", "_rescue"),
-           by = c("chunk", "pos", "mut_aa")) %>%
+           by = c("chunk", "pos", "aa")) %>%
+    filter(aa != "WT") %>%
     mutate(category = if_else(p.adj_defect < 0.05 & p.adj_rescue < 0.05,
                               "Joint Significant",
                               "Non-Joint Significant"))
 
 sig_vars <- defect_rescue_stats %>%
     filter(category == "Joint Significant") %>%
-    mutate(id = str_c(pos, mut_aa)) %>%
+    mutate(id = str_c(pos, aa)) %>%
     dplyr::select(id) %>%
     unlist()
 ```
@@ -27,12 +28,13 @@ sig_vars <- defect_rescue_stats %>%
 ### Scaled (0-1) Rescue Effects Across All Variants
 ```{r scaled-rescue-scatter, fig.width=9, fig.height=7}
 defect_sumstats %>%
-    dplyr::select(chunk:log2FoldChange) %>%
+    filter(aa != "WT") %>%
+    select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
     ggplot() +
         geom_point(aes(x = 2^NoIpsen,
                        y = 2^Ipsen,
-                       color = if_else(str_c(pos, mut_aa) %in% sig_vars, "Joint Significant", "Non-Joint Significant")),
+                       color = if_else(str_c(pos, aa) %in% sig_vars, "Joint Significant", "Non-Joint Significant")),
                    alpha = 0.3) +
         scale_color_manual(values = c("Joint Significant" = "red",
                                   "Non-Joint Significant" = "black"),
@@ -45,24 +47,38 @@ defect_sumstats %>%
 
 ### Custom Variant Set
 ```{r chap-custom-varset-barplot, fig.width=12, fig.height=4}
-variant_set <- read_tsv("../data/annotations/MC4R-fig4-variants.tsv")
+variant_set <- read_tsv("../data/annotations/MC4R-fig4-variants.tsv") %>%
+    rename("aa" = "mut_aa")
+
+wt_stats <- defect_sumstats %>%
+    filter(aa == "WT") %>%
+    group_by(aa, chaperone) %>%
+    summarize(log2FoldChange = mean(log2FoldChange),
+        std.error = mean(std.error),
+        chunk = NA,
+        pos = "",
+        group = "WT")
+
 custom_joined_data <- defect_sumstats %>% 
-    mutate(mut_aa = if_else(mut_aa == "X", "*", mut_aa)) %>%
-    dplyr::select(chunk:std.error) %>%
-    inner_join(variant_set, by = join_by(pos, mut_aa)) %>%
-    mutate(group = factor(group, levels = c("Responder",
+    mutate(aa = if_else(aa == "X", "*", aa)) %>%
+    select(chunk:std.error) %>%
+    inner_join(variant_set, by = join_by(pos, aa)) %>%
+    mutate(pos = as.character(pos)) %>%
+    bind_rows(wt_stats) %>%
+    mutate(group = factor(group, levels = c("WT",
+                                            "Responder",
                                             "Non-Responder")))
 
 custom_joined_data %>%
     mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
     ggplot() +
-        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_bar(aes(x = reorder(str_c(pos, aa), as.numeric(pos)),
                      y = 2^log2FoldChange,
                      fill = chaperone),
                  width = 0.5,
                  position = position_dodge(width = 0.5),
                  stat = "identity") +
-        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_errorbar(aes(x = reorder(str_c(pos, aa), pos),
                      y = 2^log2FoldChange,
                      ymin = 2^(log2FoldChange-2*std.error),
                      ymax = 2^(log2FoldChange+2*std.error),
@@ -80,10 +96,13 @@ custom_joined_data %>%
 
 ### Wang 2014 Variants
 ```{r rescue-wang2014-barplot, fig.width=12, fig.height=4}
-wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv")
+wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv") %>%
+    rename("aa" = "mut_aa")
+
 wang2014_barplot_data <- defect_sumstats %>%
-    dplyr::select(chunk:std.error) %>%
-    inner_join(wang2014, by = join_by(pos, mut_aa)) %>%
+    filter(aa != "WT") %>%
+    select(chunk:std.error) %>%
+    inner_join(wang2014, by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("NoRescue",
                                             "WeakRescue",
                                             "StrongRescue")))
@@ -91,13 +110,13 @@ wang2014_barplot_data <- defect_sumstats %>%
 wang2014_barplot_data %>%
     mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
     ggplot() +
-        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_bar(aes(x = reorder(str_c(pos, aa), pos),
                      y = 2^log2FoldChange,
                      fill = chaperone),
                  width = 0.5,
                  position = position_dodge(width = 0.5),
                  stat = "identity") +
-        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_errorbar(aes(x = reorder(str_c(pos, aa), pos),
                      y = 2^log2FoldChange,
                      ymin = 2^(log2FoldChange-2*std.error),
                      ymax = 2^(log2FoldChange+2*std.error),
@@ -113,14 +132,16 @@ wang2014_barplot_data %>%
 
 ```{r rescue-wang2014-scatter, fig.width=9, fig.height=7}
 wang2014_vswt <- defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
-    inner_join(wang2014, by = join_by(pos, mut_aa))
+    inner_join(wang2014, by = join_by(pos, aa))
 
 defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:log2FoldChange) %>%
     pivot_wider(names_from = chaperone, values_from = log2FoldChange) %>%
-    left_join(wang2014, by = join_by(pos, mut_aa)) %>%
+    left_join(wang2014, by = join_by(pos, aa)) %>%
     ggplot() +
         geom_point(aes(x = 2^NoIpsen,
                        y = 2^Ipsen),
@@ -133,7 +154,7 @@ defect_sumstats %>%
         geom_label_repel(data = wang2014_vswt,
                aes(x = 2^NoIpsen,
                    y = 2^Ipsen,
-                   label = str_c(pos, mut_aa))) +
+                   label = str_c(pos, aa))) +
         scale_color_manual(values = c("StrongRescue" = "green",
                                       "WeakRescue" = "gold",
                                       "NoRescue" = "red"),
@@ -146,23 +167,27 @@ defect_sumstats %>%
 ### Huang 2017 Variants
 
 ```{r rescue-huanh2017-barplot, fig.width=12, fig.height=4}
-huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv")
+huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv") %>%
+    rename("aa" = "mut_aa")
+
 defect_rescue_stats_huang2017 <- defect_sumstats %>%
+    filter(aa != "WT") %>%
     dplyr::select(chunk:std.error) %>%
-    inner_join(huang2017, by = join_by(pos, mut_aa)) %>%
+    inner_join(huang2017, by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("MildLoF",
                                             "PartialLoF",
                                             "FullLoF")))
 defect_rescue_stats_huang2017 %>%
+    filter(aa != "WT") %>%
     mutate(chaperone = relevel(as.factor(chaperone), ref = "NoIpsen")) %>%
     ggplot() +
-        geom_bar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_bar(aes(x = reorder(str_c(pos, aa), pos),
                      y = 2^log2FoldChange,
                      fill = chaperone),
                  width = 0.5,
                  position = position_dodge(width = 0.5),
                  stat = "identity") +
-        geom_errorbar(aes(x = reorder(str_c(pos, mut_aa), pos),
+        geom_errorbar(aes(x = reorder(str_c(pos, aa), pos),
                      y = 2^log2FoldChange,
                      ymin = 2^(log2FoldChange-2*std.error),
                      ymax = 2^(log2FoldChange+2*std.error),
@@ -180,7 +205,7 @@ defect_rescue_stats_huang2017 %>%
 ```{r rescue-huang2017-scatter, fig.width=9, fig.height=7}
 defect_rescue_stats_huang2017 <- huang2017 %>%
     left_join(defect_rescue_stats,
-              by = join_by(pos, mut_aa)) %>%
+              by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("MildLoF",
                                             "PartialLoF",
                                             "FullLoF")))

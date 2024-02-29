@@ -34,7 +34,6 @@ wt_noipsen <- norm_marginals %>%
            "log2MarginalNormError_WT" = "log2MarginalNormError")
 
 defect_sumstats <- norm_marginals %>%
-    filter(aa != "WT") %>%
     left_join(wt_noipsen) %>%
     ungroup() %>%
     mutate(log2FoldChange = log2MarginalNorm - log2MarginalNorm_WT,
@@ -45,7 +44,6 @@ defect_sumstats <- norm_marginals %>%
     select(-log2MarginalNorm:-log2MarginalNormError_WT)
 
 rescue_sumstats <- norm_marginals %>%
-    filter(aa != "WT") %>%
     group_by(chunk, pos, aa) %>%
     pivot_wider(names_from = chaperone,
                 values_from = log2MarginalNorm:log2MarginalNormError) %>%
