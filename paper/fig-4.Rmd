@@ -6,10 +6,8 @@ knitr::opts_chunk$set(
 
 ## Main Figures
 ```{r}
-defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv") %>%
-    rename("aa" = "mut_aa")
-rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv") %>%
-    rename("aa" = "mut_aa")
+defect_sumstats <- read_tsv("../sumstats/MC4R-DMS11-DefectSumstats.tsv")
+rescue_sumstats <- read_tsv("../sumstats/MC4R-DMS11-RescueSumstats.tsv")
 
 defect_rescue_stats <- inner_join(defect_sumstats %>% filter(chaperone == "NoIpsen"),
            rescue_sumstats,
@@ -50,7 +48,7 @@ defect_sumstats %>%
 ### Custom Variant Set
 ```{r chap-custom-varset-barplot, fig.width=12, fig.height=4}
 variant_set <- read_tsv("../data/annotations/MC4R-fig4-variants.tsv") %>%
-    mutate("aa" = "mut_aa")
+    rename("aa" = "mut_aa")
 
 wt_stats <- defect_sumstats %>%
     filter(aa == "WT") %>%
@@ -99,10 +97,11 @@ custom_joined_data %>%
 ### Wang 2014 Variants
 ```{r rescue-wang2014-barplot, fig.width=12, fig.height=4}
 wang2014 <- read_tsv("../data/annotations/MC4R-Wang2014.tsv") %>%
-    mutate("aa" = "mut_aa")
+    rename("aa" = "mut_aa")
+
 wang2014_barplot_data <- defect_sumstats %>%
     filter(aa != "WT") %>%
-    dplyr::select(chunk:std.error) %>%
+    select(chunk:std.error) %>%
     inner_join(wang2014, by = join_by(pos, aa)) %>%
     mutate(group = factor(group, levels = c("NoRescue",
                                             "WeakRescue",
@@ -169,7 +168,8 @@ defect_sumstats %>%
 
 ```{r rescue-huanh2017-barplot, fig.width=12, fig.height=4}
 huang2017 <- read_tsv("../data/annotations/MC4R-Huang2017.tsv") %>%
-    mutate("aa" = "mut_aa")
+    rename("aa" = "mut_aa")
+
 defect_rescue_stats_huang2017 <- defect_sumstats %>%
     filter(aa != "WT") %>%
     dplyr::select(chunk:std.error) %>%
