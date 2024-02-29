@@ -102,16 +102,20 @@ clinvar_dists <- cre %>%
       grepl("benign", consequence, ignore.case = TRUE) ~ "Benign",
       TRUE ~ "VUS"
     ),
-    significance = factor(
-      significance,
-      levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")
-    ),
     color = case_when(
       p.adj < 0.01 & statistic < 0 ~ "#001260",
       p.adj < 0.01 & statistic > 0 ~ "#590007",
       TRUE ~ "grey"
     )
   )
+
+clinvar_dists <- bind_rows(
+  clinvar_dists,
+  clinvar_dists %>%
+    filter(significance %in% c("Pathogenic", "Benign", "VUS")) %>%
+    mutate(significance = if_else(aa == "*", "Nonsense", "Missense"))
+) %>% mutate(significance = factor(significance,
+    levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")))
 
 clinvar_plot <- clinvar_dists %>%
   filter(
@@ -122,7 +126,7 @@ clinvar_plot <- clinvar_dists %>%
   geom_quasirandom() +
   geom_hline(yintercept = 0, lty = "dashed") +
   coord_flip() +
-  theme(legend.pos = "none") +
+  theme(legend.position = "none") +
   scale_color_identity() +
   ylab("Z-Statistic") +
   xlab("")
