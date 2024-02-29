@@ -129,7 +129,7 @@ clinvar_plot <- clinvar_dists %>%
   geom_quasirandom() +
   geom_hline(yintercept = 0, lty = "dashed") +
   coord_flip() +
-  theme(legend.pos = "none") +
+  theme(legend.position = "none") +
   scale_color_identity() +
   ylab("Z-Statistic") +
   xlab("")
