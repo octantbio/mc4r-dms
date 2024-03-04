@@ -20,7 +20,7 @@ bias_pca_amsh <- cre_uas %>%
 bias_pca_amsh_labels <- augment(bias_pca_amsh) %>%
   mutate(
     color = case_when(
-      .fittedPC2 > 7.5 | (.rownames %in% c("140I", "146Y")) ~ "#9467BD",
+      .fittedPC2 > 7.5 ~ "#9467BD",
       .fittedPC2 < -7.5 ~ "#2CA02C",
       TRUE ~ "black"
     )
@@ -211,9 +211,9 @@ bias_plot(140, "I") +
   scale_y_continuous(limits = c(-1.25, 2.6), breaks = seq(-1.5, 2.5, 0.5))
 ```
 
-### 79 Zoom
+### 79 al
 
-```{r 79-zoom, fig.width=12, fig.height=12}
+```{r 79-all, fig.width=12, fig.height=12}
 aa_ordering <- tribble(
   ~aa, ~group,
   "*", "Stop",
@@ -275,5 +275,47 @@ cre_uas %>%
   theme(
     axis.title.x = element_blank(),
     # legend.position = 'none'
+  )
+```
+
+### 79 zoom
+
+```{r 79-zoom, fig.width=8.5, fig.height=2}
+cre_uas %>%
+  filter(
+    compound %in% c("None", "aMSH"),
+    pos == 79,
+    aa %in% c('S', 'N', 'Q', 'R', 'G')
+  ) %>%
+  mutate(aa = as.character(aa)) %>%
+  inner_join(aa_ordering) %>%
+  mutate(
+    compound = "aMSH",
+    pathway = if_else(reporter == "CRE", "Gs", "Gq"),
+    dose = if_else(dose == "medium", "med", dose),
+    dose = str_to_sentence(dose),
+    dose = factor(dose, levels = c("Zero", "Low", "Med", "High")),
+    aa = factor(aa, levels = aa_ordering$aa)
+  ) %>%
+  ggplot(aes(x = dose, y = log2FoldChange, color = pathway, group = pathway)) +
+  geom_hline(yintercept = 0, lty = "dashed") +
+  geom_pointrange(
+    aes(
+      ymin = log2FoldChange - 2 * log2StdError,
+      ymax = log2FoldChange + 2 * log2StdError
+    ),
+    position = position_dodge(width = 0.25)
+  ) +
+  geom_line(
+    position = position_dodge(width = 0.25)
+  ) +
+  facet_wrap(facets = vars(aa), nrow = 1) +
+  labs(
+    y = "Log2-fold Change vs WT\n(+/- 2 Standard Errors)",
+  ) +
+  scale_color_manual(values = c("#9467BD", "#2CA02C")) +
+  theme(
+    axis.title.x = element_blank(),
+    legend.position = 'none'
   )
 ```

@@ -73,7 +73,7 @@ meta_regression_plot <- resid_data %>%
   ) +
   geom_text_repel(
     aes(label = mutant),
-    data = filter(resid_data, residual_fdr < 0.05, (residual_z > 0)),
+    data = filter(resid_data, pos %in% c(48, 104, 129) & residual_fdr < 0.05),
     force = 2,
     min.segment.length = 0,
     max.overlaps = 20,
