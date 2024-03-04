@@ -20,7 +20,7 @@ bias_pca_amsh <- cre_uas %>%
 bias_pca_amsh_labels <- augment(bias_pca_amsh) %>%
   mutate(
     color = case_when(
-      .fittedPC2 > 7.5 | (.rownames %in% c("140I", "146Y")) ~ "#9467BD",
+      .fittedPC2 > 7.5 ~ "#9467BD",
       .fittedPC2 < -7.5 ~ "#2CA02C",
       TRUE ~ "black"
     )
