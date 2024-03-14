@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-March 04, 2024
+March 14, 2024
 
 # Introduction
 
@@ -25,6 +25,8 @@ consistent.
 ### Correlation to Computational Predictions
 
 ![](./fig-1/predictors-1.png)<!-- -->
+
+Write out aMSH data for both pathways with various predictors
 
 # Figure 2
 
