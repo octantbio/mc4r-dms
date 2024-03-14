@@ -125,3 +125,29 @@ alpha_missense_plot +
   conservation_plot +
   plot_layout(ncol = 2)
 ```
+
+
+Write out aMSH data for both pathways with various predictors
+
+```{r}
+bind_rows(
+    CRE = cre %>% filter(compound == 'aMSH'),
+    UAS = uas %>% filter(compound == 'aMSH'),
+    .id = 'reporter'
+) %>% 
+    mutate(
+        pathway = if_else(reporter == 'CRE', 'Gs', 'Gq')
+    ) %>% 
+    clean_names() %>% 
+    select(reporter, pathway, compound, dose, chunk, pos, aa, log2fc = log2fold_change, std_error = log2std_error, statistic, p_value, p_adj) %>% 
+    left_join(alpha_missense) %>% 
+    rename(
+        mutant = mut,
+        am_score = score
+    ) %>% 
+    relocate(mutant, .before = 'pos') %>% 
+  select(-uniprot) %>% 
+    left_join(popeve) %>% 
+    relocate(wt, .before = 'pos') %>% 
+  write_tsv('./fig-1/amsh-popeve-alphamissense.tsv')
+```
