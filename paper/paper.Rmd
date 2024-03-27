@@ -20,6 +20,7 @@ library(ggbeeswarm)
 library(janitor)
 library(broom)
 library(patchwork)
+library(drc)
 library(cmdstanr)
 library(brms)
 library(stringr)
@@ -163,6 +164,13 @@ cre_uas <- bind_rows(
     aa = if_else(aa == 'X', '*', aa),
     aa = factor(aa, levels = lehner_grouping)
   )
+
+# write out for external collabs
+cre_uas %>% 
+    filter(compound != 'THIQ') %>% 
+    mutate(pathway = if_else(reporter == 'CRE', 'Gs', 'Gq')) %>% 
+    relocate(pathway, .before = compound) %>% 
+    write_tsv('./mc4r-amsh.tsv')
 ```
 
 
