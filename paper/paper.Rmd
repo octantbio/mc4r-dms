@@ -167,10 +167,9 @@ cre_uas <- bind_rows(
 
 # write out for external collabs
 cre_uas %>%
-  filter(compound != "THIQ") %>%
   mutate(pathway = if_else(reporter == "CRE", "Gs", "Gq")) %>%
   relocate(pathway, .before = compound) %>%
-  write_tsv("./mc4r-amsh.tsv")
+  write_tsv("./mc4r-dms.tsv")
 ```
 
 

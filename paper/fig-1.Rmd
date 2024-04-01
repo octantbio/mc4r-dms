@@ -8,9 +8,9 @@ knitr::opts_chunk$set(
 
 ## Extended Figures
 
-### Reporter Validation
+### Library Dosing
 
-```{r nfat-validation, fig.width=9, fig.height=6}
+```{r library-dosing, fig.width=9, fig.height=6}
 library_luci <- bind_rows(
   Gq = read_tsv("../data/nfat-dosing.tsv"),
   Gs = read_tsv("../data/cre-dosing.tsv"),
