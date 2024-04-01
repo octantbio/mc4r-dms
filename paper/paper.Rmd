@@ -28,7 +28,7 @@ library(tidyverse)
 
 custom_theme <- theme_bw(
   base_size = 10
-  ) +
+) +
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
@@ -79,11 +79,11 @@ uas_annotation <- tribble(
 
 uas_unnorm <- read_tsv("../sumstats/MC4R-DMS8-Gq-unnormalized.tsv") %>%
   separate(
-    contrast, 
-    into = c('compound', 'concentration', 'norm'), 
-    remove = FALSE, 
-    sep = '_'
-  ) %>% 
+    contrast,
+    into = c("compound", "concentration", "norm"),
+    remove = FALSE,
+    sep = "_"
+  ) %>%
   inner_join(uas_annotation)
 
 #-------------------------------------------------------------------------------
@@ -102,23 +102,23 @@ cre_annotation <- tribble(
 
 cre_unnorm <- read_tsv("../sumstats/MC4R-DMS5-Gs-unnormalized.tsv") %>%
   separate(
-    contrast, 
-    into = c('compound', 'concentration', 'norm'), 
-    remove = FALSE, 
-    sep = '_'
-  ) %>% 
+    contrast,
+    into = c("compound", "concentration", "norm"),
+    remove = FALSE,
+    sep = "_"
+  ) %>%
   inner_join(cre_annotation)
 
 unnorm_combo <- bind_rows(
   gs = cre_unnorm,
   gq = uas_unnorm,
   .id = "pathway"
-) %>% 
-  mutate(aa = if_else(aa == 'X', '*', aa))
+) %>%
+  mutate(aa = if_else(aa == "X", "*", aa))
 
 #-------------------------------------------------------------------------------
 
-cre <- read_tsv('../sumstats/MC4R-DMS5-Gs.tsv')
+cre <- read_tsv("../sumstats/MC4R-DMS5-Gs.tsv")
 
 cre_dose <- tribble(
   ~contrast, ~dose, ~compound, ~concentration,
@@ -133,15 +133,15 @@ cre_dose <- tribble(
   mutate(dose = factor(dose, levels = c("zero", "low", "medium", "high")))
 
 cre <- cre %>%
-  inner_join(cre_dose) %>% 
+  inner_join(cre_dose) %>%
   rename(
     log2FoldChange = log2ContrastEstimate,
     log2StdError = log2ContrastError
-  ) %>% 
+  ) %>%
   mutate(
-    aa = if_else(aa == 'X', '*', aa),
+    aa = if_else(aa == "X", "*", aa),
     aa = factor(aa, levels = lehner_grouping)
-    )
+  )
 
 #-------------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ uas <- uas_unnorm %>%
   mutate(
     p.adj = p.adjust(p.value, method = "BH")
   ) %>%
-  ungroup() %>% 
+  ungroup() %>%
   select(-norm)
 
 cre_uas <- bind_rows(
@@ -161,16 +161,16 @@ cre_uas <- bind_rows(
   select(reporter, compound, dose, chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, p.adj) %>%
   mutate(
     dose = factor(dose, levels = c("zero", "low", "medium", "high")),
-    aa = if_else(aa == 'X', '*', aa),
+    aa = if_else(aa == "X", "*", aa),
     aa = factor(aa, levels = lehner_grouping)
   )
 
 # write out for external collabs
-cre_uas %>% 
-    filter(compound != 'THIQ') %>% 
-    mutate(pathway = if_else(reporter == 'CRE', 'Gs', 'Gq')) %>% 
-    relocate(pathway, .before = compound) %>% 
-    write_tsv('./mc4r-amsh.tsv')
+cre_uas %>%
+  filter(compound != "THIQ") %>%
+  mutate(pathway = if_else(reporter == "CRE", "Gs", "Gq")) %>%
+  relocate(pathway, .before = compound) %>%
+  write_tsv("./mc4r-amsh.tsv")
 ```
 
 
