@@ -28,6 +28,7 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
         scales \
         patchwork \
         factoextra \
+	drc \
         brms
 
 # special install for cmdstanr

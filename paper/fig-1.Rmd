@@ -8,6 +8,87 @@ knitr::opts_chunk$set(
 
 ## Extended Figures
 
+### Reporter Validation
+
+```{r nfat-validation, fig.width=9, fig.height=6}
+library_luci <- bind_rows(
+  Gq = read_tsv('../data/nfat-dosing.tsv'),
+  Gs = read_tsv('../data/cre-dosing.tsv'),
+  .id = 'reporter'
+)
+
+library_luci_dmso <- library_luci %>% 
+  filter(conc == 0) %>% 
+  group_by(reporter, drug) %>% 
+  summarise(
+    dmso = mean(luc),
+    .groups = 'drop'
+  )
+
+library_luci <- library_luci %>% 
+  filter(conc > 0) %>% 
+  inner_join(library_luci_dmso) %>% 
+  mutate(fold = luc / dmso)
+
+conc_range <- library_luci %>% 
+  filter(conc > 0) %>% 
+  summarise(
+    min = min(conc),
+    max = max(conc)
+  )
+
+conc_vec <- exp(seq(log(conc_range$min), log(conc_range$max), length.out = 256))
+
+# fix the lower term to 1 since we're in fold-change space
+drc_helper <- function(df, formula){
+  drm(
+    formula = formula,
+    fct = LL2.4(
+      names = c("Slope", "Lower", "Upper", "EC50"),
+      fixed = c(NA, 1, NA, NA)
+    ),
+    data = df
+  )
+}
+
+library_luci_drcs <- library_luci %>% 
+  nest(.by = c('reporter', 'drug')) %>% 
+  mutate(
+    drc = map(data, ~drc_helper(.x, fold ~ conc)),
+    coefs = map(drc, tidy),
+    curve_fn = map(drc, ~.x$curve[[1]]),
+    conc = rep(list(conc_vec), n()),
+    curve = map2(curve_fn, conc, ~as.numeric(.x(.y)))
+  ) 
+
+library_luci_drcs %>% 
+  select(reporter, drug, data) %>% 
+  unnest(cols = data) %>% 
+  ggplot() +
+  geom_hline(yintercept = 1, lty = 'dashed') +
+  geom_point(
+    aes(x = conc, y = fold, color = drug)
+  ) +
+  geom_line(
+    aes(x = conc, y = curve, color = drug),
+    data = library_luci_drcs %>% 
+      select(reporter, drug, conc, curve) %>% 
+      unnest(cols = c(conc, curve))
+  ) +
+  facet_wrap(facets = vars(reporter)) +
+  scale_x_log10(breaks = 10^seq(-11,-5)) +
+  scale_color_manual(values = c("#1F77B4", "#FF7F0E")) +
+  labs(
+    x = 'Concentration',
+    y = 'Fold change relative to DMSO',
+    title = 'Luciferase assay to determine DMS library dosing'
+  ) +
+  theme(
+    legend.position = 'bottom',
+    legend.title = element_blank()
+  )
+```
+
 ### Effect of Barcodes
 
 ```{r barcode-downsample, fig.width=9, fig.height=4.5}
@@ -131,23 +212,23 @@ Write out aMSH data for both pathways with various predictors
 
 ```{r}
 bind_rows(
-    CRE = cre %>% filter(compound == 'aMSH'),
-    UAS = uas %>% filter(compound == 'aMSH'),
-    .id = 'reporter'
+  CRE = cre %>% filter(compound == 'aMSH'),
+  UAS = uas %>% filter(compound == 'aMSH'),
+  .id = 'reporter'
 ) %>% 
-    mutate(
-        pathway = if_else(reporter == 'CRE', 'Gs', 'Gq')
-    ) %>% 
-    clean_names() %>% 
-    select(reporter, pathway, compound, dose, chunk, pos, aa, log2fc = log2fold_change, std_error = log2std_error, statistic, p_value, p_adj) %>% 
-    left_join(alpha_missense) %>% 
-    rename(
-        mutant = mut,
-        am_score = score
-    ) %>% 
-    relocate(mutant, .before = 'pos') %>% 
+  mutate(
+    pathway = if_else(reporter == 'CRE', 'Gs', 'Gq')
+  ) %>% 
+  clean_names() %>% 
+  select(reporter, pathway, compound, dose, chunk, pos, aa, log2fc = log2fold_change, std_error = log2std_error, statistic, p_value, p_adj) %>% 
+  left_join(alpha_missense) %>% 
+  rename(
+    mutant = mut,
+    am_score = score
+  ) %>% 
+  relocate(mutant, .before = 'pos') %>% 
   select(-uniprot) %>% 
-    left_join(popeve) %>% 
-    relocate(wt, .before = 'pos') %>% 
+  left_join(popeve) %>% 
+  relocate(wt, .before = 'pos') %>% 
   write_tsv('./fig-1/amsh-popeve-alphamissense.tsv')
 ```

@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-March 14, 2024
+April 01, 2024
 
 # Introduction
 
@@ -17,6 +17,10 @@ consistent.
 ## Main Figures
 
 ## Extended Figures
+
+### Reporter Validation
+
+![](./fig-1/nfat-validation-1.png)<!-- -->
 
 ### Effect of Barcodes
 
