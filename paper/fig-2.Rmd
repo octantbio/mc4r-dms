@@ -51,11 +51,11 @@ amsh_long <- cre %>%
   ) %>%
   ggplot(aes(y = pos, x = aa, fill = statistic)) +
   geom_tile() +
-  coord_fixed(ratio = 1/3) +
+  coord_fixed(ratio = 1 / 3) +
   scale_fill_scico(palette = "vik", limits = c(-10, 10), oob = scales::squish) +
   scale_y_reverse() +
   theme_void() +
-  theme(legend.position = 'none')
+  theme(legend.position = "none")
 
 amsh_long
 ```
@@ -64,12 +64,12 @@ amsh_long
 
 ```{r all-heats, fig.width=24, fig.height=2}
 heatmap_examples <- unnorm_combo %>%
-  filter(compound != 'Forsk') %>% 
+  filter(compound != "Forsk") %>%
   mutate(
-    pathway = factor(pathway, levels = c('gs', 'gq')),
+    pathway = factor(pathway, levels = c("gs", "gq")),
     aa = factor(aa, levels = lehner_grouping),
     dose = factor(dose, levels = c("zero", "low", "medium", "high")),
-    compound = if_else(compound == 'None', 'aMSH', compound),
+    compound = if_else(compound == "None", "aMSH", compound),
     compound = factor(compound, levels = c("aMSH", "THIQ", "None", "Forsk"))
   ) %>%
   ggplot(aes(x = pos, y = aa, fill = statistic)) +
@@ -78,7 +78,7 @@ heatmap_examples <- unnorm_combo %>%
   coord_equal() +
   scale_fill_scico(palette = "vik", limits = c(-10, 10), oob = scales::squish) +
   theme_void() +
-  theme(legend.position = 'none')
+  theme(legend.position = "none")
 
 heatmap_examples
 ```
@@ -115,7 +115,8 @@ clinvar_dists <- bind_rows(
     filter(significance %in% c("Pathogenic", "Benign", "VUS")) %>%
     mutate(significance = if_else(aa == "*", "Nonsense", "Missense"))
 ) %>% mutate(significance = factor(significance,
-    levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")))
+  levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")
+))
 
 clinvar_plot <- clinvar_dists %>%
   filter(
@@ -306,12 +307,12 @@ ADE
 AFG
 "
 
-amsh_long + 
-  free(heatmap_examples) + 
-  clinvar_plot + 
-  gnomad_plot + 
-  lit_mut_plot + 
-  delta_ec50_plot + 
+amsh_long +
+  free(heatmap_examples) +
+  clinvar_plot +
+  gnomad_plot +
+  lit_mut_plot +
+  delta_ec50_plot +
   free(var_class_plot) +
   plot_layout(design = layout)
 ```

@@ -75,7 +75,7 @@ bias_plot <- function(sel_pos, sel_aa) {
       dose = str_to_sentence(dose),
       dose = factor(dose, levels = c("Zero", "Low", "Med", "High"))
     )
-  
+
   amsh_zero %>%
     ggplot(aes(x = dose, y = log2FoldChange, color = pathway, group = pathway)) +
     geom_hline(yintercept = 0, lty = "dashed") +
@@ -96,7 +96,7 @@ bias_plot <- function(sel_pos, sel_aa) {
     scale_color_manual(values = c("#9467BD", "#2CA02C")) +
     theme(
       axis.title.x = element_blank(),
-      legend.position = 'none'
+      legend.position = "none"
     )
 }
 
@@ -111,7 +111,7 @@ bias_inset_1 <- bias_plot(164, "L") +
     axis.title.y = element_blank(),
     axis.text.y = element_blank()
   ) +
-  plot_layout(nrow = 1, guides = 'collect', axis_titles = "collect") &
+  plot_layout(nrow = 1, guides = "collect", axis_titles = "collect") &
   scale_y_continuous(limits = c(-1.5, 2.0), breaks = seq(-1.5, 2, 0.5))
 
 bias_inset_1
@@ -285,7 +285,7 @@ cre_uas %>%
   filter(
     compound %in% c("None", "aMSH"),
     pos == 79,
-    aa %in% c('S', 'N', 'Q', 'R', 'G')
+    aa %in% c("S", "N", "Q", "R", "G")
   ) %>%
   mutate(aa = as.character(aa)) %>%
   inner_join(aa_ordering) %>%
@@ -316,6 +316,6 @@ cre_uas %>%
   scale_color_manual(values = c("#9467BD", "#2CA02C")) +
   theme(
     axis.title.x = element_blank(),
-    legend.position = 'none'
+    legend.position = "none"
   )
 ```
