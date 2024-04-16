@@ -168,7 +168,7 @@ compare_129
 
 ### aMSH vs THIQ -- Position 97
 
-```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+```{r pos97-amsh-vs-thiq, fig.width=9, fig.height=4}
 compare_97 <- compare_amsh_thiq(97)
 
 compare_97
@@ -184,7 +184,7 @@ compare_104
 
 ### aMSH vs THIQ -- Position 254
 
-```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+```{r pos254-amsh-vs-thiq, fig.width=9, fig.height=4}
 compare_254 <- compare_amsh_thiq(254)
 
 compare_254
