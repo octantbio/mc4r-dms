@@ -9,8 +9,8 @@ knitr::opts_chunk$set(
 ### THIQ vs aMSH meta-regression
 
 ```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
-amsh_vs_thiq_wide <- cre %>%
-  filter(dose == "low") %>%
+amsh_vs_thiq_wide <- uas %>%
+  filter((dose == "high" & compound == "THIQ") | (dose == "low" & compound == "aMSH")) %>%
   select(pos, aa, compound, est = log2FoldChange, se = log2StdError) %>%
   pivot_wider(names_from = compound, values_from = c(est, se)) %>%
   mutate(
@@ -129,10 +129,10 @@ compare_amsh_thiq <- function(sel_pos) {
   ) %>%
     mutate(group = factor(group, levels = c("Special", "Hydrophobic", "Polar Uncharged", "Positive", "Negative")))
 
-  cre %>%
+  uas %>%
     filter(
       pos == sel_pos,
-      dose == "low"
+      dose == "high"
     ) %>%
     mutate(aa = as.character(aa)) %>%
     inner_join(aa_ordering) %>%
@@ -156,7 +156,7 @@ compare_amsh_thiq <- function(sel_pos) {
       axis.title.x = element_blank(),
       legend.position = "bottom",
       legend.title = element_blank(),
-      panel.grid.major.y = element_line(colour = "grey92", linewidth = rel(0.5))
+      panel.grid.major.y = element_line(colour = "grey92", size = rel(0.5))
     )
 }
 
@@ -169,7 +169,7 @@ compare_129
 ### aMSH vs THIQ -- Position 104
 
 ```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_104 <- compare_amsh_thiq(104)
+compare_104 <- compare_amsh_thiq(129)
 
 compare_104
 ```
@@ -178,7 +178,7 @@ compare_104
 
 ```{r pos48-amsh-vs-thiq, fig.width=9, fig.height=4}
 compare_48 <- compare_amsh_thiq(48) +
-  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
+  scale_y_continuous(breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
 
 compare_48
 ```
