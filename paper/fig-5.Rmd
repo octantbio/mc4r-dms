@@ -166,12 +166,28 @@ compare_129 <- compare_amsh_thiq(129) +
 compare_129
 ```
 
+### aMSH vs THIQ -- Position 97
+
+```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_97 <- compare_amsh_thiq(97)
+
+compare_97
+```
+
 ### aMSH vs THIQ -- Position 104
 
 ```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_104 <- compare_amsh_thiq(129)
+compare_104 <- compare_amsh_thiq(104)
 
 compare_104
+```
+
+### aMSH vs THIQ -- Position 254
+
+```{r pos104-amsh-vs-thiq, fig.width=9, fig.height=4}
+compare_254 <- compare_amsh_thiq(254)
+
+compare_254
 ```
 
 ### aMSH vs THIQ -- Position 48
