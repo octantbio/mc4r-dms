@@ -8,89 +8,106 @@ knitr::opts_chunk$set(
 
 ### THIQ vs aMSH meta-regression
 
-```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
-amsh_vs_thiq_wide <- uas %>%
-  filter((dose == "high" & compound == "THIQ") | (dose == "low" & compound == "aMSH")) %>%
-  select(pos, aa, compound, est = log2FoldChange, se = log2StdError) %>%
-  pivot_wider(names_from = compound, values_from = c(est, se)) %>%
-  mutate(
-    contrast = est_aMSH - est_THIQ,
-    pooled_se = sqrt(se_aMSH^2 + se_THIQ^2),
-    z = contrast / pooled_se,
-    pval = (1 - pnorm(abs(z))) * 2,
-    fdr = p.adjust(pval, method = "fdr"),
-    mutant = str_c(pos, aa)
+```{r amsh-vs-thiq-meta-function, cache=TRUE}
+run_metaregression <- function(amsh_level, thiq_level, df){
+  
+  amsh_vs_thiq_wide <- df %>%
+    filter((dose == amsh_level & compound == "aMSH") | (dose == thiq_level & compound == "THIQ")) %>%
+    select(pos, aa, compound, est = log2FoldChange, se = log2StdError) %>%
+    pivot_wider(names_from = compound, values_from = c(est, se)) %>%
+    mutate(
+      contrast = est_aMSH - est_THIQ,
+      pooled_se = sqrt(se_aMSH^2 + se_THIQ^2),
+      z = contrast / pooled_se,
+      pval = (1 - pnorm(abs(z))) * 2,
+      fdr = p.adjust(pval, method = "fdr"),
+      mutant = str_c(pos, aa)
+    )
+
+  # assume a perfect slope and intercept centered at 0
+  priors <- c(
+    prior(normal(1, 1), class = "b", lb = 0),
+    prior(normal(0, 1), class = "Intercept")
   )
-
-# assume a perfect slope and intercept centered at 0
-priors <- c(
-  prior(normal(1, 1), class = "b", lb = 0),
-  prior(normal(0, 1), class = "Intercept")
-)
-
-bench::bench_time(
-  model_brm <- brm(
-    data = amsh_vs_thiq_wide,
-    formula = est_aMSH | se(se_aMSH) ~ me(est_THIQ, se_THIQ),
-    backend = "cmdstanr",
-    chains = 4, cores = 4,
-    prior = priors,
-    family = "gaussian"
+  
+  bench::bench_time(
+    model_brm <- brm(
+      data = amsh_vs_thiq_wide,
+      formula = est_aMSH | se(se_aMSH) ~ me(est_THIQ, se_THIQ),
+      backend = "cmdstanr",
+      chains = 4, cores = 4,
+      prior = priors,
+      family = "gaussian"
+    )
   )
-)
+  
+  meta_lm <- fixef(model_brm)[, 1]
+  
+  resid_data <- residuals(model_brm) %>%
+    as_tibble() %>%
+    mutate(
+      residual_z = Estimate / Est.Error,
+      residual_pval = (1 - pnorm(abs(residual_z))) * 2,
+      residual_fdr = p.adjust(residual_pval, method = "fdr")
+    ) %>%
+    bind_cols(amsh_vs_thiq_wide)
+  
+  meta_regression_plot <- resid_data %>%
+    ggplot(aes(y = est_aMSH, x = est_THIQ)) +
+    geom_hline(yintercept = 0, lty = "dashed") +
+    geom_vline(xintercept = 0, lty = "dashed") +
+    geom_abline(lty = "dashed") +
+    geom_point(pch = 21, alpha = 0.5) +
+    geom_point(
+      color = "#1F77B4",
+      data = filter(resid_data, residual_fdr < 0.05, residual_z < 0),
+      size = 2
+    ) +
+    geom_point(
+      color = "#FF7F0E",
+      data = filter(resid_data, residual_fdr < 0.05, residual_z > 0),
+      size = 2
+    ) +
+    geom_abline(
+      intercept = meta_lm[1],
+      slope = meta_lm[2],
+      color = "#E377C2"
+    ) +
+    geom_text_repel(
+      aes(label = mutant),
+      data = filter(resid_data, pos %in% c(48, 104, 129) & residual_fdr < 0.05),
+      force = 2,
+      min.segment.length = 0,
+      max.overlaps = 20,
+      max.time = 2
+    ) +
+    labs(
+      x = "THIQ\n(log2-fold change from WT)",
+      y = "aMSH\n(log2-fold change from WT)",
+    ) +
+    theme(panel.grid.major = element_blank())
+  
+  return(list(resid_data, meta_regression_plot))
+}
 
-meta_lm <- fixef(model_brm)[, 1]
-
-resid_data <- residuals(model_brm) %>%
-  as_tibble() %>%
-  mutate(
-    residual_z = Estimate / Est.Error,
-    residual_pval = (1 - pnorm(abs(residual_z))) * 2,
-    residual_fdr = p.adjust(residual_pval, method = "fdr")
-  ) %>%
-  bind_cols(amsh_vs_thiq_wide)
-
-meta_regression_plot <- resid_data %>%
-  ggplot(aes(y = est_aMSH, x = est_THIQ)) +
-  geom_hline(yintercept = 0, lty = "dashed") +
-  geom_vline(xintercept = 0, lty = "dashed") +
-  geom_abline(lty = "dashed") +
-  geom_point(pch = 21, alpha = 0.5) +
-  geom_point(
-    color = "#1F77B4",
-    data = filter(resid_data, residual_fdr < 0.05, residual_z < 0),
-    size = 2
-  ) +
-  geom_point(
-    color = "#FF7F0E",
-    data = filter(resid_data, residual_fdr < 0.05, residual_z > 0),
-    size = 2
-  ) +
-  geom_abline(
-    intercept = meta_lm[1],
-    slope = meta_lm[2],
-    color = "#E377C2"
-  ) +
-  geom_text_repel(
-    aes(label = mutant),
-    data = filter(resid_data, pos %in% c(48, 104, 129) & residual_fdr < 0.05),
-    force = 2,
-    min.segment.length = 0,
-    max.overlaps = 20,
-    max.time = 2
-  ) +
-  labs(
-    x = "THIQ\n(log2-fold change from WT)",
-    y = "aMSH\n(log2-fold change from WT)",
-  ) +
-  theme(panel.grid.major = element_blank())
-
-meta_regression_plot
+metareg_low <- run_metaregression(amsh_level = "low", thiq_level = "low", df = cre)
+metareg_med <- run_metaregression(amsh_level = "low", thiq_level = "medium", df = cre)
+metareg_high <- run_metaregression(amsh_level = "low", thiq_level = "high", df = cre)
 ```
+
+```{r amsh-vs-thiq-meta, fig.width=6, fig.height=6, cache=TRUE}
+metareg_low[[2]] + ggtitle("aMSH Low vs THIQ Low")
+metareg_med[[2]] + ggtitle("aMSH Low vs THIQ Medium")
+metareg_high[[2]] + ggtitle("aMSH Low vs THIQ High")
+```
+
 
 As a table, here's the 5% FDR's
 
 ```{r}
+
+
+
 resid_data %>%
   filter(residual_fdr < 0.05) %>%
   select(pos, aa, est_aMSH, est_THIQ, residual_z, residual_fdr) %>%
@@ -129,10 +146,10 @@ compare_amsh_thiq <- function(sel_pos) {
   ) %>%
     mutate(group = factor(group, levels = c("Special", "Hydrophobic", "Polar Uncharged", "Positive", "Negative")))
 
-  uas %>%
+  cre %>%
     filter(
       pos == sel_pos,
-      dose == "high"
+      (dose == "high" & compound == "THIQ") | (dose == "low" & compound == "aMSH")
     ) %>%
     mutate(aa = as.character(aa)) %>%
     inner_join(aa_ordering) %>%
@@ -160,7 +177,7 @@ compare_amsh_thiq <- function(sel_pos) {
     )
 }
 
-compare_129 <- compare_amsh_thiq(129) +
+compare_129 <- compare_amsh_thiq(121) +
   scale_y_continuous(limits = c(-3, 1.25), breaks = seq(-3, 1, 1))
 
 compare_129
@@ -212,6 +229,7 @@ compare_48 / compare_104 / compare_129 +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 ```
+
 
 ## Extended Figures
 
@@ -350,8 +368,7 @@ compare_amsh_thiq_all(129)
 ### aMSH vs THIQ -- Position 284
 
 ```{r pos284-amsh-vs-thiq, fig.width=9, fig.height=4}
-compare_amsh_thiq(284) +
-  scale_y_continuous(limits = c(-1.75, 0.75), breaks = seq(-1.5, 0.5, 0.5), expand = c(0, 0))
+compare_amsh_thiq(284) 
 ```
 
 ### DRC aMSH vs THIQ -- Position 284
@@ -359,3 +376,6 @@ compare_amsh_thiq(284) +
 ```{r 284-drc, fig.width=12, fig.height=12}
 compare_amsh_thiq_all(284)
 ```
+
+
+
