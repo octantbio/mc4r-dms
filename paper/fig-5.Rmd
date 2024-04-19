@@ -100,19 +100,26 @@ metareg_low[[2]] + ggtitle("aMSH Low vs THIQ Low")
 metareg_med[[2]] + ggtitle("aMSH Low vs THIQ Medium")
 metareg_high[[2]] + ggtitle("aMSH Low vs THIQ High")
 ```
-
-
 As a table, here's the 5% FDR's
 
 ```{r}
+resid_data <- bind_rows(metareg_low[[1]] %>% mutate("level" = "low"),
+                        metareg_med[[1]] %>% mutate("level" = "medium"),
+                        metareg_high[[1]] %>% mutate("level" = "high"))
 
-
-
-resid_data %>%
+sig_vars <- resid_data %>%
   filter(residual_fdr < 0.05) %>%
-  select(pos, aa, est_aMSH, est_THIQ, residual_z, residual_fdr) %>%
-  mutate(residual_fdr = -log10(residual_fdr)) %>%
-  arrange(pos, residual_z) %>%
+  mutate(mut_id = str_c(pos, aa)) %>%
+  pull(mut_id) %>%
+  unique()
+
+resid_data_wide <- resid_data %>%
+  filter(str_c(pos, aa) %in% sig_vars) %>%
+  select(pos, aa, residual_z, level) %>%
+  pivot_wider(names_from = level, values_from = residual_z)
+
+resid_data_wide %>%
+  arrange(pos, aa) %>%
   knitr::kable(digits = 2)
 ```
 
