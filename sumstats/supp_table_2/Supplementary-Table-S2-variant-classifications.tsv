@@ -1,221 +1,221 @@
-Variant	Position	AA	Gs-GOF	Gs-LOF	Gq-GOF	Gq-LOF
-4F	4	F	NS	NS	NS	NS
-5N	5	N	NS	NS	NS	NS
-6A	6	A	NS	NS	NS	NS
-7C	7	C	NS	NS	NS	NS
-7H	7	H	NS	NS	NS	NS
-11A	11	A	NS	NS	NS	NS
-11S	11	S	NS	NS	NS	NS
-16X	16	X	NS	significant	NS	significant
-18C	18	C	NS	NS	NS	NS
-18H	18	H	NS	NS	NS	NS
-18L	18	L	NS	NS	NS	NS
-19G	19	G	significant	NS	NS	NS
-23R	23	R	NS	NS	significant	NS
-30E	30	E	NS	NS	NS	NS
-30F	30	F	NS	NS	NS	NS
-32E	32	E	NS	NS	NS	NS
-34A	34	A	NS	NS	NS	NS
-35C	35	C	NS	NS	NS	NS
-35X	35	X	NS	significant	NS	significant
-36T	36	T	NS	NS	NS	NS
-37V	37	V	NS	significant	NS	NS
-37X	37	X	NS	significant	NS	significant
-40R	40	R	NS	NS	NS	significant
-42K	42	K	NS	NS	NS	NS
-43K	43	K	NS	NS	NS	NS
-43X	43	X	NS	significant	NS	significant
-48S	48	S	NS	NS	NS	significant
-50M	50	M	NS	NS	NS	NS
-51L	51	L	NS	significant	NS	significant
-53I	53	I	significant	NS	NS	NS
-54P	54	P	NS	significant	NS	significant
-55D	55	D	NS	significant	NS	NS
-55V	55	V	NS	significant	NS	NS
-58C	58	C	NS	NS	NS	NS
-61G	61	G	NS	NS	NS	significant
-61K	61	K	NS	significant	NS	significant
-62S	62	S	NS	significant	NS	significant
-69M	69	M	NS	significant	NS	NS
-69R	69	R	NS	significant	NS	significant
-69T	69	T	NS	significant	NS	significant
-70D	70	D	NS	significant	NS	NS
-70T	70	T	NS	significant	NS	NS
-71N	71	N	NS	NS	NS	NS
-72K	72	K	NS	NS	NS	NS
-73R	73	R	NS	NS	NS	NS
-74I	74	I	NS	NS	NS	significant
-76R	76	R	significant	significant	NS	significant
-77L	77	L	NS	NS	NS	NS
-78L	78	L	NS	significant	NS	significant
-79I	79	I	NS	significant	NS	NS
-79V	79	V	NS	significant	NS	significant
-80C	80	C	NS	NS	NS	NS
-80X	80	X	NS	significant	NS	significant
-84R	84	R	NS	significant	NS	significant
-85I	85	I	NS	NS	NS	significant
-86F	86	F	NS	significant	NS	significant
-87D	87	D	NS	significant	NS	NS
-90A	90	A	NS	significant	NS	significant
-90N	90	N	NS	significant	NS	significant
-91R	91	R	NS	significant	NS	significant
-94N	94	N	NS	NS	NS	NS
-94R	94	R	NS	significant	NS	significant
-95A	95	A	NS	NS	NS	NS
-95I	95	I	NS	NS	NS	NS
-97D	97	D	NS	NS	NS	significant
-98R	98	R	NS	significant	NS	significant
-101A	101	A	NS	NS	NS	NS
-101N	101	N	NS	significant	NS	NS
-102N	102	N	NS	significant	NS	NS
-102S	102	S	NS	significant	NS	significant
-102T	102	T	NS	significant	NS	significant
-103I	103	I	NS	NS	NS	NS
-106P	106	P	NS	significant	NS	significant
-112K	112	K	NS	NS	NS	NS
-112M	112	M	NS	NS	NS	NS
-121T	121	T	NS	NS	NS	significant
-123S	123	S	NS	NS	NS	NS
-125K	125	K	NS	significant	NS	significant
-125V	125	V	NS	significant	NS	NS
-126E	126	E	NS	significant	NS	significant
-126Y	126	Y	NS	significant	NS	significant
-127L	127	L	NS	significant	NS	significant
-135P	135	P	NS	significant	NS	significant
-136F	136	F	NS	significant	NS	significant
-136P	136	P	NS	significant	NS	significant
-137T	137	T	NS	significant	NS	significant
-139R	139	R	NS	significant	NS	significant
-140P	140	P	NS	significant	NS	significant
-141H	141	H	NS	significant	NS	significant
-141R	141	R	NS	significant	NS	significant
-146N	146	N	NS	NS	NS	NS
-146V	146	V	NS	significant	NS	significant
-150I	150	I	NS	significant	NS	significant
-154D	154	D	NS	NS	NS	significant
-154V	154	V	NS	NS	NS	NS
-156P	156	P	NS	NS	NS	significant
-156R	156	R	NS	NS	NS	NS
-156X	156	X	NS	significant	NS	significant
-157S	157	S	NS	significant	NS	significant
-158R	158	R	significant	NS	significant	NS
-160M	160	M	NS	NS	NS	NS
-161T	161	T	NS	significant	NS	significant
-162I	162	I	NS	significant	NS	significant
-162R	162	R	NS	significant	NS	significant
-163I	163	I	NS	NS	NS	NS
-165G	165	G	NS	significant	NS	significant
-165Q	165	Q	NS	NS	NS	significant
-165W	165	W	NS	significant	NS	significant
-166I	166	I	NS	NS	NS	NS
-169S	169	S	NS	NS	NS	NS
-170V	170	V	NS	NS	NS	significant
-172R	172	R	NS	significant	NS	significant
-174C	174	C	NS	significant	NS	significant
-174X	174	X	NS	significant	NS	significant
-175T	175	T	NS	NS	NS	NS
-178M	178	M	NS	NS	NS	NS
-180P	180	P	NS	significant	NS	significant
-181D	181	D	NS	significant	NS	significant
-183F	183	F	NS	NS	NS	NS
-184L	184	L	NS	significant	NS	significant
-186V	186	V	NS	NS	NS	NS
-191T	191	T	NS	NS	NS	NS
-194T	194	T	NS	significant	NS	NS
-195M	195	M	NS	NS	NS	NS
-195S	195	S	NS	NS	NS	significant
-195T	195	T	NS	NS	NS	significant
-195V	195	V	NS	NS	NS	NS
-200V	200	V	NS	NS	NS	NS
-201L	201	L	NS	NS	NS	significant
-202L	202	L	NS	NS	NS	significant
-208V	208	V	NS	significant	NS	significant
-211V	211	V	NS	NS	NS	NS
-215I	215	I	NS	NS	NS	significant
-215L	215	L	NS	NS	NS	significant
-215R	215	R	NS	significant	NS	significant
-218T	218	T	NS	NS	NS	significant
-219S	219	S	NS	NS	NS	significant
-219V	219	V	NS	significant	NS	significant
-226T	226	T	NS	NS	NS	significant
-227T	227	T	NS	NS	NS	NS
-230L	230	L	NS	NS	NS	significant
-231S	231	S	NS	NS	NS	NS
-231V	231	V	NS	NS	NS	significant
-232S	232	S	NS	NS	NS	NS
-236C	236	C	NS	NS	NS	NS
-236H	236	H	NS	NS	NS	NS
-238D	238	D	NS	NS	NS	NS
-240S	240	S	NS	NS	NS	NS
-243R	243	R	NS	significant	NS	significant
-244E	244	E	NS	NS	NS	significant
-244V	244	V	NS	NS	NS	significant
-246N	246	N	NS	NS	NS	significant
-250Q	250	Q	NS	NS	NS	NS
-251L	251	L	NS	NS	NS	NS
-252S	252	S	NS	NS	NS	significant
-253I	253	I	NS	NS	NS	significant
-255A	255	A	NS	NS	NS	NS
-255I	255	I	NS	NS	NS	NS
-259V	259	V	significant	NS	significant	NS
-260Q	260	Q	NS	significant	NS	significant
-261S	261	S	NS	significant	NS	significant
-262L	262	L	NS	significant	NS	significant
-266A	266	A	NS	NS	NS	NS
-267L	267	L	NS	NS	NS	NS
-268I	268	I	NS	NS	NS	NS
-269N	269	N	NS	significant	NS	NS
-269V	269	V	NS	NS	NS	NS
-270L	270	L	NS	NS	NS	significant
-271F	271	F	NS	significant	NS	NS
-271R	271	R	NS	significant	NS	significant
-271Y	271	Y	NS	significant	NS	significant
-272L	272	L	NS	significant	NS	significant
-272R	272	R	NS	significant	NS	significant
-273P	273	P	NS	significant	NS	significant
-273X	273	X	NS	significant	NS	significant
-274S	274	S	NS	NS	NS	significant
-275S	275	S	NS	NS	NS	NS
-276C	276	C	NS	NS	NS	significant
-277X	277	X	NS	significant	NS	significant
-279R	279	R	NS	NS	NS	NS
-279Y	279	Y	NS	NS	NS	NS
-280L	280	L	NS	NS	NS	significant
-281V	281	V	NS	significant	NS	significant
-283Y	283	Y	NS	NS	NS	NS
-287X	287	X	NS	significant	NS	significant
-289L	289	L	NS	NS	NS	NS
-293Y	293	Y	NS	significant	NS	NS
-294H	294	H	NS	significant	NS	significant
-295P	295	P	NS	NS	NS	significant
-297N	297	N	NS	significant	NS	NS
-298A	298	A	NS	significant	NS	significant
-299H	299	H	NS	significant	NS	significant
-299L	299	L	NS	significant	NS	significant
-299S	299	S	NS	significant	NS	significant
-300P	300	P	NS	significant	NS	significant
-301T	301	T	NS	significant	NS	NS
-302F	302	F	NS	NS	NS	significant
-303P	303	P	NS	significant	NS	significant
-303T	303	T	NS	significant	NS	significant
-304F	304	F	NS	NS	NS	NS
-305Q	305	Q	NS	NS	NS	NS
-305S	305	S	NS	NS	NS	significant
-305W	305	W	NS	NS	NS	NS
-306N	306	N	significant	NS	NS	NS
-307X	307	X	NS	significant	NS	significant
-308K	308	K	NS	NS	NS	NS
-310K	310	K	NS	NS	NS	NS
-312S	312	S	NS	NS	NS	significant
-316S	316	S	NS	NS	NS	significant
-317F	317	F	NS	NS	NS	NS
-317T	317	T	NS	NS	NS	significant
-317V	317	V	NS	NS	NS	NS
-318Y	318	Y	NS	NS	NS	NS
-323V	323	V	NS	NS	NS	NS
-325F	325	F	NS	NS	NS	NS
-325I	325	I	NS	NS	NS	NS
-326R	326	R	NS	NS	NS	NS
-328X	328	X	NS	NS	NS	NS
-332C	332	C	NS	NS	NS	NS
-332H	332	H	NS	NS	NS	NS
+Variant	Position	Gs-GOF	Gs-LOF	Gq-GOF	Gq-LOF
+S4F	4	NS	NS	NS	NS
+T5N	5	NS	NS	NS	NS
+H6A	6	NS	NS	NS	NS
+R7C	7	NS	NS	NS	NS
+R7H	7	NS	NS	NS	NS
+T11A	11	NS	NS	NS	NS
+T11S	11	NS	NS	NS	NS
+W16X	16	NS	significant	NS	significant
+R18C	18	NS	NS	NS	NS
+R18H	18	NS	NS	NS	NS
+R18L	18	NS	NS	NS	NS
+S19G	19	significant	NS	NS	NS
+L23R	23	NS	NS	significant	NS
+S30E	30	NS	NS	NS	NS
+S30F	30	NS	NS	NS	NS
+G32E	32	NS	NS	NS	NS
+G34A	34	NS	NS	NS	NS
+Y35C	35	NS	NS	NS	NS
+Y35X	35	NS	significant	NS	significant
+S36T	36	NS	NS	NS	NS
+D37V	37	NS	significant	NS	NS
+D37X	37	NS	significant	NS	significant
+C40R	40	NS	NS	NS	significant
+E42K	42	NS	NS	NS	NS
+Q43K	43	NS	NS	NS	NS
+Q43X	43	NS	significant	NS	significant
+P48S	48	NS	NS	NS	significant
+V50M	50	NS	NS	NS	NS
+F51L	51	NS	significant	NS	significant
+T53I	53	significant	NS	NS	NS
+L54P	54	NS	significant	NS	significant
+G55D	55	NS	significant	NS	NS
+G55V	55	NS	significant	NS	NS
+S58C	58	NS	NS	NS	NS
+E61G	61	NS	NS	NS	significant
+E61K	61	NS	significant	NS	significant
+N62S	62	NS	significant	NS	significant
+I69M	69	NS	significant	NS	NS
+I69R	69	NS	significant	NS	significant
+I69T	69	NS	significant	NS	significant
+A70D	70	NS	significant	NS	NS
+A70T	70	NS	significant	NS	NS
+K71N	71	NS	NS	NS	NS
+N72K	72	NS	NS	NS	NS
+K73R	73	NS	NS	NS	NS
+N74I	74	NS	NS	NS	significant
+H76R	76	significant	significant	NS	significant
+S77L	77	NS	NS	NS	NS
+P78L	78	NS	significant	NS	significant
+M79I	79	NS	significant	NS	NS
+M79V	79	NS	significant	NS	significant
+Y80C	80	NS	NS	NS	NS
+Y80X	80	NS	significant	NS	significant
+C84R	84	NS	significant	NS	significant
+S85I	85	NS	NS	NS	significant
+L86F	86	NS	significant	NS	significant
+A87D	87	NS	significant	NS	NS
+D90A	90	NS	significant	NS	significant
+D90N	90	NS	significant	NS	significant
+M91R	91	NS	significant	NS	significant
+S94N	94	NS	NS	NS	NS
+S94R	94	NS	significant	NS	significant
+V95A	95	NS	NS	NS	NS
+V95I	95	NS	NS	NS	NS
+N97D	97	NS	NS	NS	significant
+G98R	98	NS	significant	NS	significant
+T101A	101	NS	NS	NS	NS
+T101N	101	NS	significant	NS	NS
+I102N	102	NS	significant	NS	NS
+I102S	102	NS	significant	NS	significant
+I102T	102	NS	significant	NS	significant
+V103I	103	NS	NS	NS	NS
+L106P	106	NS	significant	NS	significant
+T112K	112	NS	NS	NS	NS
+T112M	112	NS	NS	NS	NS
+I121T	121	NS	NS	NS	significant
+N123S	123	NS	NS	NS	NS
+I125K	125	NS	significant	NS	significant
+I125V	125	NS	significant	NS	NS
+D126E	126	NS	significant	NS	significant
+D126Y	126	NS	significant	NS	significant
+S127L	127	NS	significant	NS	significant
+A135P	135	NS	significant	NS	significant
+S136F	136	NS	significant	NS	significant
+S136P	136	NS	significant	NS	significant
+I137T	137	NS	significant	NS	significant
+S139R	139	NS	significant	NS	significant
+L140P	140	NS	significant	NS	significant
+L141H	141	NS	significant	NS	significant
+L141R	141	NS	significant	NS	significant
+D146N	146	NS	NS	NS	NS
+D146V	146	NS	significant	NS	significant
+T150I	150	NS	significant	NS	significant
+A154D	154	NS	NS	NS	significant
+A154V	154	NS	NS	NS	NS
+Q156P	156	NS	NS	NS	significant
+Q156R	156	NS	NS	NS	NS
+Q156X	156	NS	significant	NS	significant
+Y157S	157	NS	significant	NS	significant
+H158R	158	significant	NS	significant	NS
+I160M	160	NS	NS	NS	NS
+M161T	161	NS	significant	NS	significant
+T162I	162	NS	significant	NS	significant
+T162R	162	NS	significant	NS	significant
+V163I	163	NS	NS	NS	NS
+R165G	165	NS	significant	NS	significant
+R165Q	165	NS	NS	NS	significant
+R165W	165	NS	significant	NS	significant
+V166I	166	NS	NS	NS	NS
+I169S	169	NS	NS	NS	NS
+I170V	170	NS	NS	NS	significant
+C172R	172	NS	significant	NS	significant
+W174C	174	NS	significant	NS	significant
+W174X	174	NS	significant	NS	significant
+A175T	175	NS	NS	NS	NS
+T178M	178	NS	NS	NS	NS
+S180P	180	NS	significant	NS	significant
+G181D	181	NS	significant	NS	significant
+L183F	183	NS	NS	NS	NS
+F184L	184	NS	significant	NS	significant
+I186V	186	NS	NS	NS	NS
+S191T	191	NS	NS	NS	NS
+I194T	194	NS	significant	NS	NS
+I195M	195	NS	NS	NS	NS
+I195S	195	NS	NS	NS	significant
+I195T	195	NS	NS	NS	significant
+I195V	195	NS	NS	NS	NS
+M200V	200	NS	NS	NS	NS
+F201L	201	NS	NS	NS	significant
+F202L	202	NS	NS	NS	significant
+M208V	208	NS	significant	NS	significant
+L211V	211	NS	NS	NS	NS
+M215I	215	NS	NS	NS	significant
+M215L	215	NS	NS	NS	significant
+M215R	215	NS	significant	NS	significant
+M218T	218	NS	NS	NS	significant
+A219S	219	NS	NS	NS	significant
+A219V	219	NS	significant	NS	significant
+I226T	226	NS	NS	NS	significant
+A227T	227	NS	NS	NS	NS
+P230L	230	NS	NS	NS	significant
+G231S	231	NS	NS	NS	NS
+G231V	231	NS	NS	NS	significant
+T232S	232	NS	NS	NS	NS
+R236C	236	NS	NS	NS	NS
+R236H	236	NS	NS	NS	NS
+G238D	238	NS	NS	NS	NS
+N240S	240	NS	NS	NS	NS
+G243R	243	NS	significant	NS	significant
+A244E	244	NS	NS	NS	significant
+A244V	244	NS	NS	NS	significant
+T246N	246	NS	NS	NS	significant
+L250Q	250	NS	NS	NS	NS
+I251L	251	NS	NS	NS	NS
+G252S	252	NS	NS	NS	significant
+V253I	253	NS	NS	NS	significant
+V255A	255	NS	NS	NS	NS
+V255I	255	NS	NS	NS	NS
+A259V	259	significant	NS	significant	NS
+P260Q	260	NS	significant	NS	significant
+F261S	261	NS	significant	NS	significant
+F262L	262	NS	significant	NS	significant
+I266A	266	NS	NS	NS	NS
+F267L	267	NS	NS	NS	NS
+Y268I	268	NS	NS	NS	NS
+I269N	269	NS	significant	NS	NS
+I269V	269	NS	NS	NS	NS
+S270L	270	NS	NS	NS	significant
+C271F	271	NS	significant	NS	NS
+C271R	271	NS	significant	NS	significant
+C271Y	271	NS	significant	NS	significant
+P272L	272	NS	significant	NS	significant
+P272R	272	NS	significant	NS	significant
+Q273P	273	NS	significant	NS	significant
+Q273X	273	NS	significant	NS	significant
+N274S	274	NS	NS	NS	significant
+P275S	275	NS	NS	NS	NS
+Y276C	276	NS	NS	NS	significant
+C277X	277	NS	significant	NS	significant
+C279R	279	NS	NS	NS	NS
+C279Y	279	NS	NS	NS	NS
+F280L	280	NS	NS	NS	significant
+M281V	281	NS	significant	NS	significant
+H283Y	283	NS	NS	NS	NS
+Y287X	287	NS	significant	NS	significant
+I289L	289	NS	NS	NS	NS
+C293Y	293	NS	significant	NS	NS
+N294H	294	NS	significant	NS	significant
+S295P	295	NS	NS	NS	significant
+I297N	297	NS	significant	NS	NS
+D298A	298	NS	significant	NS	significant
+P299H	299	NS	significant	NS	significant
+P299L	299	NS	significant	NS	significant
+P299S	299	NS	significant	NS	significant
+L300P	300	NS	significant	NS	significant
+I301T	301	NS	significant	NS	NS
+Y302F	302	NS	NS	NS	significant
+A303P	303	NS	significant	NS	significant
+A303T	303	NS	significant	NS	significant
+L304F	304	NS	NS	NS	NS
+R305Q	305	NS	NS	NS	NS
+R305S	305	NS	NS	NS	significant
+R305W	305	NS	NS	NS	NS
+S306N	306	significant	NS	NS	NS
+Q307X	307	NS	significant	NS	significant
+E308K	308	NS	NS	NS	NS
+R310K	310	NS	NS	NS	NS
+T312S	312	NS	NS	NS	significant
+I316S	316	NS	NS	NS	significant
+I317F	317	NS	NS	NS	NS
+I317T	317	NS	NS	NS	significant
+I317V	317	NS	NS	NS	NS
+C318Y	318	NS	NS	NS	NS
+G323V	323	NS	NS	NS	NS
+L325F	325	NS	NS	NS	NS
+L325I	325	NS	NS	NS	NS
+C326R	326	NS	NS	NS	NS
+L328X	328	NS	NS	NS	NS
+Y332C	332	NS	NS	NS	NS
+Y332H	332	NS	NS	NS	NS
