@@ -1,7 +1,12 @@
 library(tidyverse)
 
+clinvar_db <- read_tsv("../../data/annotations/MC4R-clinvar_20240105.tsv") %>%
+    rename("Variant" = "mut",
+           "ClinVar Category" = "consequence")
+
 clin_vars <- read_tsv("../../data/annotations/mc4r-clinical-vars.tsv") %>%
-    mutate(VariantID = gsub("^.", "", Variant))
+    mutate(VariantID = gsub("^.", "", Variant)) %>%
+    left_join(clinvar_db, by = "Variant")
 
 sumstats_gs <- read_tsv("../MC4R-DMS5-Gs.tsv") %>%
     group_by(pos, aa) %>%

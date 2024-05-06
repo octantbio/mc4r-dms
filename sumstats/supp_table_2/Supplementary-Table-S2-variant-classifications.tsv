@@ -1,221 +1,221 @@
-Variant	Position	Gs-GOF	Gs-LOF	Gq-GOF	Gq-LOF
-S4F	4	NS	NS	NS	NS
-T5N	5	NS	NS	NS	NS
-H6A	6	NS	NS	NS	NS
-R7C	7	NS	NS	NS	NS
-R7H	7	NS	NS	NS	NS
-T11A	11	NS	NS	NS	NS
-T11S	11	NS	NS	NS	NS
-W16X	16	NS	significant	NS	significant
-R18C	18	NS	NS	NS	NS
-R18H	18	NS	NS	NS	NS
-R18L	18	NS	NS	NS	NS
-S19G	19	significant	NS	NS	NS
-L23R	23	NS	NS	significant	NS
-S30E	30	NS	NS	NS	NS
-S30F	30	NS	NS	NS	NS
-G32E	32	NS	NS	NS	NS
-G34A	34	NS	NS	NS	NS
-Y35C	35	NS	NS	NS	NS
-Y35X	35	NS	significant	NS	significant
-S36T	36	NS	NS	NS	NS
-D37V	37	NS	significant	NS	NS
-D37X	37	NS	significant	NS	significant
-C40R	40	NS	NS	NS	significant
-E42K	42	NS	NS	NS	NS
-Q43K	43	NS	NS	NS	NS
-Q43X	43	NS	significant	NS	significant
-P48S	48	NS	NS	NS	significant
-V50M	50	NS	NS	NS	NS
-F51L	51	NS	significant	NS	significant
-T53I	53	significant	NS	NS	NS
-L54P	54	NS	significant	NS	significant
-G55D	55	NS	significant	NS	NS
-G55V	55	NS	significant	NS	NS
-S58C	58	NS	NS	NS	NS
-E61G	61	NS	NS	NS	significant
-E61K	61	NS	significant	NS	significant
-N62S	62	NS	significant	NS	significant
-I69M	69	NS	significant	NS	NS
-I69R	69	NS	significant	NS	significant
-I69T	69	NS	significant	NS	significant
-A70D	70	NS	significant	NS	NS
-A70T	70	NS	significant	NS	NS
-K71N	71	NS	NS	NS	NS
-N72K	72	NS	NS	NS	NS
-K73R	73	NS	NS	NS	NS
-N74I	74	NS	NS	NS	significant
-H76R	76	significant	significant	NS	significant
-S77L	77	NS	NS	NS	NS
-P78L	78	NS	significant	NS	significant
-M79I	79	NS	significant	NS	NS
-M79V	79	NS	significant	NS	significant
-Y80C	80	NS	NS	NS	NS
-Y80X	80	NS	significant	NS	significant
-C84R	84	NS	significant	NS	significant
-S85I	85	NS	NS	NS	significant
-L86F	86	NS	significant	NS	significant
-A87D	87	NS	significant	NS	NS
-D90A	90	NS	significant	NS	significant
-D90N	90	NS	significant	NS	significant
-M91R	91	NS	significant	NS	significant
-S94N	94	NS	NS	NS	NS
-S94R	94	NS	significant	NS	significant
-V95A	95	NS	NS	NS	NS
-V95I	95	NS	NS	NS	NS
-N97D	97	NS	NS	NS	significant
-G98R	98	NS	significant	NS	significant
-T101A	101	NS	NS	NS	NS
-T101N	101	NS	significant	NS	NS
-I102N	102	NS	significant	NS	NS
-I102S	102	NS	significant	NS	significant
-I102T	102	NS	significant	NS	significant
-V103I	103	NS	NS	NS	NS
-L106P	106	NS	significant	NS	significant
-T112K	112	NS	NS	NS	NS
-T112M	112	NS	NS	NS	NS
-I121T	121	NS	NS	NS	significant
-N123S	123	NS	NS	NS	NS
-I125K	125	NS	significant	NS	significant
-I125V	125	NS	significant	NS	NS
-D126E	126	NS	significant	NS	significant
-D126Y	126	NS	significant	NS	significant
-S127L	127	NS	significant	NS	significant
-A135P	135	NS	significant	NS	significant
-S136F	136	NS	significant	NS	significant
-S136P	136	NS	significant	NS	significant
-I137T	137	NS	significant	NS	significant
-S139R	139	NS	significant	NS	significant
-L140P	140	NS	significant	NS	significant
-L141H	141	NS	significant	NS	significant
-L141R	141	NS	significant	NS	significant
-D146N	146	NS	NS	NS	NS
-D146V	146	NS	significant	NS	significant
-T150I	150	NS	significant	NS	significant
-A154D	154	NS	NS	NS	significant
-A154V	154	NS	NS	NS	NS
-Q156P	156	NS	NS	NS	significant
-Q156R	156	NS	NS	NS	NS
-Q156X	156	NS	significant	NS	significant
-Y157S	157	NS	significant	NS	significant
-H158R	158	significant	NS	significant	NS
-I160M	160	NS	NS	NS	NS
-M161T	161	NS	significant	NS	significant
-T162I	162	NS	significant	NS	significant
-T162R	162	NS	significant	NS	significant
-V163I	163	NS	NS	NS	NS
-R165G	165	NS	significant	NS	significant
-R165Q	165	NS	NS	NS	significant
-R165W	165	NS	significant	NS	significant
-V166I	166	NS	NS	NS	NS
-I169S	169	NS	NS	NS	NS
-I170V	170	NS	NS	NS	significant
-C172R	172	NS	significant	NS	significant
-W174C	174	NS	significant	NS	significant
-W174X	174	NS	significant	NS	significant
-A175T	175	NS	NS	NS	NS
-T178M	178	NS	NS	NS	NS
-S180P	180	NS	significant	NS	significant
-G181D	181	NS	significant	NS	significant
-L183F	183	NS	NS	NS	NS
-F184L	184	NS	significant	NS	significant
-I186V	186	NS	NS	NS	NS
-S191T	191	NS	NS	NS	NS
-I194T	194	NS	significant	NS	NS
-I195M	195	NS	NS	NS	NS
-I195S	195	NS	NS	NS	significant
-I195T	195	NS	NS	NS	significant
-I195V	195	NS	NS	NS	NS
-M200V	200	NS	NS	NS	NS
-F201L	201	NS	NS	NS	significant
-F202L	202	NS	NS	NS	significant
-M208V	208	NS	significant	NS	significant
-L211V	211	NS	NS	NS	NS
-M215I	215	NS	NS	NS	significant
-M215L	215	NS	NS	NS	significant
-M215R	215	NS	significant	NS	significant
-M218T	218	NS	NS	NS	significant
-A219S	219	NS	NS	NS	significant
-A219V	219	NS	significant	NS	significant
-I226T	226	NS	NS	NS	significant
-A227T	227	NS	NS	NS	NS
-P230L	230	NS	NS	NS	significant
-G231S	231	NS	NS	NS	NS
-G231V	231	NS	NS	NS	significant
-T232S	232	NS	NS	NS	NS
-R236C	236	NS	NS	NS	NS
-R236H	236	NS	NS	NS	NS
-G238D	238	NS	NS	NS	NS
-N240S	240	NS	NS	NS	NS
-G243R	243	NS	significant	NS	significant
-A244E	244	NS	NS	NS	significant
-A244V	244	NS	NS	NS	significant
-T246N	246	NS	NS	NS	significant
-L250Q	250	NS	NS	NS	NS
-I251L	251	NS	NS	NS	NS
-G252S	252	NS	NS	NS	significant
-V253I	253	NS	NS	NS	significant
-V255A	255	NS	NS	NS	NS
-V255I	255	NS	NS	NS	NS
-A259V	259	significant	NS	significant	NS
-P260Q	260	NS	significant	NS	significant
-F261S	261	NS	significant	NS	significant
-F262L	262	NS	significant	NS	significant
-I266A	266	NS	NS	NS	NS
-F267L	267	NS	NS	NS	NS
-Y268I	268	NS	NS	NS	NS
-I269N	269	NS	significant	NS	NS
-I269V	269	NS	NS	NS	NS
-S270L	270	NS	NS	NS	significant
-C271F	271	NS	significant	NS	NS
-C271R	271	NS	significant	NS	significant
-C271Y	271	NS	significant	NS	significant
-P272L	272	NS	significant	NS	significant
-P272R	272	NS	significant	NS	significant
-Q273P	273	NS	significant	NS	significant
-Q273X	273	NS	significant	NS	significant
-N274S	274	NS	NS	NS	significant
-P275S	275	NS	NS	NS	NS
-Y276C	276	NS	NS	NS	significant
-C277X	277	NS	significant	NS	significant
-C279R	279	NS	NS	NS	NS
-C279Y	279	NS	NS	NS	NS
-F280L	280	NS	NS	NS	significant
-M281V	281	NS	significant	NS	significant
-H283Y	283	NS	NS	NS	NS
-Y287X	287	NS	significant	NS	significant
-I289L	289	NS	NS	NS	NS
-C293Y	293	NS	significant	NS	NS
-N294H	294	NS	significant	NS	significant
-S295P	295	NS	NS	NS	significant
-I297N	297	NS	significant	NS	NS
-D298A	298	NS	significant	NS	significant
-P299H	299	NS	significant	NS	significant
-P299L	299	NS	significant	NS	significant
-P299S	299	NS	significant	NS	significant
-L300P	300	NS	significant	NS	significant
-I301T	301	NS	significant	NS	NS
-Y302F	302	NS	NS	NS	significant
-A303P	303	NS	significant	NS	significant
-A303T	303	NS	significant	NS	significant
-L304F	304	NS	NS	NS	NS
-R305Q	305	NS	NS	NS	NS
-R305S	305	NS	NS	NS	significant
-R305W	305	NS	NS	NS	NS
-S306N	306	significant	NS	NS	NS
-Q307X	307	NS	significant	NS	significant
-E308K	308	NS	NS	NS	NS
-R310K	310	NS	NS	NS	NS
-T312S	312	NS	NS	NS	significant
-I316S	316	NS	NS	NS	significant
-I317F	317	NS	NS	NS	NS
-I317T	317	NS	NS	NS	significant
-I317V	317	NS	NS	NS	NS
-C318Y	318	NS	NS	NS	NS
-G323V	323	NS	NS	NS	NS
-L325F	325	NS	NS	NS	NS
-L325I	325	NS	NS	NS	NS
-C326R	326	NS	NS	NS	NS
-L328X	328	NS	NS	NS	NS
-Y332C	332	NS	NS	NS	NS
-Y332H	332	NS	NS	NS	NS
+Variant	Position	Gs-GOF	Gs-LOF	Gq-GOF	Gq-LOF	ClinVar Category
+S4F	4	NS	NS	NS	NS	Uncertain significance
+T5N	5	NS	NS	NS	NS	Uncertain significance
+H6A	6	NS	NS	NS	NS	NA
+R7C	7	NS	NS	NS	NS	NA
+R7H	7	NS	NS	NS	NS	Uncertain significance
+T11A	11	NS	NS	NS	NS	Uncertain significance
+T11S	11	NS	NS	NS	NS	NA
+W16X	16	NS	significant	NS	significant	NA
+R18C	18	NS	NS	NS	NS	NA
+R18H	18	NS	NS	NS	NS	NA
+R18L	18	NS	NS	NS	NS	Uncertain significance
+S19G	19	significant	NS	NS	NS	NA
+L23R	23	NS	NS	significant	NS	NA
+S30E	30	NS	NS	NS	NS	NA
+S30F	30	NS	NS	NS	NS	Uncertain significance
+G32E	32	NS	NS	NS	NS	NA
+G34A	34	NS	NS	NS	NS	NA
+Y35C	35	NS	NS	NS	NS	NA
+Y35X	35	NS	significant	NS	significant	NA
+S36T	36	NS	NS	NS	NS	NA
+D37V	37	NS	significant	NS	NS	Conflicting interpretations of pathogenicity
+D37X	37	NS	significant	NS	significant	NA
+C40R	40	NS	NS	NS	significant	NA
+E42K	42	NS	NS	NS	NS	NA
+Q43K	43	NS	NS	NS	NS	Likely pathogenic
+Q43X	43	NS	significant	NS	significant	NA
+P48S	48	NS	NS	NS	significant	NA
+V50M	50	NS	NS	NS	NS	Pathogenic
+F51L	51	NS	significant	NS	significant	NA
+T53I	53	significant	NS	NS	NS	NA
+L54P	54	NS	significant	NS	significant	Uncertain significance
+G55D	55	NS	significant	NS	NS	NA
+G55V	55	NS	significant	NS	NS	NA
+S58C	58	NS	NS	NS	NS	Pathogenic
+E61G	61	NS	NS	NS	significant	NA
+E61K	61	NS	significant	NS	significant	Pathogenic/Likely pathogenic
+N62S	62	NS	significant	NS	significant	Pathogenic
+I69M	69	NS	significant	NS	NS	NA
+I69R	69	NS	significant	NS	significant	Pathogenic
+I69T	69	NS	significant	NS	significant	NA
+A70D	70	NS	significant	NS	NS	NA
+A70T	70	NS	significant	NS	NS	NA
+K71N	71	NS	NS	NS	NS	NA
+N72K	72	NS	NS	NS	NS	NA
+K73R	73	NS	NS	NS	NS	NA
+N74I	74	NS	NS	NS	significant	Uncertain significance
+H76R	76	significant	significant	NS	significant	Uncertain significance
+S77L	77	NS	NS	NS	NS	NA
+P78L	78	NS	significant	NS	significant	Likely pathogenic
+M79I	79	NS	significant	NS	NS	NA
+M79V	79	NS	significant	NS	significant	Uncertain significance
+Y80C	80	NS	NS	NS	NS	Uncertain significance
+Y80X	80	NS	significant	NS	significant	NA
+C84R	84	NS	significant	NS	significant	NA
+S85I	85	NS	NS	NS	significant	NA
+L86F	86	NS	significant	NS	significant	Likely pathogenic
+A87D	87	NS	significant	NS	NS	NA
+D90A	90	NS	significant	NS	significant	NA
+D90N	90	NS	significant	NS	significant	Pathogenic
+M91R	91	NS	significant	NS	significant	Likely pathogenic
+S94N	94	NS	NS	NS	NS	Likely pathogenic
+S94R	94	NS	significant	NS	significant	NA
+V95A	95	NS	NS	NS	NS	NA
+V95I	95	NS	NS	NS	NS	NA
+N97D	97	NS	NS	NS	significant	Pathogenic
+G98R	98	NS	significant	NS	significant	NA
+T101A	101	NS	NS	NS	NS	NA
+T101N	101	NS	significant	NS	NS	NA
+I102N	102	NS	significant	NS	NS	NA
+I102S	102	NS	significant	NS	significant	Pathogenic
+I102T	102	NS	significant	NS	significant	Likely pathogenic
+V103I	103	NS	NS	NS	NS	Benign
+L106P	106	NS	significant	NS	significant	NA
+T112K	112	NS	NS	NS	NS	NA
+T112M	112	NS	NS	NS	NS	Conflicting interpretations of pathogenicity
+I121T	121	NS	NS	NS	significant	NA
+N123S	123	NS	NS	NS	NS	Likely benign
+I125K	125	NS	significant	NS	significant	Pathogenic
+I125V	125	NS	significant	NS	NS	Uncertain significance
+D126E	126	NS	significant	NS	significant	NA
+D126Y	126	NS	significant	NS	significant	NA
+S127L	127	NS	significant	NS	significant	Conflicting interpretations of pathogenicity
+A135P	135	NS	significant	NS	significant	Uncertain significance
+S136F	136	NS	significant	NS	significant	Pathogenic
+S136P	136	NS	significant	NS	significant	NA
+I137T	137	NS	significant	NS	significant	Uncertain significance
+S139R	139	NS	significant	NS	significant	NA
+L140P	140	NS	significant	NS	significant	Uncertain significance
+L141H	141	NS	significant	NS	significant	NA
+L141R	141	NS	significant	NS	significant	Uncertain significance
+D146N	146	NS	NS	NS	NS	Uncertain significance
+D146V	146	NS	significant	NS	significant	Uncertain significance
+T150I	150	NS	significant	NS	significant	Likely pathogenic
+A154D	154	NS	NS	NS	significant	NA
+A154V	154	NS	NS	NS	NS	Uncertain significance
+Q156P	156	NS	NS	NS	significant	NA
+Q156R	156	NS	NS	NS	NS	NA
+Q156X	156	NS	significant	NS	significant	NA
+Y157S	157	NS	significant	NS	significant	NA
+H158R	158	significant	NS	significant	NS	NA
+I160M	160	NS	NS	NS	NS	NA
+M161T	161	NS	significant	NS	significant	NA
+T162I	162	NS	significant	NS	significant	Conflicting interpretations of pathogenicity
+T162R	162	NS	significant	NS	significant	NA
+V163I	163	NS	NS	NS	NS	Uncertain significance
+R165G	165	NS	significant	NS	significant	NA
+R165Q	165	NS	NS	NS	significant	Pathogenic/Likely pathogenic
+R165W	165	NS	significant	NS	significant	Pathogenic/Likely pathogenic
+V166I	166	NS	NS	NS	NS	Pathogenic
+I169S	169	NS	NS	NS	NS	NA
+I170V	170	NS	NS	NS	significant	Conflicting interpretations of pathogenicity
+C172R	172	NS	significant	NS	significant	NA
+W174C	174	NS	significant	NS	significant	NA
+W174X	174	NS	significant	NS	significant	NA
+A175T	175	NS	NS	NS	NS	Conflicting interpretations of pathogenicity
+T178M	178	NS	NS	NS	NS	NA
+S180P	180	NS	significant	NS	significant	Likely pathogenic
+G181D	181	NS	significant	NS	significant	Likely pathogenic
+L183F	183	NS	NS	NS	NS	Uncertain significance
+F184L	184	NS	significant	NS	significant	NA
+I186V	186	NS	NS	NS	NS	NA
+S191T	191	NS	NS	NS	NS	NA
+I194T	194	NS	significant	NS	NS	NA
+I195M	195	NS	NS	NS	NS	Uncertain significance
+I195S	195	NS	NS	NS	significant	NA
+I195T	195	NS	NS	NS	significant	NA
+I195V	195	NS	NS	NS	NS	NA
+M200V	200	NS	NS	NS	NS	NA
+F201L	201	NS	NS	NS	significant	NA
+F202L	202	NS	NS	NS	significant	Conflicting interpretations of pathogenicity
+M208V	208	NS	significant	NS	significant	NA
+L211V	211	NS	NS	NS	NS	Uncertain significance
+M215I	215	NS	NS	NS	significant	Uncertain significance
+M215L	215	NS	NS	NS	significant	NA
+M215R	215	NS	significant	NS	significant	NA
+M218T	218	NS	NS	NS	significant	NA
+A219S	219	NS	NS	NS	significant	Uncertain significance
+A219V	219	NS	significant	NS	significant	Pathogenic
+I226T	226	NS	NS	NS	significant	Uncertain significance
+A227T	227	NS	NS	NS	NS	NA
+P230L	230	NS	NS	NS	significant	NA
+G231S	231	NS	NS	NS	NS	Uncertain significance
+G231V	231	NS	NS	NS	significant	NA
+T232S	232	NS	NS	NS	NS	NA
+R236C	236	NS	NS	NS	NS	NA
+R236H	236	NS	NS	NS	NS	NA
+G238D	238	NS	NS	NS	NS	NA
+N240S	240	NS	NS	NS	NS	Uncertain significance
+G243R	243	NS	significant	NS	significant	Uncertain significance
+A244E	244	NS	NS	NS	significant	NA
+A244V	244	NS	NS	NS	significant	NA
+T246N	246	NS	NS	NS	significant	NA
+L250Q	250	NS	NS	NS	NS	Conflicting interpretations of pathogenicity
+I251L	251	NS	NS	NS	NS	Benign/Likely benign
+G252S	252	NS	NS	NS	significant	Uncertain significance
+V253I	253	NS	NS	NS	significant	Uncertain significance
+V255A	255	NS	NS	NS	NS	NA
+V255I	255	NS	NS	NS	NS	Uncertain significance
+A259V	259	significant	NS	significant	NS	Uncertain significance
+P260Q	260	NS	significant	NS	significant	Likely pathogenic
+F261S	261	NS	significant	NS	significant	NA
+F262L	262	NS	significant	NS	significant	NA
+I266A	266	NS	NS	NS	NS	NA
+F267L	267	NS	NS	NS	NS	NA
+Y268I	268	NS	NS	NS	NS	NA
+I269N	269	NS	significant	NS	NS	Conflicting interpretations of pathogenicity
+I269V	269	NS	NS	NS	NS	NA
+S270L	270	NS	NS	NS	significant	NA
+C271F	271	NS	significant	NS	NS	NA
+C271R	271	NS	significant	NS	significant	Pathogenic/Likely pathogenic
+C271Y	271	NS	significant	NS	significant	Pathogenic
+P272L	272	NS	significant	NS	significant	Likely pathogenic
+P272R	272	NS	significant	NS	significant	Uncertain significance
+Q273P	273	NS	significant	NS	significant	NA
+Q273X	273	NS	significant	NS	significant	NA
+N274S	274	NS	NS	NS	significant	Conflicting interpretations of pathogenicity
+P275S	275	NS	NS	NS	NS	NA
+Y276C	276	NS	NS	NS	significant	Uncertain significance
+C277X	277	NS	significant	NS	significant	NA
+C279R	279	NS	NS	NS	NS	Uncertain significance
+C279Y	279	NS	NS	NS	NS	Uncertain significance
+F280L	280	NS	NS	NS	significant	Pathogenic
+M281V	281	NS	significant	NS	significant	NA
+H283Y	283	NS	NS	NS	NS	Uncertain significance
+Y287X	287	NS	significant	NS	significant	NA
+I289L	289	NS	NS	NS	NS	NA
+C293Y	293	NS	significant	NS	NS	NA
+N294H	294	NS	significant	NS	significant	Uncertain significance
+S295P	295	NS	NS	NS	significant	Uncertain significance
+I297N	297	NS	significant	NS	NS	Uncertain significance
+D298A	298	NS	significant	NS	significant	NA
+P299H	299	NS	significant	NS	significant	Pathogenic/Likely pathogenic
+P299L	299	NS	significant	NS	significant	NA
+P299S	299	NS	significant	NS	significant	Uncertain significance
+L300P	300	NS	significant	NS	significant	Uncertain significance
+I301T	301	NS	significant	NS	NS	Likely pathogenic
+Y302F	302	NS	NS	NS	significant	Uncertain significance
+A303P	303	NS	significant	NS	significant	NA
+A303T	303	NS	significant	NS	significant	NA
+L304F	304	NS	NS	NS	NS	NA
+R305Q	305	NS	NS	NS	NS	Uncertain significance
+R305S	305	NS	NS	NS	significant	NA
+R305W	305	NS	NS	NS	NS	Conflicting interpretations of pathogenicity
+S306N	306	significant	NS	NS	NS	NA
+Q307X	307	NS	significant	NS	significant	NA
+E308K	308	NS	NS	NS	NS	NA
+R310K	310	NS	NS	NS	NS	Uncertain significance
+T312S	312	NS	NS	NS	significant	Uncertain significance
+I316S	316	NS	NS	NS	significant	Pathogenic/Likely pathogenic
+I317F	317	NS	NS	NS	NS	Uncertain significance
+I317T	317	NS	NS	NS	significant	NA
+I317V	317	NS	NS	NS	NS	NA
+C318Y	318	NS	NS	NS	NS	NA
+G323V	323	NS	NS	NS	NS	NA
+L325F	325	NS	NS	NS	NS	NA
+L325I	325	NS	NS	NS	NS	Uncertain significance
+C326R	326	NS	NS	NS	NS	NA
+L328X	328	NS	NS	NS	NS	NA
+Y332C	332	NS	NS	NS	NS	NA
+Y332H	332	NS	NS	NS	NS	NA
