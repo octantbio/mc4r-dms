@@ -160,8 +160,8 @@ gs_drc_plot + gq_drc_plot +
     guides = 'collect',
   ) &
   scale_x_log10(
-    breaks = 10^seq(-12, -5),
-    limits = c(1e-12, 1e-5),
+    breaks = 10^seq(-13, -5),
+    limits = c(1e-13, 1e-5),
     labels = scales::trans_format("log10", scales::math_format(10^.x))
   ) &
   scale_color_manual(values = c("#1F77B4", "#FF7F0E")) &
