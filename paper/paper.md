@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-April 16, 2024
+June 07, 2024
 
 # Introduction
 
@@ -26,20 +26,20 @@ consistent.
     ##          ec50 ~ -1 + drug
     ##          emax ~ 1
     ##          slope ~ 1
-    ##    Data: library_luci_norm %>% filter(reporter == "Gs") (Number of observations: 88) 
+    ##    Data: library_luci_norm %>% filter(reporter == "Gs") (Number of observations: 72) 
     ##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
     ##          total post-warmup draws = 4000
     ## 
     ## Regression Coefficients:
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -9.99      0.10   -10.21    -9.82 1.00     3438     2453
-    ## ec50_drugTHIQ      -8.03      0.10    -8.20    -7.82 1.00     2505     2857
-    ## emax_Intercept      3.35      0.06     3.23     3.47 1.00     2866     3001
-    ## slope_Intercept     1.10      0.18     0.78     1.50 1.00     2567     2641
+    ## ec50_drugaMSH      -9.50      0.14    -9.77    -9.23 1.00     4218     2802
+    ## ec50_drugTHIQ      -9.41      0.15    -9.69    -9.12 1.00     4445     2840
+    ## emax_Intercept     60.95      0.91    59.26    62.74 1.00     4268     3244
+    ## slope_Intercept     0.72      0.09     0.57     0.92 1.00     4626     3186
     ## 
     ## Further Distributional Parameters:
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     0.34      0.03     0.29     0.40 1.00     4002     2533
+    ## sigma     8.87      0.79     7.49    10.61 1.00     4249     3202
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -53,20 +53,20 @@ Same thing for Gq
     ##          ec50 ~ -1 + drug
     ##          emax ~ 1
     ##          slope ~ 1
-    ##    Data: library_luci_norm %>% filter(reporter == "Gq") (Number of observations: 88) 
+    ##    Data: library_luci_norm %>% filter(reporter == "Gq") (Number of observations: 76) 
     ##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
     ##          total post-warmup draws = 4000
     ## 
     ## Regression Coefficients:
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -7.58      0.13    -7.82    -7.29 1.00     1131     1287
-    ## ec50_drugTHIQ      -5.86      0.15    -6.16    -5.55 1.00     1478     1474
-    ## emax_Intercept      2.92      0.09     2.74     3.12 1.00     1224     1413
-    ## slope_Intercept     0.51      0.05     0.42     0.61 1.00     1231     1578
+    ## ec50_drugaMSH      -8.22      0.16    -8.53    -7.90 1.00     1366     1825
+    ## ec50_drugTHIQ      -9.05      0.17    -9.37    -8.70 1.00     1393     1742
+    ## emax_Intercept      2.89      0.11     2.68     3.13 1.00     1165     1252
+    ## slope_Intercept     0.49      0.07     0.37     0.64 1.00     1742     1965
     ## 
     ## Further Distributional Parameters:
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     0.16      0.01     0.14     0.18 1.00     2351     2391
+    ## sigma     0.27      0.02     0.23     0.32 1.00     2810     2272
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -178,7 +178,7 @@ We’ll also write out the PC’s for projecting onto the structure
 
 ![](./fig-3/bias-inset-3-1.png)<!-- -->
 
-### 79 al
+### 79 all
 
 ![](./fig-3/79-all-1.png)<!-- -->
 

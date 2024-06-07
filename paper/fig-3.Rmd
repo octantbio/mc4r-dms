@@ -17,14 +17,19 @@ bias_pca_amsh <- cre_uas %>%
   column_to_rownames("variant") %>%
   prcomp()
 
-bias_pca_amsh_labels <- augment(bias_pca_amsh) %>%
+bias_pca_amsh_labels <- bias_pca_amsh %>% 
+  augment() %>%
   mutate(
     color = case_when(
       .fittedPC2 > 7.5 ~ "#9467BD",
       .fittedPC2 < -7.5 ~ "#2CA02C",
       TRUE ~ "black"
-    )
-  )
+    ),
+    pos = str_extract(.rownames, "\\d+") %>% as.numeric(),
+    aa = str_sub(.rownames, start=-1)
+  ) %>% 
+  left_join(wt_residues) %>% 
+  left_join(gpcrdb)
 
 bias_pca_plot <- bias_pca_amsh_labels %>%
   ggplot(aes(x = .fittedPC1, y = .fittedPC2)) +
@@ -75,7 +80,7 @@ bias_plot <- function(sel_pos, sel_aa) {
       dose = str_to_sentence(dose),
       dose = factor(dose, levels = c("Zero", "Low", "Med", "High"))
     )
-
+  
   amsh_zero %>%
     ggplot(aes(x = dose, y = log2FoldChange, color = pathway, group = pathway)) +
     geom_hline(yintercept = 0, lty = "dashed") +
@@ -211,7 +216,7 @@ bias_plot(140, "I") +
   scale_y_continuous(limits = c(-1.25, 2.6), breaks = seq(-1.5, 2.5, 0.5))
 ```
 
-### 79 al
+### 79 all
 
 ```{r 79-all, fig.width=12, fig.height=12}
 aa_ordering <- tribble(
