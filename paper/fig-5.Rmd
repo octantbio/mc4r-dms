@@ -189,7 +189,7 @@ compare_48
 layout <- "
 A
 B
-B
+C
 "
 
 compare_48 / compare_104 / compare_129 +

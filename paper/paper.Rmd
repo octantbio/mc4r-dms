@@ -63,6 +63,17 @@ But first, a little data munging to get everything annotated an consistent.
 aa_grouping <- c("G", "A", "S", "T", "C", "P", "V", "I", "L", "M", "F", "Y", "W", "N", "Q", "D", "E", "K", "R", "H", "*")
 lehner_grouping <- c("*", "D", "E", "R", "H", "K", "S", "T", "N", "Q", "C", "G", "P", "A", "V", "I", "L", "M", "F", "W", "Y")
 
+wt_residues <- read_tsv("../data/mc4r-wt.tsv") %>%
+  select(pos = Pos, wt_aa = WT_AA_Short)
+
+gpcrdb <- read_tsv("../data/annotations/mc4r-residue-numbering.tsv") %>%
+  select(gpcrdb = GPCRdb, mut = WT) %>%
+  mutate(
+    wt_aa = str_sub(mut, 1, 1),
+    pos = str_sub(mut, 2) %>% as.numeric()
+  ) %>%
+  select(-mut)
+
 #-------------------------------------------------------------------------------
 # dealing with un-normalized data
 

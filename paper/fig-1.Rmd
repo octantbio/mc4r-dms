@@ -11,24 +11,30 @@ knitr::opts_chunk$set(
 ### Library Dosing
 
 ```{r gs-drc}
-library_luci <- bind_rows(
-  Gq = read_csv("../data/nfat-dosing.csv"),
-  Gs = read_csv("../data/cre-dosing.csv"),
-  .id = "reporter"
-)
+# fix roll-over or concentrations that didn't dispense
+gs <- read_csv("../data/cre-dosing.csv") %>% 
+  filter(conc < 2e-6) 
+
+gq <- read_csv("../data/nfat-dosing.csv") %>% 
+  filter(
+    !(drug == "aMSH" & conc == 5e-10),
+    !(drug == "THIQ" & conc == 1e-05)
+  )
+
+library_luci <- bind_rows(gs, gq)
 
 library_luci_dmso <- library_luci %>%
-  filter(conc == 0) %>%
+  filter(drug == 'DMSO') %>%
   group_by(reporter, plate) %>%
   summarise(
-    dmso = mean(luc),
+    dmso = mean(value),
     .groups = "drop"
   )
 
 library_luci_norm <- library_luci %>%
-  filter(conc > 0) %>%
+  filter(drug != 'DMSO') %>%
   inner_join(library_luci_dmso) %>%
-  mutate(fold = luc / dmso)
+  mutate(fold = value / dmso)
 
 #-------------------------------------------------------------------------------
 # modeling stuff
@@ -46,7 +52,7 @@ bf_ll3 <- brms::bf(
 )
 
 # use this to pass the values to the brms function
-stanvars_gs <- stanvar(3, name = "emax") +
+stanvars_gs <- stanvar(60, name = "emax") +
   stanvar(-9, name = "ec50")
 
 gs_model <- brm(
@@ -61,7 +67,7 @@ gs_model <- brm(
 
 gs_curve_parms <- gs_model %>% 
   tidy(effects = 'fixed') %>% 
-   mutate(
+  mutate(
     term = str_remove(term, '_\\(Intercept\\)'),
     term = str_remove(term, 'drug')
   ) %>% 
@@ -75,7 +81,7 @@ Same thing for Gq
 
 ```{r gq-drc}
 stanvars_gq <- stanvar(2.5, name = "emax") +
-  stanvar(-7, name = "ec50")
+  stanvar(-9, name = "ec50")
 
 gq_model <- update(
   gs_model,
@@ -89,7 +95,7 @@ gq_model <- update(
 
 gq_curve_parms <- gq_model %>% 
   tidy(effects = 'fixed') %>% 
-   mutate(
+  mutate(
     term = str_remove(term, '_\\(Intercept\\)'),
     term = str_remove(term, 'drug')
   ) %>% 
@@ -150,25 +156,23 @@ gq_drc_plot <- library_luci_norm %>%
   )
 
 gs_drc_plot + gq_drc_plot +
-    plot_layout(
-        guides = 'collect',
-        axes = 'collect'
-    ) &
-    scale_y_continuous(limits = c(0.9,5)) &
-    scale_x_log10(
-        breaks = 10^seq(-12, -5),
-        limits = c(1e-12, 1e-5),
-        labels = scales::trans_format("log10", scales::math_format(10^.x))
-    ) &
-    scale_color_manual(values = c("#1F77B4", "#FF7F0E")) &
-    labs(
-        x = "Concentration",
-        y = "Fold change relative to DMSO"
-    ) &
-    theme(
-        legend.position = "bottom",
-        legend.title = element_blank()
-    )
+  plot_layout(
+    guides = 'collect',
+  ) &
+  scale_x_log10(
+    breaks = 10^seq(-12, -5),
+    limits = c(1e-12, 1e-5),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) &
+  scale_color_manual(values = c("#1F77B4", "#FF7F0E")) &
+  labs(
+    x = "Concentration",
+    y = "Fold change relative to DMSO"
+  ) &
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank()
+  )
 ```
 
 ### Effect of Barcodes
