@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-June 07, 2024
+August 13, 2024
 
 # Introduction
 
@@ -30,16 +30,16 @@ consistent.
     ##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
     ##          total post-warmup draws = 4000
     ## 
-    ## Regression Coefficients:
+    ## Population-Level Effects: 
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -9.50      0.14    -9.77    -9.23 1.00     4218     2802
-    ## ec50_drugTHIQ      -9.41      0.15    -9.69    -9.12 1.00     4445     2840
-    ## emax_Intercept     60.95      0.91    59.26    62.74 1.00     4268     3244
-    ## slope_Intercept     0.72      0.09     0.57     0.92 1.00     4626     3186
+    ## ec50_drugaMSH      -9.50      0.13    -9.77    -9.24 1.00     4115     2566
+    ## ec50_drugTHIQ      -9.40      0.14    -9.68    -9.11 1.00     4932     3223
+    ## emax_Intercept     60.94      0.92    59.11    62.73 1.00     4234     3276
+    ## slope_Intercept     0.72      0.09     0.57     0.94 1.00     4469     3063
     ## 
-    ## Further Distributional Parameters:
+    ## Family Specific Parameters: 
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     8.87      0.79     7.49    10.61 1.00     4249     3202
+    ## sigma     8.89      0.77     7.53    10.51 1.00     4193     2788
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -57,16 +57,16 @@ Same thing for Gq
     ##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
     ##          total post-warmup draws = 4000
     ## 
-    ## Regression Coefficients:
+    ## Population-Level Effects: 
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -8.22      0.16    -8.53    -7.90 1.00     1366     1825
-    ## ec50_drugTHIQ      -9.05      0.17    -9.37    -8.70 1.00     1393     1742
-    ## emax_Intercept      2.89      0.11     2.68     3.13 1.00     1165     1252
-    ## slope_Intercept     0.49      0.07     0.37     0.64 1.00     1742     1965
+    ## ec50_drugaMSH      -8.23      0.16    -8.53    -7.91 1.00     1724     1808
+    ## ec50_drugTHIQ      -9.05      0.17    -9.38    -8.71 1.00     1695     1561
+    ## emax_Intercept      2.88      0.11     2.68     3.12 1.00     1517     1392
+    ## slope_Intercept     0.50      0.07     0.38     0.63 1.00     2182     1745
     ## 
-    ## Further Distributional Parameters:
+    ## Family Specific Parameters: 
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     0.27      0.02     0.23     0.32 1.00     2810     2272
+    ## sigma     0.27      0.02     0.23     0.32 1.00     2391     2220
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -103,6 +103,11 @@ Let’s split the protein up in two and use patchwork to smash it together
 ### Example Heatmaps
 
 ![](./fig-2/all-heats-1.png)<!-- -->
+
+### Data for Snakeplot
+
+We ignore “Stops” when looking at sensitivity to mutation since they’re
+not actually indicative of a typical substitution.
 
 ### ClinVar
 
@@ -226,107 +231,8 @@ We’ll also write out the PC’s for projecting onto the structure
 
 ### THIQ vs aMSH meta-regression
 
-    ## Running MCMC with 4 parallel chains...
-    ## 
-    ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 105.2 seconds.
-    ## Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 3 finished in 105.5 seconds.
-    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 4 finished in 110.1 seconds.
-    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 112.0 seconds.
-    ## 
-    ## All 4 chains finished successfully.
-    ## Mean chain execution time: 108.2 seconds.
-    ## Total execution time: 112.2 seconds.
-
     ## process    real 
-    ##  13.83s   2.49m
+    ##    7.9s   1.69m
 
 ![](./fig-5/amsh-vs-thiq-meta-1.png)<!-- -->
 
@@ -334,51 +240,49 @@ As a table, here’s the 5% FDR’s
 
 | pos | aa  | est_aMSH | est_THIQ | residual_z | residual_fdr |
 |----:|:----|---------:|---------:|-----------:|-------------:|
-|  43 | V   |    -0.45 |     0.27 |      -3.68 |         1.43 |
-|  46 | R   |    -0.67 |     0.10 |      -4.93 |         3.43 |
-|  48 | R   |    -1.08 |    -0.25 |      -4.98 |         3.46 |
-|  48 | D   |     0.34 |    -0.49 |       3.82 |         1.61 |
-|  50 | P   |    -0.61 |     0.08 |      -3.95 |         1.74 |
-|  51 | S   |    -1.11 |    -0.21 |      -5.67 |         4.73 |
-|  51 | L   |    -1.01 |    -0.30 |      -3.86 |         1.65 |
-|  52 | S   |    -0.90 |    -0.09 |      -5.69 |         4.73 |
-|  52 | G   |    -0.73 |     0.05 |      -4.69 |         3.01 |
-|  52 | A   |    -0.71 |     0.10 |      -3.88 |         1.67 |
-|  52 | T   |    -0.93 |    -0.10 |      -3.78 |         1.56 |
-|  96 | L   |    -1.01 |     0.06 |      -3.74 |         1.51 |
-| 101 | R   |    -0.86 |     0.35 |      -4.96 |         3.45 |
-| 101 | I   |    -1.12 |     0.32 |      -4.09 |         1.92 |
-| 104 | V   |    -1.40 |     0.13 |      -4.99 |         3.46 |
-| 104 | R   |    -1.48 |    -0.27 |      -4.14 |         1.95 |
-| 104 | G   |    -1.27 |     0.03 |      -4.09 |         1.92 |
-| 104 | S   |    -1.12 |     0.35 |      -3.60 |         1.33 |
-| 106 | R   |    -1.25 |    -0.26 |      -3.90 |         1.68 |
-| 107 | G   |    -1.27 |    -0.13 |      -4.95 |         3.45 |
-| 107 | A   |    -0.95 |    -0.07 |      -3.83 |         1.62 |
-| 107 | R   |    -0.91 |    -0.12 |      -3.69 |         1.43 |
-| 121 | P   |    -1.69 |     0.24 |      -5.88 |         4.90 |
-| 123 | V   |    -1.92 |    -0.03 |      -5.12 |         3.68 |
-| 123 | P   |    -1.44 |     0.01 |      -3.82 |         1.61 |
-| 127 | G   |    -1.25 |     0.19 |      -4.09 |         1.92 |
-| 127 | L   |    -1.65 |    -0.39 |      -4.02 |         1.85 |
-| 129 | V   |    -1.35 |     0.02 |      -3.88 |         1.67 |
-| 129 | H   |    -0.07 |    -1.43 |       3.63 |         1.37 |
-| 129 | T   |     0.41 |    -0.65 |       3.73 |         1.49 |
-| 129 | S   |    -0.12 |    -1.33 |       5.83 |         4.90 |
-| 130 | S   |    -1.64 |     0.12 |      -5.58 |         4.57 |
-| 185 | M   |    -1.47 |     0.12 |      -4.22 |         2.10 |
-| 188 | R   |    -1.44 |     0.20 |      -4.25 |         2.13 |
-| 188 | M   |    -1.66 |    -0.04 |      -3.99 |         1.80 |
-| 189 | P   |    -1.37 |     0.41 |      -4.78 |         3.17 |
-| 193 | F   |    -1.10 |     0.46 |      -4.04 |         1.85 |
-| 194 | F   |    -1.61 |     0.25 |      -5.26 |         3.92 |
-| 194 | Y   |    -1.29 |     0.18 |      -4.03 |         1.85 |
-| 272 | R   |    -1.10 |    -0.03 |      -5.23 |         3.90 |
-| 281 | R   |    -0.83 |     0.07 |      -5.43 |         4.26 |
-| 282 | L   |    -0.63 |     0.03 |      -3.67 |         1.43 |
-| 284 | L   |    -1.02 |     0.27 |      -8.07 |        11.35 |
-| 285 | R   |    -0.74 |     0.10 |      -4.80 |         3.17 |
-| 292 | E   |    -1.01 |     0.14 |      -3.91 |         1.70 |
+|  46 | R   |    -0.67 |     0.10 |      -4.96 |         3.51 |
+|  48 | R   |    -1.08 |    -0.25 |      -4.98 |         3.51 |
+|  48 | D   |     0.34 |    -0.49 |       3.79 |         1.57 |
+|  50 | P   |    -0.61 |     0.08 |      -3.90 |         1.68 |
+|  51 | S   |    -1.11 |    -0.21 |      -5.63 |         4.63 |
+|  51 | L   |    -1.01 |    -0.30 |      -3.84 |         1.62 |
+|  52 | S   |    -0.90 |    -0.09 |      -5.79 |         4.78 |
+|  52 | G   |    -0.73 |     0.05 |      -4.72 |         3.07 |
+|  52 | T   |    -0.93 |    -0.10 |      -3.90 |         1.68 |
+|  52 | A   |    -0.71 |     0.10 |      -3.83 |         1.61 |
+|  96 | L   |    -1.01 |     0.06 |      -3.67 |         1.42 |
+| 101 | R   |    -0.86 |     0.35 |      -5.04 |         3.55 |
+| 101 | I   |    -1.12 |     0.32 |      -4.24 |         2.15 |
+| 104 | V   |    -1.40 |     0.13 |      -5.02 |         3.54 |
+| 104 | G   |    -1.27 |     0.03 |      -4.08 |         1.88 |
+| 104 | R   |    -1.48 |    -0.27 |      -4.03 |         1.83 |
+| 104 | S   |    -1.12 |     0.35 |      -3.69 |         1.43 |
+| 106 | R   |    -1.25 |    -0.26 |      -3.85 |         1.62 |
+| 107 | G   |    -1.27 |    -0.13 |      -4.97 |         3.51 |
+| 107 | A   |    -0.95 |    -0.07 |      -3.84 |         1.62 |
+| 107 | R   |    -0.91 |    -0.12 |      -3.66 |         1.41 |
+| 121 | P   |    -1.69 |     0.24 |      -5.73 |         4.78 |
+| 123 | V   |    -1.92 |    -0.03 |      -5.04 |         3.55 |
+| 123 | P   |    -1.44 |     0.01 |      -3.78 |         1.57 |
+| 127 | G   |    -1.25 |     0.19 |      -4.04 |         1.84 |
+| 127 | L   |    -1.65 |    -0.39 |      -3.99 |         1.79 |
+| 129 | V   |    -1.35 |     0.02 |      -3.82 |         1.60 |
+| 129 | T   |     0.41 |    -0.65 |       3.71 |         1.45 |
+| 129 | S   |    -0.12 |    -1.33 |       5.74 |         4.78 |
+| 130 | S   |    -1.64 |     0.12 |      -5.57 |         4.56 |
+| 185 | M   |    -1.47 |     0.12 |      -4.45 |         2.53 |
+| 188 | R   |    -1.44 |     0.20 |      -4.27 |         2.18 |
+| 188 | M   |    -1.66 |    -0.04 |      -3.98 |         1.79 |
+| 189 | P   |    -1.37 |     0.41 |      -4.89 |         3.39 |
+| 193 | F   |    -1.10 |     0.46 |      -4.10 |         1.91 |
+| 194 | F   |    -1.61 |     0.25 |      -5.26 |         3.98 |
+| 194 | Y   |    -1.29 |     0.18 |      -3.97 |         1.79 |
+| 272 | R   |    -1.10 |    -0.03 |      -5.28 |         3.98 |
+| 281 | R   |    -0.83 |     0.07 |      -5.42 |         4.24 |
+| 282 | L   |    -0.63 |     0.03 |      -3.69 |         1.43 |
+| 284 | L   |    -1.02 |     0.27 |      -7.82 |        10.47 |
+| 285 | R   |    -0.74 |     0.10 |      -4.74 |         3.08 |
+| 292 | E   |    -1.01 |     0.14 |      -3.98 |         1.79 |
 
 ### aMSH vs THIQ – Position 129
 

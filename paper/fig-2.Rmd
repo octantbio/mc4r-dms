@@ -83,6 +83,28 @@ heatmap_examples <- unnorm_combo %>%
 heatmap_examples
 ```
 
+### Data for Snakeplot
+
+We ignore "Stops" when looking at sensitivity to mutation since they're not actually indicative of a typical substitution.
+
+```{r snakeplot-data}
+cre %>% 
+  filter(
+    dose == "low",
+    compound == "aMSH",
+    aa != '*'
+  ) %>% 
+  group_by(pos) %>% 
+  summarise(
+    sens = -mean(log2FoldChange),
+    sens_err = sqrt(sum(log2StdError^2)),
+    sens_score = sens / sens_err,
+    .groups = 'drop'
+  ) %>% 
+  toJSON(pretty = TRUE) %>% 
+  write('./fig-2/snakeplot.json')
+```  
+
 ### ClinVar
 
 ```{r clinvar-dists, fig.width=9, fig.height=3}
@@ -115,7 +137,7 @@ clinvar_dists <- bind_rows(
     filter(significance %in% c("Pathogenic", "Benign", "VUS")) %>%
     mutate(significance = if_else(aa == "*", "Nonsense", "Missense"))
 ) %>% mutate(significance = factor(significance,
-  levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")
+                                   levels = c("Nonsense", "Missense", "Pathogenic", "VUS", "Benign")
 ))
 
 clinvar_plot <- clinvar_dists %>%
