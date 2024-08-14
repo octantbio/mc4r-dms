@@ -3007,7 +3007,7 @@ var data = [
   }
 ]
 
-var colorScale = d3.scaleSequential((t) => d3.interpolateViridis(t))
+var colorScale = d3.scaleSequential((t) => d3.interpolateViridis(1 - t))
             .domain([0, 1]);
 
 
