@@ -1,7 +1,7 @@
 MC4R Figure Generation
 ================
 Nathan Abell and Nathan Lubock
-June 07, 2024
+August 14, 2024
 
 # Introduction
 
@@ -32,14 +32,14 @@ consistent.
     ## 
     ## Regression Coefficients:
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -9.50      0.14    -9.77    -9.23 1.00     4218     2802
-    ## ec50_drugTHIQ      -9.41      0.15    -9.69    -9.12 1.00     4445     2840
-    ## emax_Intercept     60.95      0.91    59.26    62.74 1.00     4268     3244
-    ## slope_Intercept     0.72      0.09     0.57     0.92 1.00     4626     3186
+    ## ec50_drugaMSH      -9.50      0.13    -9.77    -9.24 1.00     4395     3006
+    ## ec50_drugTHIQ      -9.41      0.15    -9.68    -9.12 1.00     4328     3062
+    ## emax_Intercept     60.93      0.92    59.07    62.71 1.00     4130     2791
+    ## slope_Intercept     0.72      0.09     0.57     0.93 1.00     4356     3005
     ## 
     ## Further Distributional Parameters:
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     8.87      0.79     7.49    10.61 1.00     4249     3202
+    ## sigma     8.89      0.79     7.49    10.60 1.00     3536     2578
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -59,14 +59,14 @@ Same thing for Gq
     ## 
     ## Regression Coefficients:
     ##                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## ec50_drugaMSH      -8.22      0.16    -8.53    -7.90 1.00     1366     1825
-    ## ec50_drugTHIQ      -9.05      0.17    -9.37    -8.70 1.00     1393     1742
-    ## emax_Intercept      2.89      0.11     2.68     3.13 1.00     1165     1252
-    ## slope_Intercept     0.49      0.07     0.37     0.64 1.00     1742     1965
+    ## ec50_drugaMSH      -8.23      0.15    -8.52    -7.92 1.00     1660     1850
+    ## ec50_drugTHIQ      -9.05      0.17    -9.36    -8.71 1.00     1634     1633
+    ## emax_Intercept      2.88      0.11     2.70     3.12 1.00     1327     1672
+    ## slope_Intercept     0.49      0.07     0.38     0.63 1.00     1892     2002
     ## 
     ## Further Distributional Parameters:
     ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-    ## sigma     0.27      0.02     0.23     0.32 1.00     2810     2272
+    ## sigma     0.27      0.02     0.23     0.32 1.00     2596     2453
     ## 
     ## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
     ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -103,6 +103,11 @@ Let’s split the protein up in two and use patchwork to smash it together
 ### Example Heatmaps
 
 ![](./fig-2/all-heats-1.png)<!-- -->
+
+### Data for Snakeplot
+
+We ignore “Stops” when looking at sensitivity to mutation since they’re
+not actually indicative of a typical substitution.
 
 ### ClinVar
 
