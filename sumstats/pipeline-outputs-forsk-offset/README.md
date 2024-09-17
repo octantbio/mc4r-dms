@@ -1,6 +1,16 @@
 ### Two-Stage Forskolin Offset
 
-#### Coefficients for DMS5
+#### DMS5: Gs
 
-#### Marginal Contrasts for DMS11
+Stage 1:
+```
+Rscript --vanilla model-forsk.R
+```
+
+Stage 2:
+```
+Rscript --vanilla model-main.R
+```
+
+#### DMS11: Gs + Chaperone
 
