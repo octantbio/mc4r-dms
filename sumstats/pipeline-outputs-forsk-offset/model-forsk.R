@@ -30,7 +30,7 @@ compositional_model <- function(data) {
                 optArgs = list(method = "L-BFGS-B",
                     pgtol = 0,
                     rel.tol = 0.1)),
-            data = nested_counts$data[[2]],
+            data = data,
             sparseX = c(cond=TRUE),
             family = nbinom2)
 
