@@ -1,6 +1,6 @@
-# MC4R DMS 
+# High resolution deep mutational scanning of the melanocortin-4 receptor
 
-Welcome! This repository contains summary statistics and downstream analysis results for the MC4R DMS datasets at Octant. The following directories are enclosed:
+Welcome! This repository contains summary statistics and downstream analysis results for MC4R DMS datasets at Octant. The following directories are enclosed:
 
   -  `data` contains small auxiliary annotation files
   -  `docker` contains a single `Dockerfile` describing the analysis environment
