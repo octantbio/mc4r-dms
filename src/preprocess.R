@@ -4,7 +4,6 @@
 # Usage: Rscript src/preprocess.R -o output_file -m map_file -s samp_prop_file -d bc_dir
 
 # Libraries
-library(magrittr)
 library(data.table)
 library(argparse)
 library(tidyverse)

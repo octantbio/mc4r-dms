@@ -1,5 +1,7 @@
 ## Model Execution
 
+This subdirectory contains four R scripts for processing raw barcode counts and barcode maps through to final variant effect summary statistics.
+
 The following commands join raw barcode counts to an oligo-barcode map, one command for each dataset. Paths are assumed to be relative to the main level of `mc4r-dms`, e.g. the script path below is `src/preprocess.R`:
 
 ```
