@@ -1,12 +1,99 @@
 #!/usr/bin/env Rscript
-# Negative Binomial Mixed Modeling of DMS Variant Effects
 
+# Negative Binomial Mixed Modeling of DMS Variant Effects
+# Usage: Rscript src/model.R -o output_file -m map_file -s samp_prop_file -d bc_dir
+
+# Libraries
 library(argparse)
+library(data.table)
+library(future)
+library(furrr)
+library(broom)
+library(broom.mixed)
+library(glmmTMB)
+library(emmeans)
+library(future.callr)
 library(tidyverse)
-source("src/model_utils.R")
 
 RNGkind("L'Ecuyer-CMRG")
 set.seed(1)
+
+# Functions
+rand_effect <- function(data, mod_path, formula) {
+
+    to_return <- tryCatch({
+
+        mod <- glmmTMB(formula = formula,
+            start = -1,
+            REML = FALSE,
+            control = glmmTMBControl(optimizer = optim,
+                profile = TRUE,
+                optArgs = list(method = "L-BFGS-B",
+                    pgtol = 0,
+                    rel.tol = 0.1)),
+            data = data,
+            sparseX = c(cond = TRUE),
+            family = nbinom2)
+
+        saveRDS(mod, file = str_c(mod_path, ".RDS"))
+
+        coefs <- broom.mixed::tidy(mod) %>%
+            unnest_longer(term) %>%
+            mutate(dispersion = sigma(mod),
+                estimate = estimate / log(2),
+                std.error = std.error / log(2)) %>%
+            rename("log2FoldChange" = "estimate",
+                "log2StdError" = "std.error")
+
+        marginals <- broom::tidy(emmeans(mod, as.formula(~ mut_aa + condition))) %>%
+            mutate(estimate = estimate / log(2),
+                std.error = std.error / log(2)) %>%
+            rename("log2Marginal" = "estimate",
+                "log2MarginalError" = "std.error")
+
+        list("coefs" = coefs, "marginals" = marginals)
+
+        }, error = function(e) {
+
+            message("Error fitting model")
+            NULL
+
+        }
+    )
+
+    return(to_return)
+}
+
+rand_effect_wrap <- function(mapped_counts, form, model_output_path, nworkers) {
+
+    plan(callr, workers = nworkers)
+
+    wt_df <- mapped_counts %>%
+        filter(mut_aa == "WT") %>%
+        select(-pos) %>%
+        nest(wt = -chunk)
+
+    nested_counts <- mapped_counts %>%
+        filter(mut_aa != "WT") %>%
+        nest(data = c(-pos, -chunk))
+
+    joined_counts <- inner_join(nested_counts, wt_df, by = "chunk") %>%
+        mutate(
+            df = map2(data, wt, bind_rows),
+            name = str_c("chunk", chunk, "pos", pos, sep = "_"),
+            full_path = str_c(model_output_path, name, sep = "")
+        )
+
+    fit_df <- joined_counts %>%
+        mutate(sumstats = future_map2(df, full_path, rand_effect, formula = form,
+            .options = furrr_options(seed = .Random.seed)))
+
+    sumstats_wide <- fit_df %>%
+        select(chunk, pos, sumstats) %>%
+        unnest_wider(sumstats)
+
+  return(sumstats_wide)
+}
 
 # Command line arguments
 parser <- ArgumentParser()
@@ -14,18 +101,12 @@ parser$add_argument("-f", "--file", type = "character",
     help = "Mapped Counts File", metavar = "file")
 parser$add_argument("-o", "--outpfx", type = "character",
     help = "Output Prefix", metavar = "outpfx")
-parser$add_argument("-m", "--model", type = "character",
-    help = "Model Type", metavar = "model")
-parser$add_argument("-s", "--stops", type = "character",
-    help = "Stop Handling: agg or nonagg", metavar = "stops")
 parser$add_argument("-n", "--nworkers", type = "numeric", default = 35,
     help = "Number of workers to use for model fitting", metavar = "nworkers")
 
 # Argument parsing and I/O
 args <- parser$parse_args()
 mapped_counts_file <- args$file
-model_type <- args$model
-stops <- args$stops
 nworkers <- args$nworkers
 
 coefs_outfile <- str_c(args$outpfx, ".sumstats.tsv")
