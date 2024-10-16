@@ -16,13 +16,15 @@ parser$add_argument("-s", "--samp_prop", help = "Barcode Sample Properties TSV F
 parser$add_argument("-d", "--bc_dir", help = "Barcode Counts Directory", required = TRUE)
 args <- parser$parse_args()
 
+stop_aliases <- c("*", "X", "Stop", "stop", "x")
+
 out_file <- args$output
 oligo_map <- fread(args$map, col.names = c("barcode", "oligo"))
 samp_prop <- read_tsv(args$samp_prop, col_names = TRUE)
 bc_file_dir <- args$bc_dir
 
 bc_files <- list.files(bc_file_dir, full.names = TRUE)
-names(bc_files) <- gsub(str_c(bc_file_dir, "|.rna-bcs.tsv"), "", bc_files, perl = TRUE)
+names(bc_files) <- gsub(str_c(bc_file_dir, "/|.rna-bcs.tsv"), "", bc_files, perl = TRUE)
 
 ## Read in barcode counts
 bcs <- bc_files %>%
@@ -47,6 +49,7 @@ bc_oligo_join <- data.table::merge.data.table(bc_oligo_join,
 
 # Format and write to out_file
 mapped_counts <- bc_oligo_join %>%
+    filter(!is.na(oligo)) %>%
     separate(oligo,
         c("lib", "chunk", "wt_aa", "pos",
           "mut_aa", "wt_codon", "mut_codon"),
