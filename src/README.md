@@ -9,19 +9,19 @@ Rscript src/preprocess.R \
     -d data/barcode_counts/MC4R-DMS5-Gs \
     -o data/mapped_counts/MC4R-DMS5-Gs.mapped-counts.tsv \
     -m data/barcode_maps/mc4r-cre.bcmap-final.tsv \
-    -s samp_prop_file
+    -s data/MC4R-DMS5-Gs-sample-properties.tsv
 
 Rscript src/preprocess.R \
     -d data/barcode_counts/MC4R-DMS8-Gq \
     -o data/mapped_counts/MC4R-DMS8-Gq.mapped-counts.tsv \
     -m data/barcode_maps/mc4r-uas.bcmap-final.tsv \
-    -s samp_prop_file
+    -s data/MC4R-DMS8-Gq-sample-properties.tsv
 
 Rscript src/preprocess.R \
     -d data/barcode_counts/MC4R-DMS11-Gs \
     -o data/mapped_counts/MC4R-DMS11-Gs.mapped-counts.tsv \
     -m data/barcode_maps/mc4r-cre.bcmap-final.tsv \
-    -s samp_prop_file
+    -s data/MC4R-DMS11-Gs-sample-properties.tsv
 ```
 
 After executing the above, the resulting `mapped-counts.tsv` files are input to `model.R` as follows to compute raw summary statistics:

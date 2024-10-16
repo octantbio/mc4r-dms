@@ -18,16 +18,17 @@ args <- parser$parse_args()
 
 out_file <- args$output
 oligo_map <- fread(args$map, col.names = c("barcode", "oligo"))
-samp_prop <- read_tsv(args$samp_prop, col_names = TRUE) %>% select(-bclen)
+samp_prop <- read_tsv(args$samp_prop, col_names = TRUE)
 bc_file_dir <- args$bc_dir
 
-bc_files <- list.files(str_c("pipeline/", bc_file_dir, "/rna_bcs"),pattern = ".rna-bcs.tsv", full.names = TRUE)
-names(bc_files) <- gsub(str_c("pipeline/", bc_file_dir, "/rna_bcs/", "|.rna-bcs.tsv"), "", bc_files, perl = TRUE)
+bc_files <- list.files(bc_file_dir, full.names = TRUE)
+names(bc_files) <- gsub(str_c(bc_file_dir, "|.rna-bcs.tsv"), "", bc_files, perl = TRUE)
 
 ## Read in barcode counts
 bcs <- bc_files %>%
-    map_dfr(fread, .id = "sample",
-    col.names = c("count", "barcode"))
+    map_dfr(fread,
+        .id = "sample",
+        col.names = c("count", "barcode"))
 
 # Remove barcodes represented more than once
 setkey(oligo_map, barcode)
