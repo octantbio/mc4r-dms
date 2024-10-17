@@ -131,14 +131,15 @@ nested_coef <- nested_sumstats %>%
     filter(grepl("mut_aa", term)) %>%
     separate(term, c("condition", "aa"), ":") %>%
     mutate(condition = gsub("condition", "", condition),
-        aa = gsub("mut_aa", "", aa) %>%
+        aa = gsub("mut_aa", "", aa),
         contrast = str_c(condition, "_unnormalized")) %>%
     select(chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, contrast) 
 
 nested_marginals <- nested_sumstats %>%
     select(-coefs) %>%
     unnest(marginals) %>%
-    select(chunk, pos, mut_aa, condition, log2Marginal, log2MarginalError)
+    rename("aa" = "mut_aa") %>%
+    select(chunk, pos, aa, condition, log2Marginal, log2MarginalError)
 
 # Write summary statistics
 write_tsv(nested_coef, coefs_outfile)
