@@ -99,8 +99,8 @@ rand_effect_wrap <- function(mapped_counts, form, model_output_path, nworkers) {
 parser <- ArgumentParser()
 parser$add_argument("-f", "--file", type = "character",
     help = "Mapped Counts File", metavar = "file")
-parser$add_argument("-o", "--outpfx", type = "character",
-    help = "Output Prefix", metavar = "outpfx")
+parser$add_argument("-o", "--outfile", type = "character",
+    help = "Output Prefix", metavar = "outfile")
 parser$add_argument("-n", "--nworkers", type = "numeric", default = 35,
     help = "Number of workers to use for model fitting", metavar = "nworkers")
 
@@ -109,9 +109,9 @@ args <- parser$parse_args()
 mapped_counts_file <- args$file
 nworkers <- args$nworkers
 
-coefs_outfile <- str_c(args$outpfx, ".sumstats.tsv")
-marginals_outfile <- str_c(args$outpfx, ".marginals.tsv")
-model_output_path <- str_c(args$outpfx, "_model_objects/")
+coefs_outfile <- args$outfile
+marginals_outfile <- gsub(".tsv", ".marginals.tsv", args$outfile)
+model_output_path <- gsub(".tsv", "_model_objects/", args$outfile)
 
 dir.create(model_output_path)
 stop_aliases <-  c("*", "X", "Stop", "stop", "x")
@@ -125,8 +125,20 @@ form <- as.formula(count ~ -1 + condition + condition:mut_aa + (1 | barcode) + o
 nested_sumstats <- rand_effect_wrap(mapped_counts, form, model_output_path, nworkers)
 
 # Extract and format coefficients and marginals
-nested_coef <- nested_sumstats %>% select(-marginals) %>% unnest(coefs)
-nested_marginals <- nested_sumstats %>% select(-coefs) %>% unnest(marginals)
+nested_coef <- nested_sumstats %>%
+    select(-marginals) %>%
+    unnest(coefs) %>%
+    filter(grepl("mut_aa", term)) %>%
+    separate(term, c("condition", "aa"), ":") %>%
+    mutate(condition = gsub("condition", "", condition),
+        aa = gsub("mut_aa", "", aa) %>%
+        contrast = str_c(condition, "_unnormalized")) %>%
+    select(chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, contrast) 
+
+nested_marginals <- nested_sumstats %>%
+    select(-coefs) %>%
+    unnest(marginals) %>%
+    select(chunk, pos, mut_aa, condition, log2Marginal, log2MarginalError)
 
 # Write summary statistics
 write_tsv(nested_coef, coefs_outfile)

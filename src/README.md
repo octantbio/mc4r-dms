@@ -28,16 +28,19 @@ After executing the above, the resulting `mapped-counts.tsv` files are input to 
 
 ```
 Rscript src/model.R \
-    -i data/mapped_counts/MC4R-DMS5-Gs.mapped-counts.tsv \
-    -o sumstats/MC4R-DMS5-Gs-unnormalized.tsv
+    -f data/mapped_counts/MC4R-DMS5-Gs.mapped-counts.tsv \
+    -o sumstats/MC4R-DMS5-Gs-unnormalized.tsv \
+    -n 40
 
 Rscript src/model.R \
-    -i data/mapped_counts/MC4R-DMS8-Gq.mapped-counts.tsv \
-    -o sumstats/MC4R-DMS8-Gq-unnormalized.tsv
+    -f data/mapped_counts/MC4R-DMS8-Gq.mapped-counts.tsv \
+    -o sumstats/MC4R-DMS8-Gq-unnormalized.tsv \
+    -n 40
 
 Rscript src/model.R \
-    -i data/mapped_counts/MC4R-DMS11-Gs.mapped-counts.tsv \
-    -o sumstats/MC4R-DMS11-Gs-unnormalized.tsv
+    -f data/mapped_counts/MC4R-DMS11-Gs.mapped-counts.tsv \
+    -o sumstats/MC4R-DMS11-Gs-unnormalized.tsv \
+    -n 40
 ```
 
 Finally, raw summary statistics are processed to compute either control normalized (Forskolin or Untreated) or chaperone-specific (Defect and Rescue) summary statistics using the following commands:
