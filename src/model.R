@@ -27,12 +27,10 @@ rand_effect <- function(data, mod_path, formula) {
             start = -1,
             REML = FALSE,
             control = glmmTMBControl(optimizer = optim,
-                profile = TRUE,
                 optArgs = list(method = "L-BFGS-B",
                     pgtol = 0,
                     rel.tol = 0.1)),
             data = data,
-            sparseX = c(cond = TRUE),
             family = nbinom2)
 
         saveRDS(mod, file = str_c(mod_path, ".RDS"))
@@ -133,7 +131,9 @@ nested_coef <- nested_sumstats %>%
     mutate(condition = gsub("condition", "", condition),
         aa = gsub("mut_aa", "", aa),
         contrast = str_c(condition, "_unnormalized")) %>%
-    select(chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, contrast) 
+    group_by(contrast) %>%
+    mutate(p.adj = p.adjust(p.value, method = "BH")) %>%
+    select(chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, p.adj, contrast) 
 
 nested_marginals <- nested_sumstats %>%
     select(-coefs) %>%
