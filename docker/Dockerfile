@@ -29,7 +29,10 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
         patchwork \
         factoextra \
 	drc \
-        brms
+        brms \
+        glmmTMB=1.1.8 \
+        TMB=1.9.6 \
+        Matrix=1.6.0 
 
 # special install for cmdstanr
 # https://github.com/Chuan-Peng-Lab/Rstudio_docker/blob/57ded5a1e40b73d711aebd119a78d9cb2bc0cc7b/arm64.Dockerfile#L38-L41
