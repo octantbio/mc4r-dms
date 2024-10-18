@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # Join barcode counts to oligo-barcode map
-# Usage: Rscript src/preprocess.R -o output_file -m map_file -s samp_prop_file -d bc_dir
+# Usage: Rscript src/preprocess.R -o mapped_counts.tsv -m barcode_map.tsv -s sample_properties.tsv -d barcode_count_directory
 
 # Libraries
 library(data.table)
@@ -10,8 +10,8 @@ library(tidyverse)
 
 # Argument parsing
 parser <- ArgumentParser()
-parser$add_argument("-o", "--output", help = "Output File Name", required = TRUE)
-parser$add_argument("-m", "--map", help = "Oligo-Barcode Map File", required = TRUE)
+parser$add_argument("-o", "--output", help = "Output Mapped Counts TSV File", required = TRUE)
+parser$add_argument("-m", "--map", help = "Oligo-Barcode Map TSV File", required = TRUE)
 parser$add_argument("-s", "--samp_prop", help = "Barcode Sample Properties TSV File", required = TRUE)
 parser$add_argument("-d", "--bc_dir", help = "Barcode Counts Directory", required = TRUE)
 args <- parser$parse_args()

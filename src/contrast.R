@@ -6,9 +6,9 @@ library(tidyverse)
 
 # Command line arguments setup
 parser <- ArgumentParser()
-parser$add_argument("-i", "--input", type = "character", help = "Path to the input summary statistics TSV file", metavar = "input")
-parser$add_argument("-c", "--control", type = "character", help = "String Identifier for control condition", metavar = "control")
-parser$add_argument("-o", "--output", type = "character", help = "Path to the output TSV file", metavar = "output")
+parser$add_argument("-i", "--input", type = "character", help = "Input Summary Statistics TSV File", metavar = "input")
+parser$add_argument("-c", "--control", type = "character", help = "Control Condition", metavar = "control")
+parser$add_argument("-o", "--output", type = "character", help = "Output Summary Statistics TSV file", metavar = "output")
 args <- parser$parse_args()
 
 # Execution

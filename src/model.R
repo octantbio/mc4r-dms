@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # Negative Binomial Mixed Modeling of DMS Variant Effects
-# Usage: Rscript src/model.R -o output_file -m map_file -s samp_prop_file -d bc_dir
+# Usage: Rscript src/model.R -i mapped_counts.tsv -o output_sumstats.tsv -n 60
 
 # Libraries
 library(argparse)
@@ -93,9 +93,9 @@ rand_effect_wrap <- function(mapped_counts, form, model_output_path, nworkers) {
 # Command line arguments
 parser <- ArgumentParser()
 parser$add_argument("-f", "--file", type = "character",
-    help = "Mapped Counts File", metavar = "file")
+    help = "Mapped Counts TSV File", metavar = "file")
 parser$add_argument("-o", "--outfile", type = "character",
-    help = "Output Prefix", metavar = "outfile")
+    help = "Output TSV File", metavar = "outfile")
 parser$add_argument("-n", "--nworkers", type = "numeric", default = 35,
     help = "Number of workers to use for model fitting", metavar = "nworkers")
 

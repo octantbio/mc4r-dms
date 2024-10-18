@@ -1,15 +1,14 @@
 #!/usr/bin/env Rscript
-# Example usage:
-# Rscript src/contrast-marginal-chaperone.R -i combined.sumstats.tsv -w aMSH -c Forsk -o output.tsv -t aMSH
+# Usage: Rscript src/contrast-chaperone.R -i input_sumstats.tsv -d defect_sumstats.tsv -r rescue_sumstats.tsv
 
 library(argparse)
 library(tidyverse)
 
 # Command line arguments setup
 parser <- ArgumentParser()
-parser$add_argument("-i", "--input", type = "character", help = "Path to the input marginals TSV file", metavar = "input", required = TRUE)
-parser$add_argument("-d", "--defect", type = "character", help = "Path to output defect sumstats TSV file", metavar = "defect", required = TRUE)
-parser$add_argument("-r", "--rescue", type = "character", help = "Path to output rescue sumstats TSV file", metavar = "rescue", required = TRUE)
+parser$add_argument("-i", "--input", type = "character", help = "Input Summary Statistics TSV File", metavar = "input", required = TRUE)
+parser$add_argument("-d", "--defect", type = "character", help = "Defect Summary Statistics TSV file", metavar = "defect", required = TRUE)
+parser$add_argument("-r", "--rescue", type = "character", help = "Rescue Summary Statistics TSV file", metavar = "rescue", required = TRUE)
 args <- parser$parse_args()
 
 # Execution
