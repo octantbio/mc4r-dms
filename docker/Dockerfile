@@ -29,7 +29,12 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
         patchwork \
         factoextra \
 	drc \
-        brms
+        brms \
+        future.callr \
+        future \
+        furrr \
+        data.table \
+        tidyverse
 
 RUN R -q -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.6.5.tar.gz", repos = NULL, lib = "/usr/local/lib/R/library")'
 RUN R -q -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/TMB/TMB_1.9.6.tar.gz", repos = NULL, lib = "/usr/local/lib/R/library")'
