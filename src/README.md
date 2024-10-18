@@ -43,6 +43,8 @@ Rscript src/model.R \
     -n 60
 ```
 
+**NOTE: models are fit using glmmTMB, whose output is sensitive to the local Matrix>TMB>glmmTMB installation (see [glmmTMB/TMB/Matrix mismatches](https://glmmtmb.github.io/glmmTMB/index.html) for more details)**
+
 Finally, raw summary statistics are processed to compute either control normalized (Forskolin or Untreated) or chaperone-specific (Defect and Rescue) summary statistics using the following commands:
 
 ```
