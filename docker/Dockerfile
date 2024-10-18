@@ -29,10 +29,11 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
         patchwork \
         factoextra \
 	drc \
-        brms \
-        glmmTMB=1.1.8 \
-        TMB=1.9.6 \
-        Matrix=1.6.0 
+        brms
+
+RUN R -q -e 'install.packages("glmmTMB", repos = "https://cran.r-project.org/src/contrib/Archive/glmmTMB/glmmTMB_1.1.8.tar.gz")'
+RUN R -q -e 'install.packages("TMB", repos = "https://cran.r-project.org/src/contrib/Archive/TMB/TMB_1.9.6.tar.gz")'
+RUN R -q -e 'install.packages("Matrix", repos = "https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.6.0.tar.gz")'
 
 # special install for cmdstanr
 # https://github.com/Chuan-Peng-Lab/Rstudio_docker/blob/57ded5a1e40b73d711aebd119a78d9cb2bc0cc7b/arm64.Dockerfile#L38-L41

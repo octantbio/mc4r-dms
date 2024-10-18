@@ -37,8 +37,7 @@ rand_effect <- function(data, mod_path, formula) {
 
         coefs <- broom.mixed::tidy(mod) %>%
             unnest_longer(term) %>%
-            mutate(dispersion = sigma(mod),
-                estimate = estimate / log(2),
+            mutate(estimate = estimate / log(2),
                 std.error = std.error / log(2)) %>%
             rename("log2FoldChange" = "estimate",
                 "log2StdError" = "std.error")
@@ -76,11 +75,9 @@ rand_effect_wrap <- function(mapped_counts, form, model_output_path, nworkers) {
         nest(data = c(-pos, -chunk))
 
     joined_counts <- inner_join(nested_counts, wt_df, by = "chunk") %>%
-        mutate(
-            df = map2(data, wt, bind_rows),
+        mutate(df = map2(data, wt, bind_rows),
             name = str_c("chunk", chunk, "pos", pos, sep = "_"),
-            full_path = str_c(model_output_path, name, sep = "")
-        )
+            full_path = str_c(model_output_path, name, sep = ""))
 
     fit_df <- joined_counts %>%
         mutate(sumstats = future_map2(df, full_path, rand_effect, formula = form,
