@@ -46,17 +46,17 @@ Rscript src/model.R \
 Finally, raw summary statistics are processed to compute either control normalized (Forskolin or Untreated) or chaperone-specific (Defect and Rescue) summary statistics using the following commands:
 
 ```
-Rscript src/contrast-coefs.R \
+Rscript src/contrast.R \
     -i sumstats/MC4R-DMS5-Gs-unnormalized.tsv \
     -o sumstats/MC4R-DMS5-Gs.tsv \
     -c Forsk_2.5e-05
 
-Rscript src/contrast-coefs.R \
+Rscript src/contrast.R \
     -i sumstats/MC4R-DMS8-Gq-unnormalized.tsv \
     -o sumstats/MC4R-DMS8-Gq.tsv \
     -c None_0
 
-Rscript src/contrast-marginal-chaperone.R \
+Rscript src/contrast-chaperone.R \
     -i sumstats/MC4R-DMS11-Gs-unnormalized.tsv \
     --defect sumstats/MC4R-DMS11-DefectSumstats.tsv \
     --rescue sumstats/MC4R-DMS11-RescueSumstats.tsv 
