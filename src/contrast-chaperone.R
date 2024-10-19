@@ -13,14 +13,13 @@ args <- parser$parse_args()
 
 # Execution
 marginals <- read_tsv(args$input) %>%
-    rename("aa" = "mut_aa") %>%
     separate(condition, c("treatment", "concentration"), "_") %>%
     separate(treatment, c("drug", "chaperone"), "-") %>%
     mutate(chaperone = if_else(is.na(chaperone), "NoIpsen", "Ipsen"))
 
 norm_marginals <- marginals %>%
     filter(drug != "None") %>%
-    select(-statistic, -p.value, -concentration) %>%
+    select(-concentration) %>%
     pivot_wider(names_from = drug, values_from = log2Marginal:log2MarginalError) %>%
     mutate(log2MarginalNorm = log2Marginal_aMSH - log2Marginal_Forsk,
            log2MarginalNormError = sqrt(log2MarginalError_aMSH^2 + log2MarginalError_Forsk^2)) %>%
