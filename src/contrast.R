@@ -13,10 +13,7 @@ args <- parser$parse_args()
 
 # Execution
 data <- read_tsv(args$input) %>%
-    filter(grepl("mut_aa", term)) %>%
-    separate(term, into = c("condition", "aa"), sep = ":") %>%
-    mutate(condition = gsub("condition", "", condition),
-        aa = gsub("mut_aa", "", aa))
+    mutate(condition = gsub("_unnormalized", "", contrast))
 
 data_reduced <- data %>% select(chunk, pos, condition, aa, log2FoldChange, log2StdError)
 condition_data <- data_reduced %>% filter(condition != args$control)
