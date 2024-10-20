@@ -130,12 +130,14 @@ nested_coef <- nested_sumstats %>%
         contrast = str_c(condition, "_unnormalized")) %>%
     group_by(contrast) %>%
     mutate(p.adj = p.adjust(p.value, method = "BH")) %>%
+    filter(!is.na(log2FoldChange)) %>%
     select(chunk, pos, aa, log2FoldChange, log2StdError, statistic, p.value, p.adj, contrast) 
 
 nested_marginals <- nested_sumstats %>%
     select(-coefs) %>%
     unnest(marginals) %>%
     rename("aa" = "mut_aa") %>%
+    filter(!is.na(log2Marginal)) %>%
     select(chunk, pos, aa, condition, log2Marginal, log2MarginalError)
 
 # Write summary statistics

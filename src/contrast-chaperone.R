@@ -23,6 +23,7 @@ norm_marginals <- marginals %>%
     pivot_wider(names_from = drug, values_from = log2Marginal:log2MarginalError) %>%
     mutate(log2MarginalNorm = log2Marginal_aMSH - log2Marginal_Forsk,
            log2MarginalNormError = sqrt(log2MarginalError_aMSH^2 + log2MarginalError_Forsk^2)) %>%
+    filter(!is.na(log2MarginalNorm)) %>%
     select(chunk, pos, aa, chaperone, log2MarginalNorm, log2MarginalNormError)
 
 wt_noipsen <- norm_marginals %>%

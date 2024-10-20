@@ -59,7 +59,7 @@ Rscript src/contrast.R \
     -c None_0
 
 Rscript src/contrast-chaperone.R \
-    -i sumstats/MC4R-DMS11-Gs-unnormalized.tsv \
+    -i sumstats/MC4R-DMS11-Gs-unnormalized.marginals.tsv \
     --defect sumstats/MC4R-DMS11-DefectSumstats.tsv \
     --rescue sumstats/MC4R-DMS11-RescueSumstats.tsv 
 ```
