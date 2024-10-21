@@ -1,30 +1,29 @@
 #!/usr/bin/env Rscript
-# Example usage:
-# Rscript src/contrast-marginal-chaperone.R -i combined.sumstats.tsv -w aMSH -c Forsk -o output.tsv -t aMSH
+# Usage: Rscript src/contrast-chaperone.R -i input_marginals.tsv -d defect_sumstats.tsv -r rescue_sumstats.tsv
 
 library(argparse)
 library(tidyverse)
 
 # Command line arguments setup
 parser <- ArgumentParser()
-parser$add_argument("-i", "--input", type = "character", help = "Path to the input marginals TSV file", metavar = "input", required = TRUE)
-parser$add_argument("-d", "--defect", type = "character", help = "Path to output defect sumstats TSV file", metavar = "defect", required = TRUE)
-parser$add_argument("-r", "--rescue", type = "character", help = "Path to output rescue sumstats TSV file", metavar = "rescue", required = TRUE)
+parser$add_argument("-i", "--input", type = "character", help = "Input Marginals TSV File", metavar = "input", required = TRUE)
+parser$add_argument("-d", "--defect", type = "character", help = "Defect Summary Statistics TSV file", metavar = "defect", required = TRUE)
+parser$add_argument("-r", "--rescue", type = "character", help = "Rescue Summary Statistics TSV file", metavar = "rescue", required = TRUE)
 args <- parser$parse_args()
 
 # Execution
 marginals <- read_tsv(args$input) %>%
-    rename("aa" = "mut_aa") %>%
     separate(condition, c("treatment", "concentration"), "_") %>%
     separate(treatment, c("drug", "chaperone"), "-") %>%
     mutate(chaperone = if_else(is.na(chaperone), "NoIpsen", "Ipsen"))
 
 norm_marginals <- marginals %>%
     filter(drug != "None") %>%
-    select(-statistic, -p.value, -concentration) %>%
+    select(-concentration) %>%
     pivot_wider(names_from = drug, values_from = log2Marginal:log2MarginalError) %>%
     mutate(log2MarginalNorm = log2Marginal_aMSH - log2Marginal_Forsk,
            log2MarginalNormError = sqrt(log2MarginalError_aMSH^2 + log2MarginalError_Forsk^2)) %>%
+    filter(!is.na(log2MarginalNorm)) %>%
     select(chunk, pos, aa, chaperone, log2MarginalNorm, log2MarginalNormError)
 
 wt_noipsen <- norm_marginals %>%
