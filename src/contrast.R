@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Usage: Rscript src/contrast-coefs.R -i input_sumstats.tsv -c DMSO -o output_sumstats.tsv
+# Usage: Rscript src/contrast.R -i input_sumstats.tsv -c DMSO -o output_sumstats.tsv
 
 library(argparse)
 library(tidyverse)
