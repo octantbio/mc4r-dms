@@ -24,7 +24,6 @@ rand_effect <- function(data, mod_path, formula) {
     to_return <- tryCatch({
 
         mod <- glmmTMB(formula = formula,
-            start = -1,
             REML = FALSE,
             control = glmmTMBControl(optimizer = optim,
                 optArgs = list(method = "L-BFGS-B",
